@@ -1,0 +1,68 @@
+<app-header></app-header>
+<div class="main-content map-content">
+    <div class="row outlet-filter-row">
+        <div class="col-md-12">
+          <div class="container pt-4">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+                  <div class="btn-group dropdown" role="group">
+                    <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                      {{regionModel != null ? regionModel.name : 'All Regions'}}
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1" style="max-height: 50vh;overflow: auto;">
+                      <li><a class="dropdown-item" (click)="selectRegion(null)">All Regions</a></li>
+                      <li *ngFor="let region of regions"><a class="dropdown-item" (click)="selectRegion(region)">{{region.name}}</a></li>
+                    </ul>
+                  </div>
+                  <div class="btn-group" role="group" *ngIf="regionModel != null">
+                    <button id="btnGroupDrop2" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                      {{districtModel != null ? districtModel.name : 'All Districts'}}
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="btnGroupDrop3" style="max-height: 50vh;overflow: auto;">
+                      <li><a class="dropdown-item" (click)="selectDistrict(null)">All Districts</a></li>
+                      <li *ngFor="let district of filteredDistricts"><a class="dropdown-item" (click)="selectDistrict(district)">{{district.name}}</a></li>
+                    </ul>
+                  </div>
+                
+                  <div class="btn-group" role="group" *ngIf="districtModel != null">
+                    <button id="btnGroupDrop3" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                      {{wardModel != null ? wardModel.name : 'All Wards'}}
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="btnGroupDrop3" style="max-height: 50vh;overflow: auto;">
+                      <li><a class="dropdown-item" (click)="selectWard(null)">All Wards</a></li>
+                      <li *ngFor="let ward of filteredWards"><a class="dropdown-item" (click)="selectWard(ward)">{{ward.name}}</a></li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="btn-group ml-3" role="group" aria-label="Button group with nested dropdown">
+                  <div class="btn-group dropdown" role="group">
+                    <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                      <span class="status-icon bg-success" style="background: {{ categoryModel ? categoryModel.color : '#efefef'}} !important;"></span>{{categoryModel != null ? categoryModel.name : 'All Categories'}}
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1" style="max-height: 50vh;overflow: auto;">
+                      <li><a class="dropdown-item" (click)="selectCategory(null)"> <span class="status-icon bg-success" style="background-color: #efefef;"></span>All Categories</a></li>
+                      <li *ngFor="let category of classifications">
+                        <a class="dropdown-item" (click)="selectCategory(category)">
+                          <span class="status-icon bg-success" style="background: {{category.color}} !important;"></span>
+                          <span *ngIf="category.parents"><span  *ngFor="let parent of category.parents" class="text-muted"> {{parent?.name}} &#183; </span></span>
+                          {{category.name}}
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+             
+            </div>
+          </div>
+        </div>
+    </div>
+    <div id="map2">
+
+    </div>
+  
+</div>
+<app-footer></app-footer>
+
+

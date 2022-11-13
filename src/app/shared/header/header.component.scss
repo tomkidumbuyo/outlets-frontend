@@ -1,0 +1,25 @@
+a.header-brand{
+  margin-bottom: -1rem;
+  img{
+    height: 3rem;
+  }
+}
+
+.nav-tabs{
+  .nav-link.active {
+      border-color: #467fcf;
+      color: #000;
+      background: transparent;
+      border-bottom: 1px solid brown;
+      font-weight: bold;
+      padding-left: 10px;
+      padding-right: 10px;
+      i {
+          color: blue;
+      }
+  }
+  .nav-link {
+      
+      font-weight: bold;
+  }
+}

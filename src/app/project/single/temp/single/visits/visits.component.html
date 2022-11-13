@@ -1,0 +1,92 @@
+<nav class="date-nav" *ngIf="selectedDay">
+    <div class="container">
+        <div class="date-nav-wrapper">
+        <button class="left-button arrow-button" (click)="scrollLeft()">
+            <span class="fe fe-arrow-left"></span>
+        </button>
+        <div class="dates-div">
+        <ul class="dates-div-list" [ngStyle]="{'left': divLeft + 'px'}">
+            <li *ngFor="let day of days" (click)="selectDay(day)" class="{{selectedDay.start == day.start ? 'active' : ''}}">
+                <span class="date">{{day.datestring}}</span>
+                <span class="day">{{day.weekday}}</span>
+            </li>
+        </ul>
+        </div>
+        <button class="right-button arrow-button" (click)="scrollRight()">
+            <span class="fe fe-arrow-right"></span>
+        </button>
+        </div>
+    </div>
+</nav>
+<div class="main-body " *ngIf="selectedDay">
+<div class="container pt-5">
+    <div  class="row">
+        <div  class="col-md-3">
+        <div  class="list-group list-group-transparent mb-0">
+        <a  class="{{ visit._id == selectedVisit._id ? 'active' : '' }} list-group-item list-group-item-action" *ngFor="let visit of selectedDay?.visits" (click)="selectVisit(visit)">
+            <span  class="icon mr-3"><i  class="fe fe-corner-down-right"></i></span>
+            {{visit.outlet.name}}
+        </a>
+      
+        </div>
+    </div>
+    <div  class="col-md-9 pr-0" *ngIf="selectedVisit">
+    <div  class="card">
+    <div  class="card-body p-0">
+    <table  class="table mb-0">
+        <tr>
+            <td  style="border-right: 1px solid rgba(0, 40, 100, 0.12);"><h6 >Outlets</h6></td>
+            <td  colspan="4">{{selectedVisit?.outlet.name}}</td>
+        </tr>
+        <tr>
+            <td  style="border-right: 1px solid rgba(0, 40, 100, 0.12);"><h6 >Date</h6></td>
+            <td  colspan="4">{{selectedVisit?.date}}</td>
+        </tr>
+
+     
+
+        <tr >
+            <td  style="border-right: 1px solid rgba(0, 40, 100, 0.12);" [attr.rowspan]="selectedVisit?.posms?.length + 1"><h6 >Posms</h6></td>
+            <td  colspan="1"><h6 >Type</h6></td>
+            <td ><h6 >Added</h6></td>
+            <td colspan="2"><h6 >Removed</h6></td>
+        </tr>
+        <tr *ngFor="let posm of selectedVisit?.posms">
+            <td  colspan="1">{{posm.name}}</td>
+            <td >{{posm.added}}<td>
+            <td colspan="3">{{posm.removed}}</td>
+        </tr>
+
+        <tr >
+            <td  style="border-right: 1px solid rgba(0, 40, 100, 0.12);" [attr.rowspan]="selectedVisit?.giveaways?.length + 1"><h6 >Giveaways</h6></td>
+            <td  colspan="1"><h6 >Type</h6></td>
+            <td  colspan="3"><h6 >Amount</h6></td>
+        </tr>
+
+        <tr *ngFor="let giveaway of selectedVisit?.giveaways">
+            <td  colspan="1">{{giveaway.name}}</td>
+            <td  colspan="3">{{giveaway.amount}}</td>
+        </tr>
+
+        <tr >
+            <td  style="border-right: 1px solid rgba(0, 40, 100, 0.12);" [attr.rowspan]="selectedVisit?.products?.length + 1"><h6 >Products</h6></td>
+            <td ><h6 >Type</h6></td>
+            <td ><h6 >Sales</h6></td>
+            <td ><h6 >Orders</h6></td>
+            <td ><h6 >Visibility (%)</h6></td>
+        </tr>
+
+        <tr *ngFor="let product of selectedVisit?.products">
+            <td >{{product.name}}</td>
+            <td >{{product.sold}}</td>
+            <td >{{product.ordered}}</td>
+            <td >{{product.visible > 0 ? product.visible /(product.visible + product.invisible) * 100 : 0 }}</td>
+        </tr>
+      
+    </table>
+    </div>
+    </div>
+    </div>
+    </div>
+</div>
+</div>

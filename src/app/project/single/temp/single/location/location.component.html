@@ -1,0 +1,88 @@
+<nav class="date-nav" *ngIf="selectedDay">
+    <div class="container">
+        <div class="date-nav-wrapper">
+        <button class="left-button arrow-button" (click)="scrollLeft()">
+            <span class="fe fe-arrow-left"></span>
+        </button>
+        <div class="dates-div">
+        <ul class="dates-div-list" [ngStyle]="{'left': divLeft + 'px'}">
+            <li *ngFor="let day of days" (click)="selectDay(day)" class="{{selectedDay.start == day.start ? 'active' : ''}}">
+                <span class="date">{{day.datestring}}</span>
+                <span class="day">{{day.weekday}}</span>
+            </li>
+        </ul>
+        </div>
+        <button class="right-button arrow-button" (click)="scrollRight()">
+            <span class="fe fe-arrow-right"></span>
+        </button>
+        </div>
+    </div>
+</nav>
+<div class="main-body" *ngIf="selectedDay">
+    <div class="container pt-5">
+
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">
+                      <h3 class="card-title">Agent's Movements for the day.</h3>
+                      <div class="card-options">
+                        <div class="stamp bg-red">L2</div>
+                      </div>
+                    </div>
+                    <!-- <div class="card-map" id="map-metro"></div> -->
+                    <div class="card-body">
+                      <ul class="timeline">
+                        <li class="timeline-item" *ngFor="let movement of selectedDay?.movements">
+                          <div class="timeline-badge"></div>
+                          {{movement.ward.name}}
+                          <div class="timeline-time">{{movement.timeago}}</div>
+                        </li>
+                        <!-- <li class="timeline-item">
+                          <div class="timeline-badge"></div>
+                          Rondo ONZ
+                          <div class="timeline-time">1 min ago</div>
+                        </li>
+                        <li class="timeline-item">
+                          <div class="timeline-badge bg-primary"></div>
+                          <div>
+                            <strong>Świętokrzyska</strong>
+                            <small class="d-block text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</small>
+                          </div>
+                          <div class="timeline-time text-muted-dark">now</div>
+                        </li>
+                        <li class="timeline-item">
+                          <div class="timeline-badge"></div>
+                          Nowy Świat-Uniwersytet
+                          <div class="timeline-time">2 min.</div>
+                        </li>
+                        <li class="timeline-item">
+                          <div class="timeline-badge"></div>
+                          Centrum Nauki Kopernik
+                          <div class="timeline-time">3 min.</div>
+                        </li>
+                        <li class="timeline-item">
+                          <div class="timeline-badge"></div>
+                          Stadion Narodowy
+                          <div class="timeline-time">5 min.</div>
+                        </li>
+                        <li class="timeline-item">
+                          <div class="timeline-badge bg-green"></div>
+                          Dworzec Wileński
+                          <div class="timeline-time">7 min.</div>
+                        </li> -->
+                      </ul>
+                    </div>
+                  </div>
+            </div>
+            <div class="col-md-8">
+              <div class="card">
+                <div class="card-map" style="height: 500px;" id="map-temp"></div>
+              </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

@@ -1,0 +1,365 @@
+.header {
+  border-bottom: 1px solid rgba(0, 40, 100, 0.12);
+  background: none;
+  position: absolute;
+  top: 0px;
+  width: 100%;
+  padding: 0px;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  height: 55px;
+
+  .nav.nav-tabs {
+    border-bottom: none;
+    margin-bottom: 0px !important;
+    .nav-item {
+      .nav-link {
+        border-bottom-width: 3px;
+      }
+      .nav-link.active {
+        color: #000;
+        border-bottom: 3px rgb(70, 127, 207) solid;
+color: #000;
+      }
+    }
+  }
+}
+.body{
+  overflow: auto;
+  top: 55px;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  position: absolute;
+  width: 100%;
+  padding: 20px 20px;
+}
+.classification-card.card {
+  .card-header{
+    position: relative;
+    ul.nav-location{
+      margin: 0px;
+      padding: 0px;
+        li{
+          float: left;
+          list-style: none;
+          font-size: 20px;
+          display: block;
+          line-height: 30px;
+        }
+        li:after {
+          content: "";
+          font-family: "feather" !important;
+          font-style: normal;
+          font-weight: normal;
+          font-variant: normal;
+          text-transform: none;
+          line-height: 1;
+          -webkit-font-smoothing: antialiased;
+          line-height: 30px;
+          display: block;
+          float: right;
+          margin: 0px 10px;
+          color: #aaa;
+        }
+        li:last-child::after {
+          display: none;
+        }
+
+    }
+    .header-buttons{
+      position: absolute;
+      right: 7px;
+      top:7px;
+      bottom: 7px;
+      padding: 3px;
+      padding-left: 0px;
+      background:#e9ecef;
+      border-radius: 6px;
+      border: 1px solid rgba(0, 40, 100, 0.12);
+
+
+      >.btn.btn-secondary{
+        border: none;
+        border-radius: 4px;
+        background: transparent;
+        font-size: 18px;
+        padding: 0px;
+        margin-left: 3px;
+        color: #999;
+        height: 32px;
+        line-height: 32px;
+        width: 32px;
+        min-width:32px;
+      }
+
+      >.btn.btn-secondary :hover{
+        color:#000
+      }
+
+      >.btn.btn-secondary.active{
+        background: #fff;
+        color: #000;
+        box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.4);
+      }
+    }
+  }
+  .card-body.bars{
+    padding: 0px;
+    >.row{
+      background: #efefef;
+      padding-left: 0px;
+      padding-right: 0px;
+      margin:0px;
+      >.col-md-3.object-col {
+        background: #fff;
+        padding: 0px;
+        border-right: 1px solid #eee;
+        >.new-category {
+          width: 100%;
+          padding: 7px;
+          border-bottom: 1px solid #eee;
+          height: 53px;
+          background: #341f97;
+          .row{
+            background: transparent;
+            .form-control{
+              background: #5f27cd;
+              color: #fff;
+            }
+            .btn.btn-secondary{
+              background: #341f97;
+              border: 1px solid #fff;
+              color: #fff;
+            }
+          }
+        }
+
+
+        .card.card-collapsed{
+          border-bottom: 0px;
+        }
+        .card{
+          border-radius: 0px;
+          border-left: 0px;
+          border-top:0px ;
+          border-right: 0px;
+          margin-bottom: 0px;
+          .card-body{
+            min-height: 100px;
+            background: #fff;
+          }
+          .card-footer{
+            padding: 10px;
+          }
+        }
+      }
+      .col-md-3.object-col:nth-child(4){
+        border-right: 0px;
+      }
+    }
+  }
+  .card-body.tree {
+    padding: 0px;
+    background: #eee;
+    >.row {
+      margin:0px 0px;
+
+      .tree-div{
+        background: #fff;
+        border-right:1px solid rgba(0, 40, 100, 0.12);
+        min-height: 30px;
+        padding: 40px;
+
+        mat-tree {
+          font-family: "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+        }
+
+        mat-tree-node{
+          min-height: 26px;
+          >li{
+
+            list-style: none;
+            position: relative;
+            padding-left: 20px;
+            >span.down-line{
+              position: absolute;
+              height: 26px;
+              width: 22px;
+              border-left: 1px solid blue;
+              border-bottom: 1px solid blue;
+              left: -1px;
+              top: 0px;
+
+            }
+            >span.left-line{
+              left: -1px;
+              top: 25px;
+              bottom: 0px;
+              position: absolute;
+              border-left: 1px solid blue;
+            }
+            >button{
+
+              border: none;
+              background: #fff;
+              position: absolute;
+              left: -20px;
+              span{
+                font-size: 5px;
+              }
+            }
+
+            div.node-div{
+              padding: 2px 10px;
+              border-radius: 6px;
+              cursor: pointer;
+            }
+            div.node-div:hover{
+              border: 1px solid blue;
+            }
+          }
+
+          >li.active{
+            div.node-div{
+              border: 1px solid blue;
+              background: blue;
+              color: #fff;
+            }
+          }
+
+          >li.category.active{
+            div.node-div{
+              background: #222;
+              color: #fff;
+              border: none;
+            }
+          }
+
+          >li.category{
+            div.node-div{
+              background: #222;
+              color: #fff;
+            }
+          }
+        }
+        mat-tree-node:last-child > li{
+            >span.down-line{
+              position: absolute;
+              border-bottom-left-radius: 6px;
+            }
+            >span.left-line{
+              display: none;
+            }
+        }
+
+
+        mat-nested-tree-node {
+          >li{
+
+            list-style: none;
+            position: relative;
+            padding-left: 20px;
+            >span.down-line{
+              position: absolute;
+              height: 26px;
+              width: 22px;
+              border-left: 1px solid blue;
+              border-bottom: 1px solid blue;
+              left: -1px;
+              top: 0px;
+            }
+            >span.left-line{
+              left: -1px;
+              top: 25px;
+              bottom: 0px;
+              position: absolute;
+              border-left: 1px solid blue;
+            }
+            >div.mat-tree-node{
+              min-height: 26px;
+              >button{
+                border: none;
+                background: none;
+                position: absolute;
+                left: -10px;
+                background: #fff;
+                border: 1px solid #000;
+                border-radius: 3px;
+                height: 17px;
+                width: 17px;
+                padding: 0px;
+                line-height: 15px;
+                top: 15px;
+                span{
+
+                }
+              }
+              >button.open{
+                background: #fff;
+                color: #000;
+              }
+              >button.closed{
+                background: #000;
+                color: #fff;
+              }
+
+              div.node-div{
+                padding: 2px 10px;
+                border-radius: 6px;
+                margin-top: 12px;
+              }
+
+            }
+            >div.mat-tree-node.active{
+              div.node-div{
+                border: 1px solid blue;
+                border: 1px solid blue;
+                color: blue;
+                font-weight: bold;
+              }
+            }
+
+            >div.mat-tree-node.category.active{
+              div.node-div{
+                background: #222;
+                color: #fff;
+                border: none;
+              }
+            }
+
+            >div.mat-tree-node.category{
+              div.node-div{
+                background: #222;
+                color: #fff;
+              }
+            }
+
+            ul {
+              padding-left: 10px;
+              margin-bottom: 0px;
+            }
+            ul.example-tree-invisible{
+              display: none;
+            }
+          }
+        }
+        mat-nested-tree-node:last-child {
+          >li{
+            >span.down-line{
+
+            }
+            >span.left-line{
+              display: none;
+            }
+          }
+        }
+      }
+
+      .info-div {
+
+      }
+    }
+  }
+}

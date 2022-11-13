@@ -1,0 +1,42 @@
+<div class="container">
+  <div class="row mt-5">
+    <div class="col-md-4">
+      <div class="card">
+<div class="card-body">
+      <div class="media mb-5">
+        <div class="media-body">
+          <h5>{{client?.name}}</h5>
+          <address class="text-muted small">
+            {{client?.adress}}
+          </address>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-6">
+          <h5>Email</h5>
+          <p>Client</p>
+        </div>
+        <div class="col-6">
+          <h5>Business Type</h5>
+          <p>{{client?.classification}}</p>
+        </div>
+        <div class="col-6">
+          <h5>Website</h5>
+          <p><a href="javascript:void(0)">{{client?.website}}</a></p>
+        </div>
+        <div class="col-6">
+          <h5>Office Phone</h5>
+          <p *ngFor="let phone of client?.phones">{{phone.e164Number}}</p>
+        </div>
+      </div>
+      <h5>Description</h5>
+      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consectetur dignissimos doloribus eum fugiat itaque laboriosam maiores nisi nostrum perspiciatis vero.</p>
+    </div>
+    </div>
+    </div>
+    <div class="col-md-8">
+
+    </div>
+  </div>
+</div>
+

@@ -1,0 +1,216 @@
+<div class="row outlet-filter-row">
+  <div class="col-md-12">
+    <div class="container pt-4">
+      <div class="row">
+        <div class="col-md-9">
+          <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+            <div class="btn-group dropdown" role="group">
+              <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                {{regionModel != null ? regionModel.name : 'All Regions'}}
+              </button>
+              <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1" style="max-height: 50vh;overflow: auto;">
+                <li><a class="dropdown-item" (click)="selectRegion(null)">All Regions</a></li>
+                <li *ngFor="let region of regions"><a class="dropdown-item" (click)="selectRegion(region)">{{region.name}}</a></li>
+              </ul>
+            </div>
+            <div class="btn-group" role="group" *ngIf="regionModel != null">
+              <button id="btnGroupDrop2" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                {{districtModel != null ? districtModel.name : 'All Districts'}}
+              </button>
+              <ul class="dropdown-menu" aria-labelledby="btnGroupDrop3" style="max-height: 50vh;overflow: auto;">
+                <li><a class="dropdown-item" (click)="selectDistrict(null)">All Districts</a></li>
+                <li *ngFor="let district of filteredDistricts"><a class="dropdown-item" (click)="selectDistrict(district)">{{district.name}}</a></li>
+              </ul>
+            </div>
+          
+            <div class="btn-group" role="group" *ngIf="districtModel != null">
+              <button id="btnGroupDrop3" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                {{wardModel != null ? wardModel.name : 'All Wards'}}
+              </button>
+              <ul class="dropdown-menu" aria-labelledby="btnGroupDrop3" style="max-height: 50vh;overflow: auto;">
+                <li><a class="dropdown-item" (click)="selectWard(null)">All Wards</a></li>
+                <li *ngFor="let ward of filteredWards"><a class="dropdown-item" (click)="selectWard(ward)">{{ward.name}}</a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="btn-group ml-3" role="group" aria-label="Button group with nested dropdown">
+            <div class="btn-group dropdown" role="group">
+              <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                <span class="status-icon bg-success" style="background: {{ categoryModel ? categoryModel.color : '#efefef'}} !important;"></span>{{categoryModel != null ? categoryModel.name : 'All Categories'}}
+              </button>
+              <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1" style="max-height: 50vh;overflow: auto;">
+                <li><a class="dropdown-item" (click)="selectCategory(null)"> <span class="status-icon bg-success" style="background-color: #efefef;"></span>All Categories</a></li>
+                <li *ngFor="let category of classifications">
+                  <a class="dropdown-item" (click)="selectCategory(category)">
+                    <span class="status-icon bg-success" style="background: {{category.color}} !important;"></span>
+                    <span *ngIf="category.parents"><span  *ngFor="let parent of category.parents" class="text-muted"> {{parent?.name}} &#183; </span></span>
+                    {{category.name}}
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="form-group">
+            <div class="row gutters-xs">
+              <div class="col">
+                <input type="text" class="form-control" placeholder="Search for..." [(ngModel)]="queryModel" (ngModelChange)="setServiceFilters()">
+              </div>
+              <span class="col-auto">
+                <button class="btn btn-secondary" type="button"><i class="fe fe-search"></i></button>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="row outlet-list-row">
+  <div class="col-12">
+    <div class="container pt-5">
+      <div class="row">
+        <div class="col-12">
+          <div class="card outlets-card p-0">
+            <div class="table-responsive">
+              <div class="dataTables_wrapper no-footer">
+                <!--<div class="">
+                <div class="dataTables_filter">
+                  <form class="input-icon my-3 my-lg-0">
+                    <input type="search" class="form-control header-search" placeholder="Search…" tabindex="1">
+                    <div class="input-icon-addon">
+                      <i class="fe fe-search"></i>
+                    </div>
+                  </form>
+
+                </div>
+              </div>-->
+              <div class="">
+              <div class="dimmer {{ loading ? 'active' : '' }} " >
+                <div class="loader m-5" style=""></div>
+                <div class="dimmer-content">
+
+                  <table class="table card-table table-vcenter text-nowrap datatable">
+                    <thead>
+                      <tr>
+                        <th class="w-1">No.</th>
+                        
+                        <th>Name</th>
+                        <th></th>
+                        <th>Owner</th>
+                        <th>Phone No.</th>
+                        <th>Created</th>
+                        <th style="width: 100px;">Categories</th>
+                        <th>Location</th>
+                        <th></th>
+                        <th></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let outlet of filteredOutlets; let i = index">
+                        <td><span class="text-muted">{{i + this.offset + 1}}</span></td>
+
+
+                        <td><a [routerLink]="['/outlet/' + outlet._id]" class="text-inherit">{{outlet.name | titlecase }}</a></td>
+                        <td>
+                          <span *ngIf="outlet.images.length > 0" class="avatar avatar-md d-block" style="background-image: url(https://amplifyimages.s3.us-east-2.amazonaws.com/files/{{outlet.images[0]}})"></span>
+                        </td>
+                        <td>
+                          {{outlet.owner | titlecase }}
+                        </td>
+                        
+                        <td>
+                          {{outlet.phone}}
+                        </td>
+                        <td>
+                          {{outlet.created | date : 'short' : tz }}
+                        </td>
+                        <td  style="width: 100px;">
+                          <span *ngFor="let classification of outlet.classifications"> <span class="status-icon bg-success" style="background: {{classification?.color}} !important;"  ></span> {{classification?.name}} </span> 
+                        </td>
+                        <td> <span class="badge badge-default">{{outlet?.region?.name}} &#183; {{outlet?.district?.name}} &#183; {{outlet?.ward?.name}}</span> </td>
+                        <td>
+                          <a [routerLink]="['/outlet/' + outlet._id]" class="btn btn-secondary btn-sm">View</a>
+                        </td>
+                        <td>
+                          <a (click)="deleteOutlet(outlet)" class="btn btn-danger btn-sm">Delete</a>
+                        </td>
+                        
+
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div></div>
+              <!-- <div class="">
+              <div class="dataTables_info" id="DataTables_Table_0_info" role="status" aria-live="polite">Showing {{this.offset + 1}} to {{this.offset + this.limit}} of {{filteredLength}} entries</div>
+              <div class="dataTables_paginate paging_simple_numbers" id="DataTables_Table_0_paginate">
+                <a class="paginate_button previous {{page == 0 ? 'disabled' : ''}}"  (click) = "selectPage(page - 1)">Previous</a>
+                <span>
+                  <a
+                    *ngIf="page > 3"
+                    class = "paginate_button"
+                    (click) = "selectPage(0)">1</a>
+                    <span *ngIf="page > 3"  class="ellipsis">…</span>
+
+                  <a
+                    class = "paginate_button {{ pg == page ? 'current' : '' }}"
+                    *ngFor = "let pg of paginationPages ; let i = index"
+                    (click) = "selectPage(pg)">{{pg + 1}}</a>
+
+                  <span class="ellipsis" *ngIf="page < pages.length - 3" >…</span>
+                  <a
+                    *ngIf="page < pages.length - 3"
+                    class = "paginate_button"
+                    (click) = "selectPage(pages.length-1)">{{pages.length}}</a>
+
+                </span>
+                <a class="paginate_button next {{page == (pages.length - 1) ? 'disabled' : ''}}" (click) = "selectPage(page + 1)" >Next</a></div>
+              </div> -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="row outlet-paggination-row">
+<div class="container">
+<div class="row">
+  <div class="col-md-12">
+    <div class="dataTables_wrapper">
+      <div class="dataTables_info" id="DataTables_Table_0_info" role="status" aria-live="polite">Showing {{this.offset + 1}} to {{this.offset + this.limit}} of {{filteredLength}} entries</div>
+      <div class="dataTables_paginate paging_simple_numbers" id="DataTables_Table_0_paginate">
+        <a class="paginate_button previous {{page == 0 ? 'disabled' : ''}}"  (click) = "selectPage(page - 1)">Previous</a>
+        <span>
+          <a
+            *ngIf="page > 3"
+            class = "paginate_button"
+            (click) = "selectPage(0)">1</a>
+            <span *ngIf="page > 3"  class="ellipsis">…</span>
+
+          <a
+            class = "paginate_button {{ pg == page ? 'current' : '' }}"
+            *ngFor = "let pg of paginationPages ; let i = index"
+            (click) = "selectPage(pg)">{{pg + 1}}</a>
+
+          <span class="ellipsis" *ngIf="page < pages.length - 3" >…</span>
+          <a
+            *ngIf="page < pages.length - 3"
+            class = "paginate_button"
+            (click) = "selectPage(pages.length-1)">{{pages.length}}</a>
+
+        </span>
+        <a class="paginate_button next {{page == (pages.length - 1) ? 'disabled' : ''}}" (click) = "selectPage(page + 1)" >Next</a>
+      </div>
+      </div>
+  </div>
+</div>
+</div>
+</div>

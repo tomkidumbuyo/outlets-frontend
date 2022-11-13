@@ -1,0 +1,234 @@
+<div class="container">
+  <div class="col-lg-8">
+    <div class="page-title mt-5 mb-2">
+      Create or Edit a Project
+    </div>
+    <form [formGroup]="newProjectForm">
+    <div class="card">
+    
+      <div class="card-body">
+
+        <h3 class="card-title">Basic information</h3>
+
+        <div class="form-group">
+          <label class="form-label">Name</label>
+          <input type="text" class="form-control" name="example-text-input" placeholder="Text.." formControlName="name">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label"> Duration</label>
+          <mat-form-field appearance="fill">
+            <mat-label>Enter a date range</mat-label>
+            <mat-date-range-input [rangePicker]="picker" (click)="picker.open()" >
+              <input matStartDate placeholder="Start date" formControlName="from">
+              <input matEndDate placeholder="End date" formControlName="to">
+            </mat-date-range-input>
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-date-range-picker #picker></mat-date-range-picker>
+          </mat-form-field>
+        </div>
+
+        <div class="form-group">
+          <div class="form-label">Select Modules For the project</div>
+          <div class="custom-controls-stacked">
+            <label class="custom-control custom-checkbox">
+              <input type="checkbox" class="custom-control-input" formControlName="posmPlacementModule">
+              <span class="custom-control-label">Posm placement</span>
+            </label>
+            <label class="custom-control custom-checkbox">
+              <input type="checkbox" class="custom-control-input"  formControlName="salesAndOrdersModule">
+              <span class="custom-control-label">Sales and orders</span>
+            </label>
+            <label class="custom-control custom-checkbox">
+              <input type="checkbox" class="custom-control-input"  formControlName="marketSensingModule">
+              <span class="custom-control-label">Market sensing</span>
+            </label>
+            <label class="custom-control custom-checkbox">
+              <input type="checkbox" class="custom-control-input"  formControlName="giveawaysModule">
+              <span class="custom-control-label">Giveaways</span>
+            </label>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-body">
+        <h3 class="card-title">Outlets filter</h3>
+        <div class="form-group">
+          <label class="form-label">Please select Regions the campaign will take place</label>
+          <div class="selectgroup selectgroup-pills">
+            <label class="selectgroup-item"  *ngFor="let region of regions" >
+              <input type="checkbox" [ngModelOptions]="{standalone: true}" [(ngModel)]="region.selected" class="selectgroup-input" >
+              <span class="selectgroup-button">{{ region.name | titlecase }}</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Outlet classifications involved in the campaign</label>
+          <div class="selectgroup selectgroup-pills">
+            <label class="selectgroup-item"  *ngFor="let classification of classifications" >
+              <input type="checkbox" [ngModelOptions]="{standalone: true}" [(ngModel)]="classification.selected" class="selectgroup-input" >
+              <span class="selectgroup-button">{{ classification.name | titlecase }}</span>
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" *ngIf="newProjectForm.value.posmPlacementModule || newProjectForm.value.marketSensingModule">
+      <div class="card-body">
+        <h3 class="card-title">Posm selection</h3>
+        <div class="form-group">
+          <label class="form-label">Please choose the posms required in the project</label>
+          <div class="selectgroup selectgroup-pills">
+            <label class="selectgroup-item"  *ngFor="let posm of posms" >
+              <input type="checkbox" [ngModelOptions]="{standalone: true}" [(ngModel)]="posm.selected" class="selectgroup-input">
+              <span class="selectgroup-button">{{ posm.name | titlecase }}</span>
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" *ngIf="newProjectForm.value.giveawaysModule">
+      <div class="card-body">
+        <h3 class="card-title">Giveaways selection</h3>
+        <div class="form-group">
+          <label class="form-label">Please select giveaways required on the project.</label>
+          <div class="selectgroup selectgroup-pills">
+            <label class="selectgroup-item"  *ngFor="let giveaway of giveaways" >
+              <input type="checkbox" [ngModelOptions]="{standalone: true}" [(ngModel)]="giveaway.selected" class="selectgroup-input" >
+              <span class="selectgroup-button">{{ giveaway.name | titlecase }}</span>
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" *ngIf="newProjectForm.value.salesAndOrdersModule || newProjectForm.value.marketSensingModule">
+      <div class="card-body">
+        <h3 class="card-title">Add brands and products</h3>
+        <div class="form-group">
+          <label class="form-label">Please select Brands involved in the campaign</label>
+          <div class="selectgroup selectgroup-pills">
+            <label class="selectgroup-item"  *ngFor="let brand of client?.brands" >
+              <input type="checkbox" *ngIf="brand.products !== undefined" [ngModelOptions]="{standalone: true}" [(ngModel)]="brand.selected" class="selectgroup-input" (change)="selectBrand(brand)">
+              <span class="selectgroup-button" *ngIf="brand.products !== undefined">{{ brand.name | titlecase }}</span>
+            </label>
+          </div>
+        </div>
+
+        
+
+        <div class="form-group mt-3">
+          <label class="form-label">Select Products involved in the campaign</label>
+
+          <ul class="products">
+            <li *ngFor="let product of availableProducts; let i=index" class="{{ product.selected == true ? 'active' : '' }}">
+              <div class="header" >
+                <label class="custom-control custom-checkbox"  >
+                  <input type="checkbox" class="custom-control-input {{ product.selected == true ? 'checked' : '' }}" (change)="selectProduct(product)">
+                  <span class="custom-control-label">{{ product.name | titlecase }}</span>
+                </label>
+              </div>
+              <div class="body">
+                <label class="form-label">Please enter competitive products ({{product.competetiveProducts ? product.competetiveProducts.length : 0}})</label>
+                <mat-form-field class="example-chip-list">
+                  <mat-chip-list #chipList>
+                    <mat-chip
+                      *ngFor="let prdct of product.competetiveProducts"
+                      [selectable]="true"
+                      [removable]="true"
+                      (removed)="removeCompetetiveProduct(prdct, product)">
+                      {{prdct.name}}
+                      <mat-icon matChipRemove >cancel</mat-icon>
+                    </mat-chip>
+                    <input
+                      placeholder="New product..."
+                      #productInput
+                      [formControl]="product.formInput"
+                      [matAutocomplete]="auto"
+                      [matChipInputFor]="chipList"
+                      (input)="onSearchChange($event.target.value)"
+                      (matChipInputTokenEnd)="addCompetetiveProduct($event, product)">
+                  </mat-chip-list>
+                  <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectedCompetitiveProduct($event, product)">
+
+                    <mat-option *ngFor="let prdct of filteredproducts" [value]="prdct._id">
+                      {{prdct.name}}
+                    </mat-option>
+                    
+                  </mat-autocomplete>
+                </mat-form-field>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-body">
+
+        <h3 class="card-title">Add contact people information</h3>
+
+        <div class="form-group contact-wrapper" formArrayName="contactPeople">
+          <label class="form-label">Contact people</label>
+          <div class="contact-card" *ngFor="let contactPerson of newProjectForm.controls.contactPeople?.value; let i=index; trackBy:trackByFn">
+            <div class="contact-card-header">
+              <label class="form-label">Contact {{i+1}}</label>
+              <button class="btn btn-secondary remove-person-button" type="button" (click)="removeContactPerson(i)"><i class="fe fe-x"></i></button>
+            </div>
+
+            <div class="contact-card-body"  formGroupName="{{i}}">
+            <div class="form-group">
+            <label class="form-label">Full name</label>
+            <input type="text" class="form-control"  placeholder="Full name" formControlName="name">
+            </div>
+            <div class="form-group">
+            <label class="form-label">Position in the company</label>
+            <input type="text" class="form-control"  placeholder="Poition at the company" formControlName="position" >
+          </div>
+          <div class="form-group">
+          <label class="form-label">Email adress</label>
+            <input type="email" class="form-control" placeholder="email" formControlName="email">
+          </div>
+          <div class="form-group mb-0">
+          <label class="form-label">Phone number</label>
+          <input type="tel" class="form-control" placeholder="+255700000000" formControlName="phone">
+            <!-- <ngx-intl-tel-input
+                  [inputId]="'sds'"
+                  [cssClass]="'form-control'"
+                  [preferredCountries]="preferredCountries"
+                  [enableAutoCountrySelect]="false"
+                  [enablePlaceholder]="true"
+                  [searchCountryFlag]="true"
+                  [searchCountryField]="[SearchCountryField.Iso2, SearchCountryField.Name]"
+                  [selectFirstCountry]="false"
+                  [selectedCountryISO]="CountryISO.Tanzania"
+                  [maxLength]="15"
+            
+                  [phoneValidation]="true"
+                  [separateDialCode]="true"
+                  name="phone" formControlName="phone">
+            </ngx-intl-tel-input> -->
+
+          </div>
+            </div>
+          </div>
+        </div>
+
+        <button class="btn btn-secondary btn-block" (click)="addContactPerson()">ADD CONTACT PEOPLE</button>
+
+      </div>
+      
+    
+  </div>
+  <div class="pt-0 pb-5 clearfix">
+    <button type="button" class="btn btn-primary btn-lg pull-right" (click)="createProject()">Save Project</button>
+  </div>
+  </form>
+  </div>
+</div>

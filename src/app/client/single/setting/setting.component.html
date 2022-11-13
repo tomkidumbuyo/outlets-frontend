@@ -1,0 +1,121 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-7 pt-3">
+            
+            <h4 class="danger-title pb-2">Edit client</h4>
+            <form [formGroup]="editClientForm">
+                <div class="form-group">
+                  <label class="form-label">Company Name<span class="form-required">*</span></label>
+                  <input type="text" class="form-control {{editClientForm.controls.name.invalid && (editClientForm.controls.name.dirty || editClientForm.controls.name.touched) ? 'is-invalid' : ''}}" formControlName="name" placeholder="Enter Company Name">
+                </div>
+      
+                <div class="form-group">
+                  <label class="form-label">Classification<span class="form-required">*</span></label>
+                  <mat-form-field>
+                    <mat-label >Select Classification</mat-label>
+                    <mat-select formControlName="classification">
+                      <mat-option value="FMCG">FCMGs</mat-option>
+                      <mat-option value="Heavy Industries">Heavy industries</mat-option>
+                      <mat-option value="Merchandising">Merchandising</mat-option>
+                      <mat-option value="Communication">Communication</mat-option>
+                      <mat-option value="Financial">Financial</mat-option>
+                      <mat-option value="Agri Products">Agriculture Products</mat-option>
+                      <mat-option value="RealEstate">RealEstate </mat-option>
+                      <mat-option value="Electronics">Electronics</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+      
+                <div class="form-group" >
+                  <label class="form-label">Phone numbers<span class="form-required">*</span></label>
+                  <ng-container formArrayName="phones">
+                  <div class="row gutters-xs mb-2" *ngFor="let phone of phones.controls; let i = index;">
+                    <div class="col">
+                      <ngx-intl-tel-input
+                        [inputId]="'adsasd'"
+                        [cssClass]="'form-control'"
+                        [preferredCountries]="preferredCountries"
+                        [enableAutoCountrySelect]="false"
+                        [enablePlaceholder]="true"
+                        [searchCountryFlag]="true"
+                        [searchCountryField]="[SearchCountryField.Iso2, SearchCountryField.Name]"
+                        [selectFirstCountry]="false"
+                        [selectedCountryISO]="CountryISO.Tanzania"
+                        [maxLength]="15"
+                      
+                        [phoneValidation]="true"
+                        [separateDialCode]="true"
+                        name="phone" formControlName="{{i}}">
+                      </ngx-intl-tel-input>
+                      <!--<input type="text" class="form-control" formControlName="{{i}}" placeholder="+255700000000">-->
+                    </div>
+                    <span class="col-auto">
+                      <button class="btn btn-secondary" type="button" (click)="removeItem(i)"><i class="fe fe-x"></i></button>
+                    </span>
+                  </div>
+                  </ng-container>
+      
+      
+                  <button class="mt-1 btn btn-secondary btn-block" (click)="addItem()"><span class="fe fe-plus mr-1"></span> ADD PHONE NUMBER</button>
+                </div>
+      
+                <div class="form-group">
+                  <label class="form-label">Email<span class="form-required">*</span></label>
+                  <input type="email" class="form-control {{editClientForm.controls.email.invalid && (editClientForm.controls.email.dirty || editClientForm.controls.email.touched) ? 'is-invalid' : ''}}" formControlName="email" placeholder="example@mail.com">
+                </div>
+      
+                <div class="form-group">
+                  <label class="form-label">Website </label>
+                  <input type="text" class="form-control {{editClientForm.controls.website.invalid && (editClientForm.controls.website.dirty || editClientForm.controls.website.touched) ? 'is-invalid' : ''}}" formControlName="website" placeholder="www.example.com">
+                </div>
+      
+                <div class="form-group">
+                  <label class="form-label">Adress <span class="form-required">*</span></label>
+                  <textarea class="form-control {{editClientForm.controls.adress.invalid && (editClientForm.controls.adress.dirty || editClientForm.controls.adress.touched) ? 'is-invalid' : ''}}"  formControlName="adress" placeholder="Adress"></textarea>
+                </div>
+      
+            </form>
+            <button type="button" class="btn btn-primary mb-4 " (click)="saveClient()">Save Changes</button>
+            
+        </div>
+    </div>
+
+    <div class="row mt-3">
+        <div class="col-md-7 pt-1">
+            <div class="card card-body mb-4">
+                <h4 class="danger-title">Delete client</h4>
+                <p> <span class="gl-text-gray-500">Client will be permanently deleted immediately.</span></p>
+                <p>This action will <strong>permanently delete</strong> <code>{{client.name}}</code> <strong>immediately</strong>, including its brands, projects and all related resources, including members, products, etc.</p>
+                <p><strong>Are you ABSOLUTELY SURE you wish to delete this client?</strong></p>
+                <button type="button" class="btn btn-danger btn-md gl-button" data-toggle="modal" data-target="#delete-client">Delete project</button> 
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="delete-client" tabindex="-1"  aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <header class="modal-header">
+                    <h4 class="modal-title">Delete client. Are you ABSOLUTELY SURE?</h4> 
+                 
+                </header>
+                <div  class="modal-body"> 
+                    <div role="alert" class="alert alert-danger"> <!----> 
+                        <h4 class="gl-alert-title">You are about to permanently delete this client</h4> 
+                        <div class="gl-alert-body">Once a client is permanently deleted, it <strong>cannot be recovered</strong>. Permanently deleting this client will <strong>immediately delete</strong> its products and <strong>all related resources</strong>.</div>
+                    </div> 
+                    <p>This action cannot be undone. You will lose this client's products and all related resources, including projects, products.</p> 
+                    <p class="gl-mb-1">Please type the following to confirm:</p> <p><code class="gl-white-space-pre-wrap">{{client.name}}</code></p> 
+                    <input type="text" class="gl-form-input form-control" [(ngModel)]="deleteVerification"> 
+                </div>
+                <footer  class="modal-footer gl-bg-gray-10 gl-p-5">
+                    <button type="button" class="btn js-modal-action-cancel btn-default btn-md gl-button" data-dismiss="modal">Cancel, keep client</button> <!----> 
+                    <button type="button" class="btn js-modal-action-primary btn-danger btn-md gl-button"  [disabled]="deleteVerification != client.name" (click)="deleteClient()">Yes, delete project</button>
+                </footer>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+

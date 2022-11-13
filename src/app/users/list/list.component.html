@@ -1,0 +1,145 @@
+<div class="container">
+  <div class="row">
+    <div class="col-12">
+      <div class="card"><div class="card-header">
+        <h3 class="card-title">Users</h3>
+        <div class="card-options">
+          <a class="btn btn-primary btn-sm" data-toggle="modal" data-target="#new-user">New user</a>
+        </div>
+      </div>
+        <div class="card-body p-0">
+        <div class="table-responsive">
+          <table class="table table-hover table-outline table-vcenter text-nowrap card-table">
+            <thead>
+              <tr>
+                <th with="38px" ></th>
+                <th with="38px" ></th>
+                <th with="38px" ></th>
+                <th width="20px" style="width: 20px;">#</th>
+                <th class="text-center w-1"><i class="icon-people"></i></th>
+                <th>Name</th>
+                
+                <th>Phone</th>
+                <th>Email</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let user of users; let i = index">
+                <td with="38px"><span class="fe fe-x" (click)="deleteUser(user)"></span></td>
+                <td with="38px"><span class="fe fe-edit-2"  data-toggle="modal" data-animation="bounce" data-target="#new-user" (click)="editUser(user)"></span></td>
+                <td with="38px"><span class="fe fe-lock"  data-toggle="modal" data-animation="bounce" data-target="#change-password" (click)="editUser(user)"></span></td>
+                <td width="20px" style="width: 20px;">{{i+1}}</td>
+                <td class="text-center">
+                  <div class="avatar d-block" style="background-image: url(demo/faces/female/26.jpg)">
+                    <span class="avatar-status bg-green"></span>
+                  </div>
+                </td>
+                <td>{{ user.first_name | titlecase }} {{ user.last_name | titlecase }}</td>
+               
+                <td>{{ user.phone}}</td>
+                <td>{{ user.email}}</td>
+              </tr>
+              
+            </tbody>
+          </table>
+        </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="new-user" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">New User</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="clearUser()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+        <form [formGroup]="newUserForm" class="form-horizontal">
+          <div class="row">
+            <div class="col-md-12">
+            <label >Full name</label>
+          </div>
+            <div class="form-group col-sm-6">
+              <input type="text" class="form-control"  placeholder="first name"  formControlName="first_name">
+            </div>
+            <div class="form-group col-sm-6">
+              <input type="text" class="form-control"  placeholder="last name"  formControlName="last_name">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="exampleFormControlInput3">Email address</label>
+            <input type="email" class="form-control" id="exampleFormControlInput3" placeholder="name@example.com"  formControlName="email">
+          </div>
+          <div class="form-group">
+            <label for="exampleFormControlInput3">Phone</label>
+            <input type="tel" class="form-control" placeholder="+255 000 000 000"  formControlName="phone">
+          </div>
+          <div class="form-group">
+            <label for="exampleFormControlInput3">Type</label>
+            <select formControlName="type" class="form-control">
+              <option value="admin">Admin</option>
+              <option value="aim">Aim Group</option>
+              <option value="plant">Plant Manager</option>
+              <option value="distributionCenter">Distribution Center</option>
+              <option value="regionalSuperviser">Regional Supervisor</option>
+              <option value="temp">Temp</option>
+            </select>
+          </div>
+          <div class="form-group" *ngIf="newUserForm.get('type').value == 'distributionCenter' || newUserForm.get('type').value == 'regionalSuperviser'">
+            <label for="exampleFormControlInput3">Region</label>
+            <select formControlName="region" class="form-control" (change)="selectRegion()">
+              <option value="{{region._id}}" *ngFor="let region of regions">{{region.name}}</option>
+            </select>
+          </div>
+          <div class="form-group" *ngIf="newUserForm.get('type').value == 'distributionCenter'">
+            <label for="exampleFormControlInput3">Distribution Center</label>
+            <select formControlName="dc" class="form-control">
+              <option value="{{dc._id}}" *ngFor="let dc of distributionCenters">{{dc.name}}</option>
+            </select>
+          </div>
+          <div class="form-group" *ngIf="!editedUser !== false">
+            <label for="exampleFormControlInput4">Password</label>
+            <input type="password" class="form-control" id="exampleFormControlInput4"  formControlName="password">
+          </div>
+          <div class="form-group" *ngIf="!editedUser !== false">
+            <label for="exampleFormControlInput5">Repeat Password</label>
+            <input type="password" class="form-control" id="exampleFormControlInput5"  formControlName="retype_password">
+          </div>
+          <button (click)="register()" class="btn btn-primary btn-block">Register</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="change-password" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Change Password for {{editedUser?.first_name}}  {{editedUser?.last_name}}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="clearUser()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="newUserForm" class="form-horizontal">
+          <div class="form-group">
+            <label >Password</label>
+            <input type="password" class="form-control"   formControlName="password">
+          </div>
+          <div class="form-group">
+            <label >Repeat Password</label>
+            <input type="password" class="form-control"   formControlName="retype_password">
+          </div>
+          <button (click)="changePassword()" class="btn btn-primary btn-block">Register</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

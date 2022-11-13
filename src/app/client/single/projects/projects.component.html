@@ -1,0 +1,41 @@
+<div class="container" *ngIf="client">
+  <div class="card mt-5">
+    <div class="card-header">
+      <h3 class="card-title">Projects</h3>
+      <div class="card-options">
+        <a [routerLink]="['/client/' + client?._id + '/newproject']" class="btn btn-primary btn-sm" >New project</a>
+      </div>
+    </div>
+    <div class="card-body p-0">
+      <table  class="table table-hover table-outline table-vcenter text-nowrap card-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Duration</th>
+            <th>Regions</th>
+            <th>Products</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr  *ngFor="let project of client.projects" >
+            <td>
+              <a  [routerLink]="['/project/' + project._id]">
+                <div>{{project.name}}</div>
+              </a>
+            </td>
+            <td>
+              <a [routerLink]="['/project/' + project._id]">{{project.from}} - {{project.to}}</a>
+            </td>
+            <td>
+              <a [routerLink]="['/project/' + project._id]">{{project.regions.length}}</a>
+            </td>
+            <td>
+              <a [routerLink]="['/project/' + project._id]">{{project.products.length}}</a>
+            </td>
+
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

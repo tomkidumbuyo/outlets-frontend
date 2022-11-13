@@ -1,0 +1,174 @@
+table.table{
+    tbody{
+      tr{
+        td{
+          cursor: pointer;
+        }
+      }
+      tr.active{
+        td{
+          color: blue;
+          font-weight: bold;
+          background: rgba($color: #000000, $alpha: 0.02);
+        }
+      }
+    }
+  }
+
+  .outlet-filter-row {
+      background: #fff;
+      border-bottom: 1px solid rgba(0, 40, 100, 0.12);
+  }
+  .outlet-list-row {
+    margin-top: 10px;
+  }
+  
+  .regions-col {
+    border-right: 1px solid #ccc;
+    padding-right: 0px;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    bottom: 0px;
+    overflow: auto;
+    .header{
+      border-bottom: 1px solid #ccc;
+      height: 50px;
+      position: absolute;
+      left: 0px;
+      right: 0px;
+      top: 0px;
+      bottom: 0px;
+      button{
+        border: none;
+        background: transparent;
+        width: 100%;
+        height: 50px;
+        color: #444;
+        font-weight: bold;
+        span{
+          color: #444;
+        }
+      }
+      button:hover{
+        color: #000;
+        span{
+          color: blue;
+        }
+      }
+    }
+    .body{
+      position: absolute;
+      left: 0px;
+      top: 50px;
+      bottom: 0px;
+      right: 0px;
+      overflow: auto;
+    }
+  }
+  
+  .main-col {
+    padding: 0px;
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    bottom: 0px;
+    overflow: auto;
+    .header{
+      border-bottom:1px solid #ccc ;
+      position: absolute;
+      left: 0px;
+      top: 0px;
+      right: 0px;
+      height: 50px;
+      padding: 0px;
+      ul.nav.nav-pills{
+        height: 50px;
+        width: auto;
+        float: left;
+        margin-left: 20px;
+        li{
+          height: 50px;
+          a{
+            height: 50px;
+            color: #444;
+            padding: 10px;
+            line-height: 30px;
+            display: block;
+          }
+        }
+        li.active{
+          a{
+            font-weight: bold;
+            color:000;
+            font-weight: bold;
+            border-bottom: 3px solid #2980b9;
+            display: block;
+            margin-bottom: -1px;
+            height: 51px;
+            cursor: pointer;
+          }
+        }
+      }
+  
+      ul.nav.nav-pills.pull-right{
+        float: right;
+      }
+  
+      .page-title{
+        margin: 0px 10px;
+        line-height: 50px;
+        font-family: "Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+        .bold{
+          font-weight: bold;
+        }
+      }
+  
+      button.new-dc {
+        font-weight: bold;
+        float: right;
+        border: none;
+        color: #fff;
+        height: 40px;
+        display: block;
+        padding: 10px 15px;
+        line-height: 20px;
+        cursor: pointer;
+        margin: 5px;
+        border-radius: 6px;
+        background: #0652DD;
+        span {
+          color: #fff
+        }
+      }
+      button.new-dc:hover {
+        background-color: #1B1464;
+        color: #fff;
+        span {
+          color: #EA2027
+        }
+      }
+    }
+    .body{
+      position: absolute;
+      left: 0px;
+      top: 50px;
+      bottom: 0px;
+      right: 0px;
+      overflow: auto;
+    }
+  }
+
+  .nav{
+    .nav-link {
+      font-weight: bold;
+      color: rgba(0, 0, 0, 0.5);
+    }
+    .nav-link.active {
+      color: #0652DD;
+    }
+  }
+
+  .list-group-item.active .icon {
+    color: #0652DD !important;
+  }

@@ -1,0 +1,103 @@
+<div class="container mt-3">
+
+  <div class="row row-cards">
+    <div class="col-lg-4 col-md-6">
+      <div class="card">
+ 
+        <div class="card-body">
+          <div class="media mb-1">
+            <div class="media-body">
+              <h5>{{project?.client?.name}}</h5>
+              <address class="text-muted small">
+                <span *ngFor="let brand of project?.brands; let i = index" [attr.data-index]="i">{{i > 0 ? ', ' : ''}}{{brand.name}}</span>
+              </address>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-6">
+              <div class="h6">Created</div>
+              <p>{{project?.date | date : 'M/d/yy'}}</p>
+            </div>
+            <div class="col-6">
+              <div class="h6">Campaign dates</div>
+              <p>{{project?.from | date : 'M/d/yy'}} - {{project?.to | date : 'M/d/yy'}}</p>
+            </div>
+          </div>
+          <div class="h6">Regions</div>
+          <p><span *ngFor="let region of project?.regions; let i = index" [attr.data-index]="i">{{i > 0 ? ', ' : ''}}{{region.name}}</span></p>
+        </div>
+      </div>
+  
+    
+    </div>
+    <div class="col-lg-8 col-md-6">
+      <div class="card">
+      <table class="table mb-0">
+        <tr>
+          <td style="border-right: 1px solid rgba(0, 40, 100, 0.12);"><h6>Name</h6></td>
+          <td colspan="4">{{project?.name}}</td>
+        </tr>
+        <tr>
+          <td style="border-right: 1px solid rgba(0, 40, 100, 0.12);"><h6>Client</h6></td>
+          <td colspan="4">{{project?.client?.name}}</td>
+        </tr>
+        <tr>
+          <td style="border-right: 1px solid rgba(0, 40, 100, 0.12);"><h6>Brands involved</h6></td>
+          <td colspan="4"><span class="badge badge-default mr-1" *ngFor="let brand of project?.brands; let i = index" [attr.data-index]="i">{{brand.name}}</span></td>
+        </tr>
+        <tr>
+          <td style="border-right: 1px solid rgba(0, 40, 100, 0.12);"><h6>Outlet Classifications</h6></td>
+          <td colspan="4"><span class="badge badge-default mr-1" *ngFor="let classification of project?.classifications; let i = index" [attr.data-index]="i">{{classification.name}}</span></td>
+        </tr>
+        <tr>
+          <td style="border-right: 1px solid rgba(0, 40, 100, 0.12);"><h6>Duration</h6></td>
+          <td colspan="4">{{project?.from | date : 'M/d/yy'}} - {{project?.to | date : 'M/d/yy'}}</td>
+        </tr>
+        <tr>
+          <td style="border-right: 1px solid rgba(0, 40, 100, 0.12);"><h6>Date created</h6></td>
+          <td colspan="4">{{project?.date | date : 'M/d/yy'}}</td>
+        </tr>
+        <tr>
+          <td style="border-right: 1px solid rgba(0, 40, 100, 0.12);"><h6>Regions</h6></td>
+          <td colspan="4"><span class="badge badge-default mr-1" *ngFor="let region of project?.regions; let i = index" [attr.data-index]="i">{{region.name}}</span></td>
+        </tr>
+        <tr>
+          <td [attr.rowspan]=" project ? (project.products.length + 1) : 1 " style="border-right: 1px solid rgba(0, 40, 100, 0.12);"><h6>Products</h6></td>
+          <td><h6>Product</h6></td>
+          <td colspan="3"><h6>Competetive Products</h6></td>
+        </tr>
+        <tr *ngFor="let product of project?.products">
+          <td><span class="badge badge-default mr-1">{{product.name}}</span></td>
+          <td colspan="3"><span class="badge badge-default mr-1" *ngFor="let competetiveProduct of product?.competetiveProducts; let i = index" [attr.data-index]="i">{{competetiveProduct.name}}</span></td>
+        </tr>
+
+        <tr>
+          <td style="border-right: 1px solid rgba(0, 40, 100, 0.12);"><h6>POSMs</h6></td>
+          <td colspan="4"><span class="badge badge-default mr-1" *ngFor="let posm of project?.posms; let i = index" [attr.data-index]="i">{{posm.name}}</span></td>
+        </tr>
+        <tr>
+          <td style="border-right: 1px solid rgba(0, 40, 100, 0.12);"><h6>Giveaway</h6></td>
+          <td colspan="4"><span class="badge badge-default mr-1" *ngFor="let giveaway of project?.giveaways; let i = index" [attr.data-index]="i">{{giveaway.name}}</span></td>
+        </tr>
+
+        <tr>
+          <td [attr.rowspan]=" project ? (project.contactPeople.length + 1) : 1 " style="border-right: 1px solid rgba(0, 40, 100, 0.12);"><h6>Contact People</h6></td>
+          <td><h6>Name</h6></td>
+          <td><h6>Position</h6></td>
+          <td><h6>Email</h6></td>
+          <td><h6>phone</h6></td>
+        </tr>
+        <tr *ngFor="let person of project?.contactPeople">
+          <td>{{person.name | titlecase }}</td>
+          <td>{{person.position}}</td>
+          <td>{{person.email}}</td>
+          <td>{{person.phone}}</td>
+        </tr>
+      </table>
+    </div>
+   
+   
+    </div>
+  </div>
+
+</div>

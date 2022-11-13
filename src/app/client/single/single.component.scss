@@ -1,0 +1,40 @@
+
+.client-navbar{
+  background: #fff;
+  border-bottom: 1px solid rgba(0, 40, 100, 0.12);
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  a.navbar-brand {
+    img {
+      
+    }
+  }
+
+
+    ul.navbar-nav {
+
+      li.nav-item {
+        a.nav-link {
+          border-bottom: 0px;
+          font-weight: bold;
+        }
+      }
+
+      li.nav-item.active {
+        a.nav-link {
+          color: blue;
+        }
+      }
+    }
+}
+.client-body{
+  position: absolute;
+  top: 71.5px;
+  left: 0px;
+  bottom: 0px;
+  right: 0px;
+  overflow: auto;
+}
+

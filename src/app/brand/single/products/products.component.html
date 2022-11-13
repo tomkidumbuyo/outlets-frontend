@@ -1,0 +1,71 @@
+<div class="container">
+  <div class="card mt-5">
+    <div class="card-header">
+      <h3 class="card-title">Products</h3>
+      <div class="card-options">
+        <a [routerLink]="['/brand/' + brand?._id + '/newproduct']" class="btn btn-primary btn-sm" >New product</a>
+      </div>
+    </div>
+    <div class="card-body p-0">
+      <table  class="table table-hover table-outline table-vcenter text-nowrap card-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Classification</th>
+            <th>sku</th>
+            <th width="100px"></th>
+            <th width="100px"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="ng-star-inserted" *ngFor="let product of brand?.products">
+            <td>
+              <a [routerLink]="['/product/' + product._id]">
+                <div>{{product.name}}</div>
+              </a>
+            </td>
+
+            <td>
+              <span class="badge badge-default mr-1"  *ngFor="let classification of product.classifications">{{classification.name}}</span>
+            </td>
+            <td>
+                <span class="badge badge-default mr-1"  *ngFor="let sku of product.skus">{{sku.sku}}</span>
+            </td>
+            <td width="100px">
+              <a class="btn btn-primary btn-sm pull-right" [routerLink]="['/brand/' + product.brand._id + '/newproduct/' + product._id ]">Edit product</a>
+            </td>
+            <td width="100px">
+              <button class="btn btn-danger btn-sm pull-right" (click)="promptDeleteProduct(product)">Delete product</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="delete-product" tabindex="-1"  aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <header class="modal-header">
+              <h4 class="modal-title">Delete product. Are you ABSOLUTELY SURE?</h4> 
+           
+          </header>
+          <div  class="modal-body"> 
+              <div role="alert" class="alert alert-danger"> <!----> 
+                  <h4 class="gl-alert-title">You are about to permanently delete this product</h4> 
+                  <div class="gl-alert-body">Once a product is permanently deleted, it <strong>cannot be recovered</strong>. Permanently deleting this product will <strong>immediately delete</strong> its products and <strong>all related resources</strong>.</div>
+              </div> 
+              <p>This action cannot be undone. You will lose this product's products and all related resources, including projects, products.</p> 
+              <p class="gl-mb-1">Please type the following to confirm:</p> <p><code class="gl-white-space-pre-wrap">{{deletedProduct?.name}}</code></p> 
+              <input type="text" class="gl-form-input form-control" [(ngModel)]="deleteVerification"> 
+          </div>
+          <footer  class="modal-footer gl-bg-gray-10 gl-p-5">
+              <button type="button" class="btn js-modal-action-cancel btn-default btn-md gl-button" data-dismiss="modal">Cancel, keep product</button> <!----> 
+              <button type="button" class="btn js-modal-action-primary btn-danger btn-md gl-button"  [disabled]="deletedProduct && deleteVerification != deletedProduct.name" (click)="deleteProduct()">Yes, delete product</button>
+          </footer>
+      </div>
+  </div>
+</div>
+
+

@@ -1,0 +1,118 @@
+<div class="container">
+  <div class="card mt-5">
+    <div class="card-header">
+      <h3 class="card-title">Brands</h3>
+      <div class="card-options">
+        <a data-toggle="modal" data-target="#brandmodal" class="btn btn-primary btn-sm" >New brand</a>
+      </div>
+    </div>
+    <div class="card-body p-0">
+      <table  class="table table-hover table-outline table-vcenter text-nowrap card-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Manager</th>
+            <th>Email</th>
+            
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="ng-star-inserted" *ngFor="let brand of client?.brands">
+            <td>
+              <a [routerLink]="['/brand/' + brand._id]">
+                <div>{{brand.name}}</div>
+                <div class="small text-muted">
+                  Registered: {{brand.date}}
+                </div>
+              </a>
+            </td>
+            <td>
+              <a [routerLink]="['/brand/' + brand._id]">{{brand.manager.name}}</a>
+            </td>
+
+            <td>
+              <div class="small text-muted">
+                <a [routerLink]="['/brand/' + brand._id]">{{brand.manager.email}}</a>
+              </div>
+
+            </td>
+
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="brandmodal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">New Brands</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true" class=""></span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+        <form [formGroup]="newBrandForm">
+          
+          <div class="form-group">
+            <label class="form-label">Brand Name<span class="form-required">*</span></label>
+            <input type="text" class="form-control {{newBrandForm.controls.name.invalid && (newBrandForm.controls.name.dirty || newBrandForm.controls.name.touched) ? 'is-invalid' : ''}}" formControlName="name" placeholder="Enter Company Name">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Manager's Name<span class="form-required">*</span></label>
+            <input type="text" class="form-control {{newBrandForm.controls.manager.invalid && (newBrandForm.controls.manager.dirty || newBrandForm.controls.manager.touched) ? 'is-invalid' : ''}}" formControlName="manager" placeholder="Enter Company Manager">
+          </div>
+
+          <div class="form-group" >
+            <label class="form-label">Manger's Phone numbers<span class="form-required">*</span></label>
+            <ng-container formArrayName="phones">
+            <div class="row gutters-xs mb-2" *ngFor="let phone of phones.controls; let i = index;">
+              <div class="col">
+                <ngx-intl-tel-input
+                  [inputId]="'adsasd'"
+                  [cssClass]="'form-control'"
+                  [preferredCountries]="preferredCountries"
+                  [enableAutoCountrySelect]="false"
+                  [enablePlaceholder]="true"
+                  [searchCountryFlag]="true"
+                  [searchCountryField]="[SearchCountryField.Iso2, SearchCountryField.Name]"
+                  [selectFirstCountry]="false"
+                  [selectedCountryISO]="CountryISO.Tanzania"
+                  [maxLength]="15"
+               
+                  [phoneValidation]="true"
+                  [separateDialCode]="true"
+                  name="phone" formControlName="{{i}}">
+                </ngx-intl-tel-input>
+                <!--<input type="text" class="form-control" formControlName="{{i}}" placeholder="+255700000000">-->
+              </div>
+              <span class="col-auto">
+                <button class="btn btn-secondary" type="button" (click)="removeItem(i)"><i class="fe fe-x"></i></button>
+              </span>
+            </div>
+            </ng-container>
+
+
+            <button class="mt-1 btn btn-secondary btn-block" (click)="addItem()"><span class="fe fe-plus mr-1"></span> ADD PHONE NUMBER</button>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Email<span class="form-required">*</span></label>
+            <input type="email" class="form-control {{newBrandForm.controls.email.invalid && (newBrandForm.controls.email.dirty || newBrandForm.controls.email.touched) ? 'is-invalid' : ''}}" formControlName="email" placeholder="example@mail.com">
+          </div>
+
+        </form>
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" (click)="createBrand()">Add</button>
+      </div>
+    </div>
+  </div>
+</div>

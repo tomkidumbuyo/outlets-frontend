@@ -1,0 +1,61 @@
+<div class="container">
+    <div class="row">
+
+        <div class="col-md-7 mt-3">
+            <form [formGroup]="newBrandForm">
+          
+                <div class="form-group mt-4">
+                  <label class="form-label">Brand Name<span class="form-required">*</span></label>
+                  <input type="text" class="form-control {{newBrandForm.controls.name.invalid && (newBrandForm.controls.name.dirty || newBrandForm.controls.name.touched) ? 'is-invalid' : ''}}" formControlName="name" placeholder="Enter Company Name">
+                </div>
+      
+                <div class="form-group">
+                  <label class="form-label">Manager's Name<span class="form-required">*</span></label>
+                  <input type="text" class="form-control {{newBrandForm.controls.manager.invalid && (newBrandForm.controls.manager.dirty || newBrandForm.controls.manager.touched) ? 'is-invalid' : ''}}" formControlName="manager" placeholder="Enter Company Manager">
+                </div>
+      
+                <div class="form-group" >
+                  <label class="form-label">Manger's Phone numbers<span class="form-required">*</span></label>
+                  <ng-container formArrayName="phones">
+                  <div class="row gutters-xs mb-2" *ngFor="let phone of phones.controls; let i = index;">
+                    <div class="col">
+                      <ngx-intl-tel-input
+                        [inputId]="'adsasd'"
+                        [cssClass]="'form-control'"
+                        [preferredCountries]="preferredCountries"
+                        [enableAutoCountrySelect]="false"
+                        [enablePlaceholder]="true"
+                        [searchCountryFlag]="true"
+                        [searchCountryField]="[SearchCountryField.Iso2, SearchCountryField.Name]"
+                        [selectFirstCountry]="false"
+                        [selectedCountryISO]="CountryISO.Tanzania"
+                        [maxLength]="15"
+      
+                        [phoneValidation]="true"
+                        [separateDialCode]="true"
+                        name="phone" formControlName="{{i}}">
+                      </ngx-intl-tel-input>
+                      <!--<input type="text" class="form-control" formControlName="{{i}}" placeholder="+255700000000">-->
+                    </div>
+                    <span class="col-auto">
+                      <button class="btn btn-secondary" type="button" (click)="removeItem(i)"><i class="fe fe-x"></i></button>
+                    </span>
+                  </div>
+                  </ng-container>
+      
+      
+                  <button class="mt-1 btn btn-secondary btn-block" (click)="addItem()"><span class="fe fe-plus mr-1"></span> ADD PHONE NUMBER</button>
+                </div>
+      
+                <div class="form-group">
+                  <label class="form-label">Email<span class="form-required">*</span></label>
+                  <input type="email" class="form-control {{newBrandForm.controls.email.invalid && (newBrandForm.controls.email.dirty || newBrandForm.controls.email.touched) ? 'is-invalid' : ''}}" formControlName="email" placeholder="example@mail.com">
+                </div>
+
+                <button class="btn btn-primary" (click)="updateBrand()">Save</button>
+      
+            </form>
+        </div>
+    </div>
+
+</div>

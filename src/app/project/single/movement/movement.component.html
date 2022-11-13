@@ -1,0 +1,603 @@
+<div class="mt-5" style="text-align: center;position: fixed;top: 45%;width: 50%;left: 25%;" *ngIf="!dataLoaded">
+  <h4 style="text-align: center;">{{loadingMessage}}</h4>
+  <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+</div>
+
+
+<div class="row outlet-filter-row"  *ngIf="dataLoaded">
+  <div class="col-md-12">
+    <div class="container p-4">
+      <div class="row">
+        <div class="col-md-auto">
+          <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+            <div class="btn-group dropdown" role="group">
+              <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                {{regionModel != null ? regionModel.name : 'All Regions'}}
+              </button>
+              <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1" style="max-height: 50vh;overflow: auto;">
+                <li><a class="dropdown-item" (click)="selectRegion(null)">All Regions</a></li>
+                <li *ngFor="let region of regions"><a class="dropdown-item" (click)="selectRegion(region)">{{region.name | titlecase }}</a></li>
+              </ul>
+            </div>
+            <div class="btn-group" role="group" *ngIf="regionModel != null">
+              <button id="btnGroupDrop2" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                {{districtModel != null ? districtModel.name : 'All Districts'}}
+              </button>
+              <ul class="dropdown-menu" aria-labelledby="btnGroupDrop3" style="max-height: 50vh;overflow: auto;">
+                <li><a class="dropdown-item" (click)="selectDistrict(null)">All Districts</a></li>
+                <li *ngFor="let district of filteredDistricts"><a class="dropdown-item" (click)="selectDistrict(district)">{{district.name}}</a></li>
+              </ul>
+            </div>
+            <div class="btn-group" role="group" *ngIf="districtModel != null">
+              <button id="btnGroupDrop3" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                {{wardModel != null ? wardModel.name : 'All Wards'}}
+              </button>
+              <ul class="dropdown-menu" aria-labelledby="btnGroupDrop3" style="max-height: 50vh;overflow: auto;">
+                <li><a class="dropdown-item" (click)="selectWard(null)">All Wards</a></li>
+                <li *ngFor="let ward of filteredWards"><a class="dropdown-item" (click)="selectWard(ward)">{{ward.name}}</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3 pl-0">
+            <mat-form-field appearance="fill">
+              <mat-label>Enter a date range</mat-label>
+              <mat-date-range-input [rangePicker]="picker" (click)="picker.open()" >
+                <input matStartDate placeholder="Start date" [(ngModel)]="from" (ngModelChange)="timeChanged($event)">
+                <input matEndDate placeholder="End date" [(ngModel)]="to" (ngModelChange)="timeChanged($event)">
+              </mat-date-range-input>
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-date-range-picker #picker></mat-date-range-picker>
+            </mat-form-field>
+        </div>
+        <div class="col-md-auto pl-0">
+          <button class="btn btn-primary" (click)="resetTime()">Reset time interval</button>
+        </div>
+        <div class="col pr-0">
+          <nav class="nav pull-right mt-2">
+            <a class="nav-link {{ page == 'summary' ? 'active' : '' }}" (click)="select_page('summary')">Summary</a>
+            <a class="nav-link {{ page == 'outlets' ? 'active' : '' }}" (click)="select_page('outlets')">Outlets</a>
+            <a class="nav-link {{ page == 'posms' ? 'active' : '' }} pr-0" (click)="select_page('posms')">Posms</a>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="{{ (page == 'outlets' || page == 'posms') && selectedOutlet == null ? 'full p-0' : 'container p-2' }}  outlet-list-row" style="overflow: auto;"  *ngIf="dataLoaded">
+
+<div class="row" *ngIf="page == 'summary'">
+
+  <!-- <div class="col-sm-3">
+    <div class="card">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+          <table class="table table-hover mb-0">
+            <tbody>
+              <tr *ngFor="let region of regions" (click)="selectRegion(region)" class="{{selectedLocation._id == region._id ? 'active' : '' }}">
+                <td>{{region.code}}</td>
+                <td>{{region.name}}</td>
+                <!--<td>{{region.supervisor?.first_name}} {{region.supervisor?.last_name}}</td>--
+              </tr>
+            </tbody>
+          </table>
+        </div>
+    </div>
+    </div>
+  </div> -->
+  <div class="col-md-12" >
+
+    <div class="card">
+      <div class="card-body p-0">
+        <table class="table mb-0">
+          <tr>
+            <td style="border-right: 1px solid rgba(0, 40, 100, 0.12);"><h6>{{selectedLocationType}}</h6></td>
+            <td colspan="7">{{selectedLocation?.name}}</td>
+          </tr>
+          <tr>
+            <td style="border-right: 1px solid rgba(0, 40, 100, 0.12);"><h6>Outlets</h6></td>
+            <td colspan="7">{{selectedLocation?.outlets?.length}}</td>
+          </tr>
+          <tr>
+            <td style="border-right: 1px solid rgba(0, 40, 100, 0.12);"><h6>New Outlets</h6></td>
+            <td colspan="7">{{selectedLocation?.newOutlets?.length}}</td>
+          </tr>
+          <tr>
+            <td style="border-right: 1px solid rgba(0, 40, 100, 0.12);"><h6>Visited Outlets</h6></td>
+            <td colspan="7">{{selectedLocation?.visitedOutlets?.length}}</td>
+          </tr>
+          <tr>
+            <td style="border-right: 1px solid rgba(0, 40, 100, 0.12);"><h6>Visits</h6></td>
+            <td colspan="7">{{selectedLocation?.visits?.length}}</td>
+          </tr>
+          <tr *ngIf="selectedChildrenType != null">
+            <td style="border-right: 1px solid rgba(0, 40, 100, 0.12);"><h6>{{ selectedChildrenType | titlecase }}</h6></td>
+            <td colspan="7"><span class="badge badge-default mr-1" *ngFor="let district of selectedLocation?.children; let i = index" [attr.data-index]="i">{{district.name}}</span></td>
+          </tr>
+          
+          <tr *ngIf="selectedLocation.posms.length > 0">
+            <td [attr.rowspan]="selectedLocation.posms ? selectedLocation.posms.length + 1 : 1"  style="border-right: 1px solid rgba(0, 40, 100, 0.12);"><h6>Posms Adding and Removing</h6></td>
+            <td style="border-right: 1px solid rgba(0, 40, 100, 0.12);"><h6>Type</h6></td>
+            <td colspan="3"><h6>Added</h6></td>
+            <td colspan="3"><h6>Removed</h6></td>
+          </tr>
+          <tr *ngFor="let posm of selectedLocation.posms">
+            <td style="border-right: 1px solid rgba(0, 40, 100, 0.12);">{{posm.name}}</td>
+            <td colspan="3"><span class="text-muted">{{posm.added}}</span></td>
+            <td colspan="3" ><span class="text-muted">{{posm.removed}}</span></td>
+          </tr>
+          <tr *ngIf="selectedLocation.posms.length > 0 && selectedLocation.products.length > 0">
+            <td [attr.rowspan]="selectedLocation.posms ? selectedLocation.products.length * selectedLocation.posms.length + 1 : 1"  style="border-right: 1px solid rgba(0, 40, 100, 0.12);"><h6>Posms Visibility by Brand</h6></td>
+            <td style="border-right: 1px solid rgba(0, 40, 100, 0.12);"><h6>Product</h6></td>
+            <td colspan="2"><h6>Posms</h6></td>
+            <td colspan="2"><h6>Visible / Outlets surveyed</h6></td>
+            <td colspan="2"><h6>Percentage</h6></td>
+          </tr>
+          <ng-container *ngFor="let product of selectedLocation.products">
+          <tr *ngFor="let posmsVisibility of product.posmsVisibilities; let i = index" [attr.data-index]="i">
+            <td [attr.rowspan] ="product.posmsVisibilities.length" *ngIf="i == 0"  style="border-right: 1px solid rgba(0, 40, 100, 0.12);">{{product.name}}</td>
+            <td style="border-right: 1px solid rgba(0, 40, 100, 0.12);" colspan="2">{{posmsVisibility.posm.name}}</td>
+            <td colspan="2"><span class="text-muted">{{posmsVisibility.visible}} / {{posmsVisibility.saved}}</span></td>
+            <td colspan="2"><span class="text-muted">{{(posmsVisibility.visible / posmsVisibility.saved) * 100 | number}} %</span></td>
+          </tr>
+          </ng-container>
+          <tr *ngIf="selectedLocation.giveaways.length > 0">
+            <td [attr.rowspan]="selectedLocation.giveaways ? selectedLocation.giveaways.length + 1 : 1" style="border-right: 1px solid rgba(0, 40, 100, 0.12);"><h6>Giveaways</h6></td>
+            <td style="border-right: 1px solid rgba(0, 40, 100, 0.12);" colspan="1"><h6>Type</h6></td>
+            <td colspan="6"><h6>Amount</h6></td>
+  
+          </tr>
+          <tr *ngFor="let giveaway of selectedLocation.giveaways">
+            <td style="border-right: 1px solid rgba(0, 40, 100, 0.12);" colspan="1">{{giveaway.name}}</td>
+            <td colspan="6"><span class="text-muted">{{giveaway.amount | number }}</span></td>
+          </tr>
+
+          <!-- <tr>
+            <td [attr.rowspan]="selectedLocation.products ? selectedLocation.products.length + 1 : 1"  style="border-right: 1px solid rgba(0, 40, 100, 0.12);"><h6>Brands</h6></td>
+            <td><h6>Type</h6></td>
+            <td><h6>Sales</h6></td>
+            <td><h6>Orders</h6></td>
+            <td><h6>Availability</h6></td>
+            <td><h6>Visibility</h6></td>
+        
+          </tr>
+          <tr *ngFor="let product of selectedLocation.products">
+            <td>{{product.name }}</td>
+            <td><span class="text-muted">{{product.sold}}</span></td>
+            <td><span class="text-muted">{{product.ordered}}</span></td>
+            <td><span class="text-muted">{{product.stock}} / {{product.visible + product.invisible}}</span></td>
+            <td><span class="text-muted">{{product.visible}} / {{product.visible + product.invisible}}</span></td>
+ 
+          </tr> -->
+
+          <tr *ngIf="selectedLocation.skus?.length > 0">
+            <td [attr.rowspan]="selectedLocation.skus ? selectedLocation.skus.length + 1 : 1"  style="border-right: 1px solid rgba(0, 40, 100, 0.12);"><h6>Products Sales and Orders by units</h6></td>
+            <td style="border-right: 1px solid rgba(0, 40, 100, 0.12);"><h6>SKU</h6></td>
+            <td><h6>Sales</h6></td>
+            <td><h6>Orders</h6></td>
+            <td><h6>Delivered</h6></td>
+            <td><h6>Canceled</h6></td>
+            <td><h6>Pending</h6></td>
+            <td><h6>Total Sales</h6></td>
+          </tr>
+          <tr *ngFor="let sku of selectedLocation.skus">
+            <td style="border-right: 1px solid rgba(0, 40, 100, 0.12);">{{sku.name +" (" +sku.sku + ")"}}</td>
+            <td><span class="text-muted">{{sku.sold}}</span></td>
+            <td><span class="text-muted">{{sku.ordered}}</span></td>
+            <td><span class="text-muted">{{sku.delivered}}</span></td>
+            <td><span class="text-muted">{{sku.canceled}}</span></td>
+            <td ><span class="text-muted" style="border-right: 1px solid rgba(0, 40, 100, 0.12);">{{sku.ordered - sku.delivered - sku.canceled}}</span></td>
+            <td><span class="text-muted">{{sku.sold + sku.delivered}}</span></td>
+          </tr>
+
+          <tr *ngIf="selectedLocation.skus?.length > 0">
+            <td [attr.rowspan]="selectedLocation.skus ? selectedLocation.skus.length + 1 : 1"  style="border-right: 1px solid rgba(0, 40, 100, 0.12);"><h6>Products Availability and Price Compliance</h6></td>
+            <td style="border-right: 1px solid rgba(0, 40, 100, 0.12);"><h6>SKU</h6></td>
+    
+            <td><h6>Availability</h6></td>
+            <td><h6>Visibility</h6></td>
+            <td><h6>Supplier Price</h6></td>
+            <td><h6>Price compliance</h6></td>
+            <td ><h6>Above price</h6></td>
+            <td ><h6>Below price</h6></td>
+          </tr>
+          <tr *ngFor="let sku of selectedLocation.skus">
+            <td style="border-right: 1px solid rgba(0, 40, 100, 0.12);">{{sku.name +" (" +sku.sku + ")"}}</td>
+            <td   ><span class="text-muted">{{sku.stock}} / {{sku.visible + sku.invisible}}</span></td>
+            <td><span class="text-muted">{{sku.visible}} / {{sku.visible + sku.invisible}}</span></td>
+            <td><span class="text-muted">{{sku.price | number }}</span></td>
+            <td><span class="text-muted">{{(sku.priceComplied / (sku.priceComplied + sku.priceAbove + sku.priceBelow))*100 | number }} %</span></td>
+            <td><span class="text-muted">{{(sku.priceAbove / (sku.priceComplied + sku.priceAbove + sku.priceBelow))*100 | number }} %</span></td>
+            <td><span class="text-muted">{{(sku.priceBelow  / (sku.priceComplied + sku.priceAbove + sku.priceBelow))*100 | number }} %</span></td>
+          </tr>
+        </table>
+      </div>
+
+    </div>
+    
+
+  </div>
+</div>
+
+<div class="row" *ngIf="page == 'outlets' && selectedOutlet == null">
+  <div class="col-md-12 pr-0 pl-0" >
+    <!-- <div class="card">
+      <div class="card-body p-0" style="overflow: auto;"> -->
+        <table class="table card-table table-striped table-fixed table-vcenter text-nowrap datatable thin-table">
+          <thead>
+            <tr>
+
+              <th class="w-1" rowspan="3" style="border-right: 1px solid rgba(0, 40, 100, 0.12);">No.</th>
+              <th rowspan="3" style="border-right: 1px solid rgba(0, 40, 100, 0.12); width: 150px;">Name</th>
+              <!-- <th rowspan="3">Created</th> -->
+              <th rowspan="3" style="border-right: 1px solid rgba(0, 40, 100, 0.12); width: 70px;">Categories</th>
+
+              <th rowspan="3" style="border-right: 1px solid rgba(0, 40, 100, 0.12);">Region</th>
+              <th rowspan="3" style="border-right: 1px solid rgba(0, 40, 100, 0.12);">District</th>
+              <th rowspan="3" style="border-right: 1px solid rgba(0, 40, 100, 0.12);">Ward</th>
+              <th rowspan="3" style="border-right: 1px solid rgba(0, 40, 100, 0.12);">Visits</th>
+
+              <th [attr.colspan]="project.posms.length * 2" *ngIf="project.posms.length" style="border-right: 1px solid rgba(0, 40, 100, 0.12);">POSMs </th>
+              <th [attr.colspan]="project.giveaways.length" *ngIf="project.giveaways.length" rowspan="2" style="border-right: 1px solid rgba(0, 40, 100, 0.12);">Giveaways</th>
+              <th [attr.colspan]="project.skus.length + project.products.length" *ngIf="project.skus.length" rowspan="1" style="border-right: 1px solid rgba(0, 40, 100, 0.12);">Sales</th>
+              <th [attr.colspan]="project.skus.length + project.products.length" *ngIf="project.skus.length" rowspan="1" style="border-right: 1px solid rgba(0, 40, 100, 0.12);">Orders</th>
+              <th [attr.colspan]="project.skus.length + project.products.length" *ngIf="project.skus.length" rowspan="1" style="border-right: 1px solid rgba(0, 40, 100, 0.12);">Availability</th>
+              <th [attr.colspan]="project.skus.length + project.products.length" *ngIf="project.skus.length" rowspan="1" style="border-right: 1px solid rgba(0, 40, 100, 0.12);">Visibility</th>
+
+              <th rowspan="3" style="border-right: 1px solid rgba(0, 40, 100, 0.12);">Owner</th>
+              <th rowspan="3" style="border-right: 1px solid rgba(0, 40, 100, 0.12);">Phone No.</th>
+              <th rowspan="3" style="border-right: 1px solid rgba(0, 40, 100, 0.12);"></th>
+            </tr>
+         
+            <tr>
+              <th *ngFor="let posm of project.posms" colspan="2" style="border-right: 1px solid rgba(0, 40, 100, 0.12);">{{posm.name}}</th>
+              
+              <th *ngFor="let product of project.products" [attr.colspan]="product.skus.length + 1" style="border-right: 1px solid rgba(0, 40, 100, 0.12);">{{product.name}}</th>
+              <th *ngFor="let product of project.products" [attr.colspan]="product.skus.length + 1" style="border-right: 1px solid rgba(0, 40, 100, 0.12);">{{product.name}}</th>
+              <th *ngFor="let product of project.products" [attr.colspan]="product.skus.length + 1" style="border-right: 1px solid rgba(0, 40, 100, 0.12);">{{product.name}}</th>
+              <th *ngFor="let product of project.products" [attr.colspan]="product.skus.length + 1" style="border-right: 1px solid rgba(0, 40, 100, 0.12);">{{product.name}}</th>
+             
+              
+            </tr>
+            <tr>
+              <ng-container *ngFor="let posm of project.posms">
+                <th  style="border-right: 1px solid rgba(0, 40, 100, 0.12); width: 30px;"> <span class="upright-label"> Added</span></th>
+                <th  style="border-right: 1px solid rgba(0, 40, 100, 0.12); width: 30px;"><span class="upright-label"> Removed</span></th>
+              </ng-container>
+
+              <th *ngFor="let giveaway of project.giveaways" style="border-right: 1px solid rgba(0, 40, 100, 0.12); width: 30px;"><span class="upright-label"> {{giveaway.name}}</span></th>
+
+              <ng-container *ngFor="let product of project.products">
+                <th *ngFor="let sku of product.skus"  style="border-right: 1px solid rgba(0, 40, 100, 0.12); width: 30px;"><span class="upright-label"> {{sku.sku}}</span></th>
+                <th style="border-right: 1px solid rgba(0, 40, 100, 0.12); width: 30px;"><span class="upright-label"> Total</span></th>
+              </ng-container>
+              <ng-container *ngFor="let product of project.products">
+                <th *ngFor="let sku of product.skus"  style="border-right: 1px solid rgba(0, 40, 100, 0.12); width: 30px;"><span class="upright-label"> {{sku.sku}}</span></th>
+                <th style="border-right: 1px solid rgba(0, 40, 100, 0.12); width: 30px;"><span class="upright-label"> Total</span></th>
+              </ng-container>
+              <ng-container *ngFor="let product of project.products">
+                <th *ngFor="let sku of product.skus"  style="border-right: 1px solid rgba(0, 40, 100, 0.12); width: 30px;"><span class="upright-label"> {{sku.sku}}</span></th>
+                <th style="border-right: 1px solid rgba(0, 40, 100, 0.12); width: 30px;"><span class="upright-label"> Total</span></th>
+              </ng-container>
+              <ng-container *ngFor="let product of project.products">
+                <th *ngFor="let sku of product.skus"  style="border-right: 1px solid rgba(0, 40, 100, 0.12); width: 30px;"><span class="upright-label"> {{sku.sku}}</span></th>
+                <th style="border-right: 1px solid rgba(0, 40, 100, 0.12); width: 30px;"><span class="upright-label"> Total</span></th>
+              </ng-container>
+              
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let outlet of selectedLocation?.outlets; let i = index">
+
+              <td style="border-right: 1px solid rgba(0, 40, 100, 0.12);"><span class="text-muted">{{i + 1}}</span></td>
+              <td style="border-right: 1px solid rgba(0, 40, 100, 0.12); width: 150px;">
+                {{outlet.name | titlecase }}
+              </td>
+              
+              <!-- <td>
+                {{outlet.created | date : 'short' : tz }}
+              </td> -->
+              <td style="border-right: 1px solid rgba(0, 40, 100, 0.12); width: 70px;">
+                <span *ngFor="let classification of outlet.classifications"> <span class="status-icon bg-success" style="background: {{classification?.color}} !important;"  ></span> {{classification?.name}} </span> 
+              </td>
+              <td style="border-right: 1px solid rgba(0, 40, 100, 0.12);"> <span class="badge badge-default">{{outlet?.region?.name}}</span> </td>
+              <td style="border-right: 1px solid rgba(0, 40, 100, 0.12);"> <span class="badge badge-default">{{outlet?.district?.name}}</span> </td>
+              <td style="border-right: 1px solid rgba(0, 40, 100, 0.12);"> <span class="badge badge-default">{{outlet?.ward?.name}}</span> </td>
+              <td style="border-right: 1px solid rgba(0, 40, 100, 0.12); width: 30px;">
+                {{outlet.visits.length}}
+              </td>
+              <ng-container *ngFor="let posm of outlet.posms">
+              <td style="border-right: 1px solid rgba(0, 40, 100, 0.12); width: 30px;">
+                {{posm.added}}
+              </td>
+              <td style="border-right: 1px solid rgba(0, 40, 100, 0.12); width: 30px;">
+                {{posm.removed}}
+              </td>
+              </ng-container>
+              <td *ngFor="let giveaway of outlet.giveaways" style="border-right: 1px solid rgba(0, 40, 100, 0.12); width: 30px;">
+                {{giveaway.amount}}
+              </td>
+
+              <ng-container *ngFor="let product of outlet.products">
+                <td *ngFor="let sku of product.skus"  style="border-right: 1px solid rgba(0, 40, 100, 0.12); width: 30px;">{{sku.sold}}</td>
+                <td style="border-right: 1px solid rgba(0, 40, 100, 0.12); width: 30px;">{{product.sold}}</td>
+              </ng-container>
+              <ng-container *ngFor="let product of outlet.products">
+                <td *ngFor="let sku of product.skus"  style="border-right: 1px solid rgba(0, 40, 100, 0.12); width: 30px;">{{sku.ordered}}</td>
+                <td style="border-right: 1px solid rgba(0, 40, 100, 0.12); width: 30px;">{{product.ordered}}</td>
+              </ng-container>
+              <ng-container *ngFor="let product of outlet.products">
+                <td *ngFor="let sku of product.skus"  style="border-right: 1px solid rgba(0, 40, 100, 0.12); width: 30px;">{{sku.visible > 0 ? sku.visible/(sku.visible + sku.invisible) : 0}} %</td>
+                <td style="border-right: 1px solid rgba(0, 40, 100, 0.12); width: 30px;"> {{product.visible > 0 ? product.visible/(product.visible + product.invisible) : 0}} %</td>
+              </ng-container>
+              <ng-container *ngFor="let product of outlet.products">
+                <td *ngFor="let sku of product.skus"  style="border-right: 1px solid rgba(0, 40, 100, 0.12); width: 30px;">{{sku.stock}}</td>
+                <td style="border-right: 1px solid rgba(0, 40, 100, 0.12); width: 30px;">{{product.stock}}</td>
+              </ng-container>
+
+              <td>
+                {{outlet.owner | titlecase }}
+              </td>
+              <td>
+                {{outlet.phone}}
+              </td>
+              <td>
+                <a (click)="selectOutlet(outlet)" class="btn btn-secondary btn-sm">View <span class="ml-1 fe fe-arrow-right"></span></a>
+              </td>
+
+            </tr>
+          </tbody>
+        </table>
+      <!-- </div>
+    </div> -->
+  </div>
+</div>
+
+<div class="row mb-4" *ngIf="page == 'outlets' && selectedOutlet != null">
+  <div class="col-md-auto">
+    <button class="btn btn-secondary" (click)="selectOutlet(null)"><span class="fe fe-arrow-left mr-1"></span>Back</button>
+  </div>
+  <div class="col-md-auto">
+    <h4 class="title mt-2"> {{selectedOutlet.name | titlecase}}</h4>
+  </div>
+ 
+  <div class="col pr-0 mb-2">
+    <nav class="nav pull-right mt-2">
+      <a class="nav-link {{ outlet_page == 'summary' ? 'active' : '' }}" (click)="select_outlet_page('summary')">Oulet Summary</a>
+      <a class="nav-link {{ outlet_page == 'visits' ? 'active' : '' }} pr-0" (click)="select_outlet_page('visits')">Outlet Visits</a>
+    </nav>
+  </div>
+</div>
+
+<div class="row" *ngIf="page == 'outlets' && selectedOutlet != null">
+  <div class="col-md-12" *ngIf="outlet_page == 'summary'">
+    <div class="card-body p-0">
+      <table class="table mb-0">
+        <tr>
+          <td style="border-right: 1px solid rgba(0, 40, 100, 0.12);"><h6>Outlet</h6></td>
+          <td colspan="4">{{selectedOutlet?.name}}</td>
+        </tr>
+        <tr>
+          <td style="border-right: 1px solid rgba(0, 40, 100, 0.12);"><h6>Visits</h6></td>
+          <td colspan="4">{{selectedOutlet?.visits.length}}</td>
+        </tr>
+        <tr>
+          <td [attr.rowspan]="selectedOutlet.posms ? selectedOutlet.posms.length + 1 : 1"  style="border-right: 1px solid rgba(0, 40, 100, 0.12);"><h6>Posms</h6></td>
+          <td colspan="2"><h6>Type</h6></td>
+          <td><h6>Added</h6></td>
+          <td><h6>Removed</h6></td>
+        </tr>
+        <tr *ngFor="let posm of selectedOutlet.posms">
+          <td colspan="2">{{posm.name}}</td>
+          <td ><span class="text-muted">{{posm.added}}</span></td>
+          <td ><span class="text-muted">{{posm.removed}}</span></td>
+        </tr>
+        <tr>
+          <td [attr.rowspan]="selectedOutlet.giveaways ? selectedOutlet.giveaways.length + 1 : 1" style="border-right: 1px solid rgba(0, 40, 100, 0.12);"><h6>Giveaways</h6></td>
+          <td colspan="2"><h6>Type</h6></td>
+          <td colspan="2"><h6>Amount</h6></td>
+
+        </tr>
+        <tr *ngFor="let giveaway of selectedOutlet.giveaways">
+          <td colspan="2"><span class="text-muted">{{giveaway.name}}</span></td>
+          <td colspan="2"><span class="text-muted">{{giveaway.amount | number }}</span></td>
+        </tr>
+
+        <tr>
+          <td [attr.rowspan]="selectedOutlet.products ? selectedOutlet.products.length + 1 : 1"  style="border-right: 1px solid rgba(0, 40, 100, 0.12);"><h6>Products</h6></td>
+          <td><h6>Type</h6></td>
+          <td><h6>Sales</h6></td>
+          <td><h6>Orders</h6></td>
+          <td><h6>Visibility (%)</h6></td>
+        </tr>
+        <tr *ngFor="let product of selectedOutlet.products">
+          <td>{{product.name}}</td>
+          <td><span class="text-muted">{{product.sold}}</span></td>
+          <td><span class="text-muted">{{product.ordered}}</span></td>
+          <td><span class="text-muted">{{(product.visible / (product.visible + product.invisible)) * 100 | number }}</span></td>
+        </tr>
+        
+      </table>
+
+    </div>
+  </div>
+  <div class="col-md-12" *ngIf="outlet_page == 'visits'">
+    <div class="row">
+      <div class="col-md-3">
+        <div class="list-group list-group-transparent mb-0">
+          <a *ngFor="let visit of selectedOutlet.visits" class="list-group-item list-group-item-action {{selectedVisit._id == visit._id ? 'active' : ''}}" (click)="select_visit(visit)"><span class="icon mr-3"><i class="fe fe-corner-down-right"></i></span>{{visit.date | date : 'short' : tz }}</a>
+        </div>
+      </div>
+      <div class="col-md-9 pr-0">
+        <div class="card">
+          <div class="card-body p-0">
+            <table class="table mb-0">
+              <tr>
+                <td style="border-right: 1px solid rgba(0, 40, 100, 0.12);"><h6>Date</h6></td>
+                <td colspan="4">{{selectedVisit?.date}}</td>
+              </tr>
+              <tr>
+                <td style="border-right: 1px solid rgba(0, 40, 100, 0.12);"><h6>User</h6></td>
+                <td colspan="4">{{selectedLocation?.user?.length}}</td>
+              </tr>
+             
+              
+              <tr>
+                <td [attr.rowspan]="selectedLocation.posms ? selectedLocation.posms.length + 1 : 1"  style="border-right: 1px solid rgba(0, 40, 100, 0.12);"><h6>Posms</h6></td>
+                <td colspan="2"><h6>Type</h6></td>
+                <td><h6>Added</h6></td>
+                <td><h6>Removed</h6></td>
+              </tr>
+              <tr *ngFor="let posm of selectedVisit.posms">
+                <td colspan="2">{{posm.name}}</td>
+                <td ><span class="text-muted">{{posm.added}}</span></td>
+                <td ><span class="text-muted">{{posm.removed}}</span></td>
+              </tr>
+              <tr>
+                <td [attr.rowspan]="selectedVisit.giveaways ? selectedVisit.giveaways.length + 1 : 1" style="border-right: 1px solid rgba(0, 40, 100, 0.12);"><h6>Giveaways</h6></td>
+                <td colspan="2"><h6>Type</h6></td>
+                <td colspan="2"><h6>Amount</h6></td>
+      
+              </tr>
+              <tr *ngFor="let giveaway of selectedVisit.giveaways">
+                <td colspan="2"><span class="text-muted">{{giveaway.name}}</span></td>
+                <td colspan="2"><span class="text-muted">{{giveaway.amount | number }}</span></td>
+              </tr>
+    
+              <tr>
+                <td [attr.rowspan]="selectedVisit.products ? selectedVisit.products.length + 1 : 1"  style="border-right: 1px solid rgba(0, 40, 100, 0.12);"><h6>Products</h6></td>
+                <td><h6>Type</h6></td>
+                <td><h6>Sales</h6></td>
+                <td><h6>Orders</h6></td>
+                <td><h6>Visibility (%)</h6></td>
+              </tr>
+              <tr *ngFor="let product of selectedVisit.products">
+                <td>{{product.name}}</td>
+                <td><span class="text-muted">{{product.sold}}</span></td>
+                <td><span class="text-muted">{{product.ordered}}</span></td>
+                <td><span class="text-muted">{{(product.visible / (product.visible + product.invisible)) * 100 | number }}</span></td>
+              </tr>
+              
+            </table>
+    
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row" *ngIf="page == 'posms'">
+  <div class="col-md-12" >
+
+    <div class="card">
+      <div class="card-body p-0">
+        <table class="table card-table table-striped table-fixed table-vcenter text-nowrap datatable thin-table">
+          <thead>
+            <tr>
+
+              <th class="w-1" rowspan="3" style="border-right: 1px solid rgba(0, 40, 100, 0.12);">No.</th>
+              <th rowspan="3" style="border-right: 1px solid rgba(0, 40, 100, 0.12); width: 150px;">Date</th>
+              <!-- <th rowspan="3">Created</th> -->
+              <th rowspan="3" style="border-right: 1px solid rgba(0, 40, 100, 0.12); width: 70px;">Outlet</th>
+              <th rowspan="3" style="border-right: 1px solid rgba(0, 40, 100, 0.12); width: 70px;">Temp</th>
+              <th rowspan="3" style="border-right: 1px solid rgba(0, 40, 100, 0.12); max-width: 70px !important;"  width="70px">Outlet Classification</th>
+              
+
+              <th rowspan="3" style="border-right: 1px solid rgba(0, 40, 100, 0.12);">Location</th>
+             
+            
+
+              <th [attr.colspan]="project.posms.length * 2" style="border-right: 1px solid rgba(0, 40, 100, 0.12);">POSMs </th>
+
+              <th rowspan="3" style="border-right: 1px solid rgba(0, 40, 100, 0.12);">Before Images</th>
+              <th rowspan="3" style="border-right: 1px solid rgba(0, 40, 100, 0.12);">After Images</th>
+              
+            </tr>
+
+            <tr>
+              <th *ngFor="let posm of project.posms" colspan="2" style="border-right: 1px solid rgba(0, 40, 100, 0.12);">{{posm.name}}</th>
+            </tr>
+         
+            <tr>
+              <ng-container *ngFor="let posm of project.posms">
+                <th  style="border-right: 1px solid rgba(0, 40, 100, 0.12); width: 30px;"> <span class="upright-label"> Added</span></th>
+                <th  style="border-right: 1px solid rgba(0, 40, 100, 0.12); width: 30px;"><span class="upright-label"> Removed</span></th>
+              </ng-container>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let visit of visits; let i = index">
+
+              <td style="border-right: 1px solid rgba(0, 40, 100, 0.12);"><span class="text-muted">{{i + 1}}</span></td>
+              <td style="border-right: 1px solid rgba(0, 40, 100, 0.12); width: 150px;">
+                {{ visit.date | date : 'short' : tz }}
+              </td>
+
+              <td style="border-right: 1px solid rgba(0, 40, 100, 0.12); width: 150px;">
+                <a [routerLink]="['/outlet/' + visit.outlet._id]">{{ visit.outlet.name | titlecase }}</a>
+              </td>
+
+              <td style="border-right: 1px solid rgba(0, 40, 100, 0.12); width: 150px;">
+                {{ visit.user.first_name | titlecase }} {{ visit.user.last_name | titlecase }}
+              </td>
+
+              
+      
+              <td style="border-right: 1px solid rgba(0, 40, 100, 0.12); max-width: 70px !important;" width="70px">
+                <span *ngFor="let classification of visit.outlet.classifications" style="max-width: 70px !important;"> <span class="status-icon bg-success" style="background: {{classification?.color}} !important;"  ></span> {{classification?.name}} </span> 
+              </td>
+              <td style="border-right: 1px solid rgba(0, 40, 100, 0.12);"> <span class="badge badge-default">{{visit.outlet?.region?.name}}</span> <span class="badge badge-default">{{visit.outlet?.district?.name}}</span> <span class="badge badge-default">{{visit.outlet?.ward?.name}}</span> </td>
+          
+              <ng-container *ngFor="let posm of visit.posms">
+              <td style="border-right: 1px solid rgba(0, 40, 100, 0.12); width: 30px;">
+                {{posm.added}}
+              </td>
+              <td style="border-right: 1px solid rgba(0, 40, 100, 0.12); width: 30px;">
+                {{posm.removed}}
+              </td>
+              </ng-container>
+
+              <td style="border-right: 1px solid rgba(0, 40, 100, 0.12); width: 150px;">
+                <img *ngFor="let posmBeforeImage of visit.posmBeforeImages" style="height: 40px;" class="rounded ml-1" src="https://amplifyimages.s3.us-east-2.amazonaws.com/files/{{posmBeforeImage}}" (click)="viewImage(posmBeforeImage)">
+              </td>
+
+              <td style="border-right: 1px solid rgba(0, 40, 100, 0.12); width: 150px;">
+                <img *ngFor="let posmAfterImage of visit.posmAfterImages" style="height: 40px;" class="rounded ml-1" src="https://amplifyimages.s3.us-east-2.amazonaws.com/files/{{posmAfterImage}}" (click)="viewImage(posmAfterImage)">
+              </td>
+              
+            
+
+          
+
+            
+
+            </tr>
+          </tbody>
+        </table>
+
+      </div>
+
+    </div>
+    
+
+  </div>
+</div>
+
+</div>
+
+<div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+     
+      <div class="modal-body p-0">
+        <img src="https://amplifyimages.s3.us-east-2.amazonaws.com/files/{{popupImage}}" id="imagepreview" style="width: 100%; height: auto;" >
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Back</button>
+      </div>
+    </div>
+  </div>
+</div>
+

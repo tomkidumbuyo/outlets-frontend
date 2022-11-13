@@ -1,0 +1,5 @@
+<div class="mt-5" style="text-align: center;position: fixed;top: 45%;width: 50%;left: 25%;" *ngIf="!dataLoaded">
+    <h4 style="text-align: center;">{{loadingMessage}}</h4>
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+</div>
+<router-outlet *ngIf="dataLoaded"></router-outlet>

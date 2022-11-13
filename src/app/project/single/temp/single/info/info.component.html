@@ -1,0 +1,97 @@
+<div class="container mt-3">
+
+    <div class="row row-cards">
+      <div class="col-lg-4 col-md-6">
+        <div class="card">
+   
+          <div class="card-body">
+            <div class="media mb-1">
+              <div class="media-body">
+                <h5>{{user?.first_name | titlecase}} {{user?.last_name | titlecase}}</h5> 
+                <address class="text-muted small">
+                  {{user?.email}}, {{user?.phone}}
+                </address>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-6">
+                <div class="h6">Created</div>
+                <p></p>
+              </div>
+              <div class="col-6">
+                <div class="h6">Campaign dates</div>
+                <p></p>
+              </div>
+            </div>
+            <div class="h6">Regions</div>
+            <p>
+                <!-- <span *ngFor="let region of project?.regions; let i = index" [attr.data-index]="i">{{i> 0 ? ', ' : ''}}{{region.name}}</span> -->
+            </p>
+          </div>
+        </div>
+    
+      
+      </div>
+      <div class="col-lg-8 col-md-6">
+        <div  class="card">
+          <div  class="card-body p-0">
+          <table  class="table mb-0">
+              <tr>
+                  <td  style="border-right: 1px solid rgba(0, 40, 100, 0.12);"><h6>Visits</h6></td>
+                  <td  colspan="4">{{report?.visits.length}}</td>
+              </tr>
+              <tr>
+                <td  style="border-right: 1px solid rgba(0, 40, 100, 0.12);"><h6>New Outlets</h6></td>
+                <td  colspan="4">{{report?.outlets?.length}}</td>
+              </tr>
+      
+              <tr>
+                  <td  style="border-right: 1px solid rgba(0, 40, 100, 0.12);" [attr.rowspan]="report?.posms?.length + 1"><h6>Posms</h6></td>
+                  <td><h6>Type</h6></td>
+                  <td><h6>Added</h6></td>
+                  <td colspan="2"><h6>Removed</h6></td>
+              </tr>
+              <tr *ngFor="let posm of report?.posms">
+                  <td>{{posm.name}}</td>
+                  <td>{{posm.added}}<td>
+                  <td colspan="3">{{posm.removed}}</td>
+              </tr>
+      
+              <tr>
+                  <td  style="border-right: 1px solid rgba(0, 40, 100, 0.12);" [attr.rowspan]="report?.giveaways?.length + 1"><h6>Giveaways</h6></td>
+                  <td><h6>Type</h6></td>
+                  <td  colspan="3"><h6>Amount</h6></td>
+              </tr>
+      
+              <tr *ngFor="let giveaway of report?.giveaways">
+                  <td>{{giveaway.name}}</td>
+                  <td  colspan="3">{{giveaway.amount}}</td>
+              </tr>
+      
+              <tr>
+                  <td  style="border-right: 1px solid rgba(0, 40, 100, 0.12);" [attr.rowspan]="report?.products?.length + 1"><h6>Products</h6></td>
+                  <td><h6>Type</h6></td>
+                  <td><h6>Sales</h6></td>
+                  <td><h6>Orders</h6></td>
+                  <td><h6>Visibility (%)</h6></td>
+              </tr>
+      
+              <tr *ngFor="let product of report?.products">
+                  <td>{{product.name}}</td>
+                  <td>{{product.sold}}</td>
+                  <td>{{product.ordered}}</td>
+                  <td>{{product.visible> 0 ? product.visible /(product.visible + product.invisible) * 100 : 0 }}</td>
+              </tr>
+            
+          </table>
+          </div>
+          </div>
+     
+     
+      </div>
+    </div>
+  
+  </div>
+  
+
+

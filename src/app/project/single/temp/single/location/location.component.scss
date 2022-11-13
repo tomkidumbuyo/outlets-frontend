@@ -1,0 +1,102 @@
+.date-nav {
+    border-bottom: 1px solid rgba(0, 40, 100, 0.12);
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    left: 0px;
+    padding: 0.5rem 1rem;
+    height: 70.5px;
+    .date-nav-wrapper   {
+        height: 53.5px;
+        width: 100%;
+        position: relative;
+        
+        .left-button {
+            left: 0px;
+            span{
+                
+            }
+        }
+      
+        .right-button {
+
+            right: 0px;
+  
+            span{
+                     
+            }
+        }
+
+        .arrow-button {
+            position: absolute;
+            top: 0px;
+            border: 0px;
+            height: 53.5px;
+            span{
+                font-size: 20px;      
+            }
+        }
+        
+        .dates-div{
+            position: absolute;
+            top: 0px;
+            right: 50px;
+            left: 50px;
+            overflow: hidden;
+            height: 54px;
+            ul{
+                position: absolute;
+                top: 0px;
+                left: -50px;
+             
+                padding: 0px;
+                margin: 0px;
+                height: 53px;
+                display: inline-flex;
+                flex-direction: row;
+
+                li{
+                    cursor: pointer;
+                    list-style: none;
+                    display: block;
+                    display: inline-block;
+                    width: 100px;
+                    width: 100px;
+                    padding: 2px 0px;
+                    .date{
+                        display: block;
+                        color: #777;
+                        width: 100px;
+                        font-weight: bold;
+                    }
+                    .day{
+                        display: block;
+                        color: #555;
+                    }
+                }
+                li.active{
+                    .date{
+                        color: black;
+                        font-weight: bold;
+                    }
+                    .day{
+                        color: blue;
+                        font-weight: bold;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.main-body {
+   
+    position: absolute;
+    top: 70px;
+    right: 0px;
+    left: 0px;
+    bottom: 0px;
+    overflow: auto;
+   
+    
+}

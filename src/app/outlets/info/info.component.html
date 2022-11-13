@@ -1,0 +1,200 @@
+<div class="map-header" id="map">
+  <!--<google-map
+  height="240px"
+  width="100%"></google-map>-->
+</div>
+
+<div class="container">
+  <div class="row row-cards">
+    <div class="col-lg-4 col-md-6 pr-0">
+      <div class="card">
+        <div class="card-body">
+          <div class="media mb-5">
+            <img class="d-flex mr-5 rounded" src="assets/images/avatar/brand.png" alt="Generic placeholder image" style="width: 60px;">
+            <div class="media-body">
+              <h5>{{outlet?.name | titlecase}}</h5>
+              <address class="text-muted small">
+                <span *ngFor="let classification of outlet.classifications; let i=index">{{i > 0 ? ', ' : ''}}{{classification.name}} </span>
+                <!--1290 Avenua of The Americas<br>
+                New York, NY 101040105-->
+              </address>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-6">
+              <div class="h6">Owner</div>
+              <p>{{outlet?.name | titlecase}}</p>
+            </div>
+            <div class="col-6">
+              <div class="h6">Phone Number</div>
+              <p>{{outlet?.phone}}</p>
+            </div>
+            <div class="col-6">
+              <div class="h6">Classification</div>
+              <p>
+                <span *ngFor="let classification of outlet.classifications; let i=index"><span class="status-icon bg-success" [ngStyle]="{'background': classification.color + ' !important'}" ></span>{{i > 0 ? ', ' : ''}}{{classification.name}} </span>
+              </p>
+            </div>
+            <div class="col-6">
+              <div class="h6">Region</div>
+              <p>{{outlet?.region?.name}}</p>
+            </div>
+            <div class="col-6">
+              <div class="h6">District</div>
+              <p>{{outlet?.district?.name}}</p>
+            </div>
+            <div class="col-6">
+              <div class="h6">Wards</div>
+              <p>{{outlet?.ward?.name}}</p>
+            </div>
+            
+          </div>
+          <!--<div class="h6">Classifications</div>
+          <p><span class="label label-default" *ngFor="let classification of outlet?.classifications">{{classification.name}}</span></p>-->
+        </div>
+      </div>
+
+
+    </div>
+    <div class="col-lg-8 col-md-6">
+
+      
+      <ul class="nav nav-tabs mt-5" style="border-bottom: 1px solid #ddd;">
+        <!-- <li role="presentation" class="{{ page == 'info' ? 'active' : '' }}" (click)="selectPage('info')"><a>Info</a></li>
+        <li role="presentation" class="{{ page == 'sales' ? 'active' : '' }}" (click)="selectPage('sales')"><a>Sales</a></li> -->
+        <li role="presentation" class="{{ page == 'visits' ? 'active' : '' }}" (click)="selectPage('visits')"><a>Visits</a></li>
+        <li role="presentation" class="{{ page == 'images' ? 'active' : '' }}" (click)="selectPage('images')"><a>Images</a></li>
+      </ul>
+      <div class="row">
+
+        
+
+        <div class="col-md-12" *ngIf="page == 'visits'">
+          <!-- <div class="page-header">
+            <h1 class="page-title">
+              Sales
+            </h1>
+          </div> -->
+
+          <div class="page-body">
+            <div class="card mt-3" style="overflow-x: auto;">
+              <table class="table mb-0">
+                <thead>
+                  <tr>
+                    <th rowspan="2" style="border-right: 1px solid rgba(0, 40, 100, 0.12);">Date</th>
+                    <th rowspan="2" style="border-right: 1px solid rgba(0, 40, 100, 0.12);">Project</th>
+                    <th rowspan="2" style="border-right: 1px solid rgba(0, 40, 100, 0.12);">By</th>
+                    
+                    <th colspan="2" style="border-right: 1px solid rgba(0, 40, 100, 0.12);" >giveaways</th>
+                    <th colspan="3" style="border-right: 1px solid rgba(0, 40, 100, 0.12);">posms</th>
+                    <th rowspan="2" style="border-right: 1px solid rgba(0, 40, 100, 0.12);">Before Image</th>
+                    <th rowspan="2" style="border-right: 1px solid rgba(0, 40, 100, 0.12);">pAfter Image</th>
+                  </tr>
+                  <tr>
+
+                    <th  style="border-right: 1px solid rgba(0, 40, 100, 0.12);">Name</th>
+                    <th  style="border-right: 1px solid rgba(0, 40, 100, 0.12);">Amount</th>
+                   
+                    
+                    <th  style="border-right: 1px solid rgba(0, 40, 100, 0.12);">Name</th>
+                    <th  style="border-right: 1px solid rgba(0, 40, 100, 0.12);">Added</th>
+                    <th  style="border-right: 1px solid rgba(0, 40, 100, 0.12);">Removed</th>
+               
+                  </tr>
+                
+                </thead>
+                <tbody>
+                  <ng-container *ngFor="let visit of visits">
+                  <tr *ngFor="let row of visit.rows; let i = index">
+                  
+
+              
+
+                      <!-- <td style="border-right: 1px solid rgba(0, 40, 100, 0.12);"><span class="text-muted">{{i + 1}}</span></td> -->
+                      <td style="border-right: 1px solid rgba(0, 40, 100, 0.12);" [attr.rowspan]="visit.rows.length" *ngIf="row == 0">
+                        <span class="text-muted">{{ visit.date | date : 'short' : tz }}</span>
+                      </td>
+        
+                      <td style="border-right: 1px solid rgba(0, 40, 100, 0.12);"  [attr.rowspan]="visit.rows.length" *ngIf="row == 0">
+                        <a [routerLink]="['/outlet/' + outlet._id]">{{ visit.project.name | titlecase }}</a>
+                      </td>
+        
+                      <td style="border-right: 1px solid rgba(0, 40, 100, 0.12);"  [attr.rowspan]="visit.rows.length" *ngIf="row == 0">
+                        {{ visit.user.first_name | titlecase }} {{ visit.user.last_name | titlecase }}
+                      </td>
+        
+                      <td style="border-right: 1px solid rgba(0, 40, 100, 0.12); width: 30px;">
+                        {{row <= visit.giveaways.length ? visit.giveaways[row]?.giveaway.name : ""}}
+                      </td>
+                      <td style="border-right: 1px solid rgba(0, 40, 100, 0.12); width: 30px;">
+                        {{row <= visit.giveaways.length ? visit.giveaways[row]?.amount : ""}}
+                      </td>
+                                
+                      <td style="border-right: 1px solid rgba(0, 40, 100, 0.12); width: 30px;">
+                        {{row <= visit.posms.length ? visit.posms[row]?.posm.name : ""}}
+                      </td>
+                      <td style="border-right: 1px solid rgba(0, 40, 100, 0.12); width: 30px;">
+                        {{row <= visit.posms.length ? visit.posms[row]?.added : ""}}
+                      </td>
+                      <td style="border-right: 1px solid rgba(0, 40, 100, 0.12); width: 30px;">
+                        {{row <= visit.posms.length ? visit.posms[row]?.removed : ""}}
+                      </td>
+                    
+        
+                      <td style="border-right: 1px solid rgba(0, 40, 100, 0.12); min-width: 150px;" [attr.rowspan]="visit.rows.length" *ngIf="i == 0">
+                        <img *ngFor="let posmBeforeImage of visit.posmBeforeImages" style="height: 40px;" class="rounded ml-1" src="https://amplifyimages.s3.us-east-2.amazonaws.com/files/{{posmBeforeImage}}" (click)="viewImage(posmBeforeImage)">
+                      </td>
+        
+                      <td style="border-right: 1px solid rgba(0, 40, 100, 0.12); min-width: 150px;" [attr.rowspan]="visit.rows.length" *ngIf="i == 0">
+                        <img *ngFor="let posmAfterImage of visit.posmAfterImages" style="height: 40px;" class="rounded ml-1" src="https://amplifyimages.s3.us-east-2.amazonaws.com/files/{{posmAfterImage}}" (click)="viewImage(posmAfterImage)">
+                      </td>
+                      
+                    
+        
+                  
+        
+                    
+        
+                  
+                  </tr>
+                  </ng-container>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-12" *ngIf="page == 'images'">
+          <!-- <div class="page-header">
+            <h1 class="page-title">
+              Images
+            </h1>
+          </div> -->
+          <div class="row row-cards pt-4">
+            <div class="col-sm-6 col-lg-4" *ngFor="let image of outlet.images">
+              <div class="card p-3">
+                  <img src="https://amplifyimages.s3.us-east-2.amazonaws.com/files/{{image}}" alt="https://amplifyimages.s3.us-east-2.amazonaws.com/files/{{image}}" class="rounded" (click)="viewImage(image)">
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+     
+      <div class="modal-body p-0">
+        <img src="https://amplifyimages.s3.us-east-2.amazonaws.com/files/{{popupImage}}" id="imagepreview" style="width: 100%; height: auto;" >
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Back</button>
+      </div>
+    </div>
+  </div>
+</div>

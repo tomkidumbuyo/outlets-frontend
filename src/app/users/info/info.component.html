@@ -1,0 +1,18 @@
+<nav class="navbar client-navbar  navbar-light bg-light ">
+  <div class="container">
+    <a class="navbar-brand">
+      <img src="assets/brand/bootstrap-solid.svg" class="mr-2" width="30" height="30" alt="{{user?.name}}" loading="lazy">{{user?.name}}
+    </a>
+    <ul class="navbar-nav navbar-nav nav nav-tabs border-0 flex-column flex-lg-row">
+      <li class="nav-item {{ page == 'info' ? 'active' : '' }}">
+        <a class="nav-link" [routerLink]="['/user/' + user?._id ]">Info</a>
+      </li>
+      <li class="nav-item {{ page == 'products' ? 'active' : '' }}">
+        <a class="nav-link" [routerLink]="['/user/' + user?._id + '/products']">Products</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+<div class="client-body">
+  <router-outlet></router-outlet>
+</div>

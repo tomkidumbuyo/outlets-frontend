@@ -1,0 +1,71 @@
+.class-picker{
+  border: 1px solid #eee;
+  border-radius: 6px;
+  margin-bottom: 20px;
+  .category-div{
+    border-bottom: 1px solid #eee;
+    .header{
+      position: relative;
+      padding: 10px 15px 10px 50px;
+      span.back{
+        position: absolute;
+        left: 10px;
+        top: 10px;
+        font-size: 20px;
+        cursor: pointer;
+      }
+      span.back:hover{
+        color: blue;
+      }
+    }
+
+    .body{
+      >ul{
+        padding: 0px;
+        margin: 0px;
+        >li{
+          cursor: pointer;
+          position: relative;
+          padding: 10px 20px 10px 15px;
+          list-style: none;
+          span.continue{
+            position: absolute;
+            right: 10px;
+            top: 10px;
+            font-size: 20px;
+          }
+        }
+        >li:hover{
+          background: rgba(0,0,0,.02);
+        }
+      }
+    }
+  }
+  .category-div:last-child{
+    border-bottom: 0px;
+  }
+}
+
+.class-picked{
+  ul{
+    padding: 0px;
+    >li{
+      margin-bottom: 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      position: relative;
+      list-style: none;
+      padding: 10px 15px;
+      cursor: pointer;
+      span.cancel{
+        position: absolute;
+        right: 10px;
+        top: 10px;
+        font-size: 20px;
+      }
+    }
+    >li:hover{
+      background: rgba(0,0,0,.02);
+    }
+  }
+}

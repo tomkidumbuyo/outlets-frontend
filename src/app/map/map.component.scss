@@ -1,0 +1,24 @@
+.map-content{
+    position: absolute;
+    top: 120px;
+    bottom: 0px;
+}
+
+.outlet-filter-row {
+    background: #fff;
+    height: 71px;
+    border-bottom: 1px solid rgba(0, 40, 100, 0.12);
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+}
+#map2 {
+    position: absolute;
+    top: 71px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    overflow-y: scroll;
+
+}

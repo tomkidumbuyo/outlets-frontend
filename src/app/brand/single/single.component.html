@@ -1,0 +1,21 @@
+<nav class="navbar client-navbar  navbar-light bg-light " >
+  <div class="container">
+    <a class="navbar-brand">
+      <img src="assets/images/avatar/brand.png" class="mr-2" width="30" height="30" loading="lazy"> {{brand?.name}}
+    </a>
+    <ul class="navbar-nav navbar-nav nav nav-tabs border-0 flex-column flex-lg-row" *ngIf="brand">
+      <!--<li class="nav-item {{ page == 'info' ? 'active' : '' }}">
+        <a class="nav-link" [routerLink]="['/brand/' + brand?._id ]">Info</a>
+      </li>-->
+      <li class="nav-item {{ page == 'products' ? 'active' : '' }}">
+        <a class="nav-link" [routerLink]="['/brand/' + brand?._id + '/products']">Products</a>
+      </li>
+      <li class="nav-item {{ page == 'setting' ? 'active' : '' }}">
+        <a class="nav-link" [routerLink]="['/brand/' + brand?._id + '/setting']">Settings</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+<div class="client-body">
+  <router-outlet></router-outlet>
+</div>

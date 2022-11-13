@@ -1,0 +1,45 @@
+
+  <div class="container" >
+    <div class="card mt-5">
+      <div class="card-header">
+        <h3 class="card-title">Projects</h3>
+      
+      </div>
+      <div class="card-body p-0 oxa">
+        <table  class="table table-hover table-outline table-vcenter text-nowrap card-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Duration</th>
+              <th>Regions</th>
+              <th>Products</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr  *ngFor="let project of projects" >
+              <td>
+                
+                  {{project.name}}
+                
+              </td>
+              <td>
+                {{project.from | date : 'M/d/yy'}} - {{project.to | date : 'M/d/yy'}}
+              </td>
+              <td>
+                {{project.regions.length}}
+              </td>
+              <td>
+                {{project.products.length}}
+              </td>
+              <td>
+                <a class="btn btn-secondary btn-sm pull-right" [routerLink]="['/project/' + project._id]"> Open <span class="fe fe-arrow-right"></span></a>
+              </td>
+
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+

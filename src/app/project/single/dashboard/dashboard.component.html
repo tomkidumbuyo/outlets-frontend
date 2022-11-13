@@ -1,0 +1,379 @@
+<div class="mt-5" style="text-align: center;position: fixed;top: 45%;width: 50%;left: 25%;" *ngIf="!dataLoaded">
+    <h4 style="text-align: center;">{{loadingMessage}} ...</h4>
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+  </div>
+  
+  <div class="row outlet-filter-row"  *ngIf="dataLoaded">
+    <div class="col-md-12">
+      <div class="container p-4">
+        <div class="row">
+          <div class="col">
+            <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+              <div class="btn-group dropdown" role="group">
+                <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                  {{regionModel != null ? regionModel.name : 'All Regions'}}
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1" style="max-height: 50vh;overflow: auto;">
+                  <li><a class="dropdown-item" (click)="selectRegion(null)">All Regions</a></li>
+                  <li *ngFor="let region of regions"><a class="dropdown-item" (click)="selectRegion(region)">{{region.name | titlecase }}</a></li>
+                </ul>
+              </div>
+              <div class="btn-group" role="group" *ngIf="regionModel != null">
+                <button id="btnGroupDrop2" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                  {{districtModel != null ? districtModel.name : 'All Districts'}}
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="btnGroupDrop3" style="max-height: 50vh;overflow: auto;">
+                  <li><a class="dropdown-item" (click)="selectDistrict(null)">All Districts</a></li>
+                  <li *ngFor="let district of filteredDistricts"><a class="dropdown-item" (click)="selectDistrict(district)">{{district.name}}</a></li>
+                </ul>
+              </div>
+              <div class="btn-group" role="group" *ngIf="districtModel != null">
+                <button id="btnGroupDrop3" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                  {{wardModel != null ? wardModel.name : 'All Wards'}}
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="btnGroupDrop3" style="max-height: 50vh;overflow: auto;">
+                  <li><a class="dropdown-item" (click)="selectWard(null)">All Wards</a></li>
+                  <li *ngFor="let ward of filteredWards"><a class="dropdown-item" (click)="selectWard(ward)">{{ward.name}}</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+         
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container outlet-list-row">
+  <div *ngIf="dataLoaded">
+    <div class="page-header">
+      <h1 class="page-title">
+        Dashboard
+      </h1>
+    </div>
+
+    <div class="row row-cards">
+      <div class="col-6 col-sm-4 col-lg-2">
+        <div class="card">
+          <div class="card-body p-3 pt-5 text-center">
+            <div class="text-right text-green">
+             
+            </div>
+            <div class="h1 m-0">{{selectedLocation?.newOutlets?.length}}</div>
+            <div class="text-muted mb-4">Added Outlets</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-6 col-sm-4 col-lg-2">
+        <div class="card">
+          <div class="card-body p-3 pt-5 text-center">
+            <div class="text-right text-red">
+              
+            </div>
+            <div class="h1 m-0">{{selectedLocation?.outlets?.length}}</div>
+            <div class="text-muted mb-4">Outlets</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-6 col-sm-4 col-lg-2">
+        <div class="card">
+          <div class="card-body p-3 pt-5 text-center">
+            <div class="text-right text-green">
+              
+            </div>
+            <div class="h1 m-0">{{selectedLocation?.visitedOutlets?.length}}</div>
+            <div class="text-muted mb-4">Outlets Visited</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-6 col-sm-4 col-lg-2">
+        <div class="card">
+          <div class="card-body p-3 pt-5 text-center">
+            <div class="text-right text-green">
+             
+            </div>
+            <div class="h1 m-0">{{selectedLocation?.visits?.length}}</div>
+            <div class="text-muted mb-4">Visits</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-6 col-sm-4 col-lg-2">
+        <div class="card">
+          <div class="card-body p-3 pt-5 text-center">
+            <div class="text-right text-red">
+              
+            </div>
+            <div class="h1 m-0">{{users?.length}}</div>
+            <div class="text-muted mb-4">Temps</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-6 col-sm-4 col-lg-2">
+        <div class="card">
+          <div class="card-body p-3 pt-5 text-center">
+            <div class="text-right text-red">
+              
+            </div>
+            <div class="h1 m-0">{{regions.length}}</div>
+            <div class="text-muted mb-4">Regions</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-8">
+        <div class="card h-100">
+          <div class="card-header">
+            <h3 class="card-title">visits</h3>
+          </div>
+          <canvas baseChart width="400" height="400"
+                [datasets]="visitsGraph.data"
+                [labels]="visitsGraph.labels"
+                [legend]="true"
+                [chartType]="'bar'"
+                [options]="barChartOptions"></canvas>
+        </div>
+     
+      
+      </div>
+      <div class="col-md-4">
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">Visits by region</h3>
+              </div>
+              <div class="card-body">
+                <canvas height="300" baseChart
+                  [data]="visitsChart.data"
+                  [labels]="visitsChart.label"
+                  [chartType]="'doughnut'"
+                  [options]="pieChartOptions"
+                  [legend]="true"></canvas>
+              </div>
+            </div>
+          
+          </div>
+          <div class="col-sm-12">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">New Outlet by region</h3>
+              </div>
+              <div class="card-body">
+                <canvas height="300" baseChart
+                  [data]="newOutletsChart.data"
+                  [labels]="newOutletsChart.label"
+                  [chartType]="'doughnut'"
+                  [options]="pieChartOptions"
+                  [legend]="true"></canvas>
+              </div>
+            </div>
+           
+          </div>
+         
+        </div>
+      </div>
+      
+    </div>
+    <div class="page-header">
+      <h1 class="page-title">
+        Posms
+      </h1>
+    </div>
+
+    <div class="row">
+      <div class="col-lg-6">
+        <div class="card ">
+          <div class="card-header">
+            <h3 class="card-title">Posms Added</h3>
+          </div>
+          <div class="card-body">
+            <canvas baseChart  height="300"
+                [datasets]="posmsAddedGraph.data"
+                [labels]="posmsAddedGraph.labels"
+                [legend]="true"
+                [chartType]="'bar'"
+                [options]="barChartOptions"></canvas>
+          </div>
+        </div>
+     
+      
+      </div>
+      <div class="col-lg-6">
+        <div class="card ">
+          <div class="card-header">
+            <h3 class="card-title">Posms Removed</h3>
+          </div>
+          <div class="card-body">
+            <canvas baseChart  height="300"
+                [datasets]="posmsRemovedGraph.data"
+                [labels]="posmsRemovedGraph.labels"
+                [legend]="true"
+                [options]="barChartOptions"
+                [plugins]="barChartPlugins"
+                [chartType]="'bar'"
+                [options]="barChartOptions"></canvas>
+          </div>
+          
+        </div>
+     
+      
+      </div>
+      <div class="col-md-12">
+        <div class="row">
+
+          <div *ngFor="let posm of selectedLocation?.posms; let i = index" class="col-sm-4">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">{{posm.name}} Added and removed by region</h3>
+              </div>
+              <div class="card-body">
+                <!-- <div id="chart-donut" style="height: 12rem; max-height: 192px; position: relative;" class="c3"></div> -->
+                <canvas height="300" baseChart
+                  [data]="posm.chartData"
+                  [labels]="posm.chartLabel"
+                  [chartType]="'doughnut'"
+                  [options]="pieChartOptions"
+                  [legend]="true">
+                </canvas>
+              </div>
+            </div>
+          </div>
+       
+        </div>
+      </div>
+    </div>
+    <div class="page-header">
+      <h1 class="page-title">
+        Giveaways
+      </h1>
+    </div>
+
+    <div class="row">
+      <div class="col-lg-6">
+        <div class="card h-100">
+          <div class="card-header">
+            <h3 class="card-title">Giveways</h3>
+          </div>
+          <canvas baseChart  height="400"
+                [datasets]="giveawaysGraph.data"
+                [labels]="giveawaysGraph.labels"
+                [legend]="true"
+                [options]="lineChartOptions"
+                [chartType]="'line'"></canvas>
+        </div>
+     
+      
+      </div>
+      <div class="col-md-6">
+        <div class="row">
+          <div class="col-sm-6 " *ngFor="let giveaway of selectedLocation?.giveaways; let i = index">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">{{giveaway.name}} by region</h3>
+              </div>
+              <div class="card-body">
+                <canvas height="300" baseChart
+                  [data]="giveaway.chartData"
+                  [labels]="giveaway.chartLabel"
+                  [chartType]="'doughnut'"
+                  [options]="pieChartOptions"
+                  [legend]="true">
+                </canvas>
+              </div>
+            </div>
+          
+          </div>
+        
+         
+        </div>
+      </div>
+    </div>
+
+    <div class="page-header">
+      <h1 class="page-title">
+        Sales
+      </h1>
+    </div>
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="card ">
+          <div class="card-header">
+            <h3 class="card-title">Sales and Orders</h3>
+          </div>
+          <canvas baseChart  height="200"
+                [datasets]="salesGraph.data"
+                [labels]="salesGraph.labels"
+                [legend]="true"
+                [chartType]="'bar'"
+                [options]="barChartOptions"></canvas>
+        </div>
+     
+      
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="card ">
+          <div class="card-header">
+            <h3 class="card-title">Sales and Orders By Outlet Classification</h3>
+          </div>
+          <canvas baseChart  height="200"
+                [datasets]="productClassificationGraph.data"
+                [labels]="productClassificationGraph.labels"
+                [legend]="true"
+                [options]="barChartOptions"
+                [chartType]="'bar'"></canvas>
+        </div>
+     
+      
+      </div>
+      
+      <div class="col-md-12">
+        <div class="row">
+          <div class="col-sm-4" *ngFor="let product of selectedLocation?.products; let i = index">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">Sale  and orders of {{product.name}} by region</h3>
+              </div>
+              <div class="card-body">
+                <canvas height="300" baseChart
+                  [data]="product.chartData"
+                  [labels]="product.chartLabel"
+                  [chartType]="'doughnut'"
+                  [options]="pieChartOptions"
+                  [legend]="true">
+                </canvas>
+              </div>
+            </div>
+          
+          </div>
+         
+         
+        </div>
+      </div>
+    </div>
+
+    <div class="page-header">
+      <h1 class="page-title">
+        Stock Visibility
+      </h1>
+    </div>
+    <div class="row">
+      <div class="col-sm-3"  *ngFor="let product of selectedLocation?.products; let i = index">
+        <div class="card">
+          <div class="card-body text-center">
+            <div class="h5">{{product.name}} stock visibility</div>
+            <div class="display-4 font-weight-bold mb-4">{{(product.visible != 0 ? (product.visible/(product.visible+product.invisible))*100 : 0  ) | number}} %</div>
+            <div class="progress progress-sm">
+              <div class="progress-bar bg-red" [ngStyle]="{'width': (product.visible != 0 ? (product.visible/(product.visible+product.invisible))*100 : 0) + '%'}" ></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+
+  
+  
+  </div>
+  </div>
+  

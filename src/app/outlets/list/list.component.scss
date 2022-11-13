@@ -1,0 +1,30 @@
+.outlet-filter-row {
+    background: #fff;
+    border-bottom: 1px solid rgba(0, 40, 100, 0.12);
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+}
+.outlet-list-row {
+    position: absolute;
+    top: 71px;
+    bottom: 70px;
+    left: 0px;
+    right: 0px;
+    overflow-y: scroll;
+
+}
+.outlet-paggination-row {
+    background: #fff;
+    border-top: 1px solid rgba(0, 40, 100, 0.12);
+    position: absolute;
+    bottom: 0px;
+    height: 70px;
+    left: 0px;
+    right: 0px;
+}
+
+.outlets-card {
+    min-height: 100px;
+}

@@ -1,0 +1,31 @@
+<nav class="navbar client-navbar  navbar-light bg-light " *ngIf="client">
+<div class="container">
+  <a class="navbar-brand">
+    <img src="assets/images/avatar/client.png" class="mr-1" width="30" height="30" loading="lazy"> {{client?.name}}
+  </a>
+
+
+    <ul class="navbar-nav navbar-nav nav nav-tabs border-0 flex-column flex-lg-row">
+      <li class="nav-item {{ page == 'info' ? 'active' : '' }}">
+        <a class="nav-link" [routerLink]="['/client/' + client?._id ]">Info</a>
+      </li>
+      <li class="nav-item {{ page == 'brands' ? 'active' : '' }}">
+        <a class="nav-link" [routerLink]="['/client/' + client?._id + '/brands']">Brands</a>
+      </li>
+      <li class="nav-item {{ page == 'projects' ? 'active' : '' }}">
+        <a class="nav-link" [routerLink]="['/client/' + client?._id + '/projects']">Projects</a>
+      </li>
+      <li class="nav-item {{ page == 'members' ? 'active' : '' }}">
+        <a class="nav-link" [routerLink]="['/client/' + client?._id + '/members']">Members</a>
+      </li>
+      <li class="nav-item {{ page == 'settings' ? 'active' : '' }}">
+        <a class="nav-link" [routerLink]="['/client/' + client?._id + '/settings']">Settings</a>
+      </li>
+    </ul>
+
+    
+</div>
+</nav>
+<div class="client-body">
+  <router-outlet></router-outlet>
+</div>

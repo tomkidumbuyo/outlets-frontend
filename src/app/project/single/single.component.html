@@ -1,0 +1,30 @@
+
+<nav class="navbar client-navbar  navbar-light bg-light ">
+  <div class="container">
+    <a class="navbar-project">
+      <img src="assets/images/avatar/project.png" class="mr-2" width="30" height="30" loading="lazy"> {{project?.name}}
+    </a>
+    <ul class="navbar-nav navbar-nav nav nav-tabs border-0 flex-column flex-lg-row">
+      <li class="nav-item {{ page == 'dashboard' ? 'active' : '' }}">
+        <a class="nav-link" [routerLink]="['/project/' + id ]">Dashboard</a>
+      </li>
+      <li class="nav-item {{ page == 'info' ? 'active' : '' }}">
+        <a class="nav-link" [routerLink]="['/project/' + id + '/info']">Info</a>
+      </li>
+      <li class="nav-item {{ page == 'lidmovement' ? 'active' : '' }}">
+        <a class="nav-link" [routerLink]="['/project/' + id + '/movement']">Visits</a>
+      </li>
+      <li class="nav-item {{ page == 'temps' ? 'active' : '' }}">
+        <a class="nav-link" [routerLink]="['/project/' + id + '/temps']">Temps</a>
+      </li>
+      <li class="nav-item {{ page == 'settings' ? 'active' : '' }}" *ngIf="project">
+        <a class="nav-link" [routerLink]="['/client/' + project?.client?._id + '/newproject/' + id]">Settings</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+<div class="client-body">
+  <router-outlet></router-outlet>
+</div>
+
+

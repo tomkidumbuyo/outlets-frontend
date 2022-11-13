@@ -1,0 +1,251 @@
+
+<app-header></app-header>
+<div class="main-content">
+  <div class="row header">
+    <div class="col-md-12">
+      <div class="container">
+        <ul class="nav nav-tabs mb-3">
+          <li class="nav-item">
+            <a class="nav-link {{ page == 'classification' && type == 'outlet' ? 'active' : '' }}" (click)="selectType('outlet')">Outlets</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link {{ page == 'classification' && type == 'product' ? 'active' : '' }}" (click)="selectType('product')">Products</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link {{ page == 'posm' ? 'active' : '' }}" (click)="selectType('posm')">Posms & Giveaways</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="row body">
+    <div class="col-md-12">
+
+  <div class="container " *ngIf="page == 'classification'">
+
+    <div class="card classification-card">
+      <div class="card-header">
+        <ul class="nav-location">
+          <li *ngFor="let level of levels" (click)="selectClass(level.parent)">{{level.parent.name}}</li>
+        </ul>
+        <div class="header-buttons">
+          <button class="btn btn-secondary {{ display == 'bar' ? 'active' : '' }}" (click)="changeDisplay('bar')"><span class="fe fe-menu"></span></button>
+          <button class="btn btn-secondary {{ display == 'tree' ? 'active' : '' }}" (click)="changeDisplay('tree')"><span class="fe fe-corner-down-right"></span></button>
+        </div>
+      </div>
+      <div class="card-body bars" *ngIf="display == 'bar'">
+        <div class="row">
+          <div class="col-md-3 object-col" *ngFor="let level of displayLevels">
+            <div class="new-category" >
+              <div class=" row gutters-xs" [hidden]="level.parent._id == null">
+                <div class="col">
+                  <input type="text" class="form-control" [(ngModel)]="level.newCategoryName" placeholder="Create new Category">
+                </div>
+                <span class="col-auto">
+                  <button class="btn btn-secondary" type="button" (click)="createCategory(level)"><i class="fe fe-plus"></i></button>
+                </span>
+              </div>
+            </div>
+            <div class="card {{category.active ? '' : 'card-collaps'}}" *ngFor="let category of level.categories">
+              <div class="card-header">
+                <h3 class="card-title">{{category.name}}</h3>
+                <div class="card-options" [hidden]="level.parent._id == null">
+                  <!--<a href="#" class="card-options-collapse" data-toggle="card-collapse"><i class="fe fe-chevron-up"></i></a>-->
+                  <a (click)="deleteCategory(category)" class="card-options-remove" ><i class="fe fe-x"></i></a>
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="list-group list-group-transparent mb-0">
+                  <a class="list-group-item list-group-item-action {{classification.active ? 'active' : ''}}"
+                    *ngFor="let classification of category.classifications"
+                    (click)="selectClass(classification)">
+
+                    <span class="icon mr-3" (click)="deleteClass(classification)" click-stop-propagation><i class="fe fe-x"></i></span>
+                    <span class="status-icon bg-success" style="background: {{classification.color}} !important;"> </span>{{classification.name}}
+                  </a>
+                </div>
+              </div>
+              <div class="card-footer">
+                <div class="row gutters-xs">
+                  <div class="col">
+                    <input type="text" class="form-control" [(ngModel)]="category.newClassName" placeholder="Create new Class">
+                  </div>
+                  <span class="col-auto">
+                    <button class="btn btn-secondary" type="button" (click)="createClass(category)"><i class="fe fe-plus"></i></button>
+                  </span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+      <div class="card-body tree" *ngIf="display == 'tree'">
+        <div class="row ">
+          <div class="col-md-6 tree-div ">
+
+            <mat-tree [dataSource]="dataSource" [treeControl]="treeControl" class="example-tree">
+              <!-- This is the tree node template for leaf nodes -->
+              <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>
+                <li class="mat-tree-node {{node._id == selectedClassification._id? 'active' : ''}} {{node.type}}">
+                  <span class="down-line"></span>
+                  <span class="left-line"></span>
+                  <!-- use a disabled button to provide padding for tree leaf -->
+                  <!--<button mat-icon-button disabled>
+                    <span class="fe fe-circle"></span>
+                  </button>-->
+                  <div class="node-div" (click)="selectClass(node)">
+                  {{node.name}}
+                  </div>
+                </li>
+              </mat-tree-node>
+              <!-- This is the tree node template for expandable nodes -->
+              <mat-nested-tree-node *matTreeNodeDef="let node; when: hasChild">
+                <li>
+                  <span class="down-line"></span>
+                  <span class="left-line"></span>
+                  <div class="mat-tree-node {{node.active ? 'active' : ''}} {{node.type}}">
+                    <button mat-icon-button matTreeNodeToggle
+                            [attr.aria-label]="'toggle ' + node.name" class="{{treeControl.isExpanded(node) ? 'open' : 'closed'}}">
+
+                        <span class="fe {{treeControl.isExpanded(node) ? 'fe-minus' : 'fe-plus'}}"></span>
+
+                    </button>
+                    <div class="node-div">
+                      {{node.type == 'category' ? 'by' : '' }} {{node.name}}
+                  </div>
+                  </div>
+                  <ul [class.example-tree-invisible]="!treeControl.isExpanded(node)">
+                    <ng-container matTreeNodeOutlet></ng-container>
+                  </ul>
+                </li>
+              </mat-nested-tree-node>
+
+            </mat-tree>
+
+          </div>
+          <div class="col-md-6 info-div p-5">
+            <h3 class="card-title">{{selectedClassification.name | titlecase}}</h3>
+            <div class="card" *ngIf="selectedClassification._id != null">
+              <div class="card-header">
+                <h2 class="card-title">Attributes</h2>
+              </div>
+              <table class="table card-table">
+                <thead>
+                  <tr>
+                    <th>value</th>
+                  <th>type</th>
+                  <th>unit</th>
+                  <th></th></tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let attribute of selectedClassification?.attributes">
+                    <td> <span class="status-icon bg-success" style="background: {{attribute.color}} !important;"> </span> {{attribute.name}}</td>
+                    <td class="text-left">
+                      <span class="badge badge-default">{{attribute.type}}</span>
+                    </td>
+                    <td class="text-left">
+                      {{attribute.unit}}
+                    </td>
+                    <td class="text-right">
+                        <button class="btn btn-secondary" (click)="deleteAttribute(attribute)"><span class="fe fe-x"></span></button>
+                    </td>
+                  </tr>
+
+                  <tr>
+                      <td>
+                        <input type="text" class="form-control"  placeholder="Attribute name" [(ngModel)]="newAttribute.name">
+                      </td>
+                      <td class="text-right">
+                        <select  class="form-control" [(ngModel)]="newAttribute.type">
+                          <option value="number">Number</option>
+                          <option value="string">Text</option>
+                          <option value="boolean">Yes/No</option>
+                        </select>
+                      </td>
+                      <td class="text-right">
+                        <input type="text" class="form-control" [(ngModel)]="newAttribute.unit">
+                      </td>
+                      <td class="text-right">
+                        <button class="btn btn-secondary" (click)="addAttribute()"><span class="fe fe-plus"></span></button>
+                      </td>
+
+                  </tr>
+
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      
+      <div class="card-footer">
+        A class can have more than one category type. Each category type will have its own child category and the chain continues.
+      </div>
+    </div>
+  </div>
+
+  <div class="container " *ngIf="page == 'posm'">
+    <div class="row">
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header">POSMs</div>
+        <div class="card-body p-0">
+          <table class="table">
+            <tbody>
+              <tr *ngFor="let posm of posms">
+                <td style="width: 20px;"><button class="btn btn-sm btn-secondary"  (click)="deletePosm(posm)"><i class="fe fe-x"></i></button></td>
+                <td>{{posm.name | titlecase}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="card-footer">
+          <div class="row gutters-xs">
+            <div class="col">
+              <input type="text" class="form-control" [(ngModel)]="newPosm" placeholder="Create new Class">
+            </div>
+            <span class="col-auto">
+              <button class="btn btn-secondary" type="button" (click)="createPosm()"><i class="fe fe-plus"></i></button>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header">Giveaways</div>
+        <div class="card-body p-0">
+          <table class="table">
+            <tbody>
+              <tr *ngFor="let giveaway of giveaways">
+                <td style="width: 20px;"><button class="btn btn-sm btn-secondary" (click)="deleteGiveaway(giveaway)"><i class="fe fe-x"></i></button></td>
+                <td>{{giveaway.name | titlecase}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="card-footer">
+          <div class="row gutters-xs">
+            <div class="col">
+              <input type="text" class="form-control" [(ngModel)]="newGiveaway" placeholder="Create new Class">
+            </div>
+            <span class="col-auto">
+              <button class="btn btn-secondary" type="button" (click)="createGiveaway()"><i class="fe fe-plus"></i></button>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  </div>
+
+  </div>
+</div>
+</div>
+<app-footer></app-footer>
+
+

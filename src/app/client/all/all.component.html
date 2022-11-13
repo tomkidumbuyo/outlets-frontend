@@ -1,0 +1,145 @@
+<div class="container">
+  <div class="card"><div class="card-header">
+    <h3 class="card-title">Clients</h3>
+    <div class="card-options">
+      <a class="btn btn-primary btn-sm" data-toggle="modal" data-target="#clientmodal">New client</a>
+    </div>
+  </div>
+  <div class="card-body p-0 oxa">
+  <table class="table table-hover table-outline table-vcenter text-nowrap card-table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Classification</th>
+        <th class="text-center">Phone</th>
+        <th class="text-center">Email</th>
+        <th class="text-center">Website</th>
+        <th class="text-center">Adress</th>
+      </tr>
+    </thead>
+    <tbody>
+
+      <tr *ngFor="let client of clients">
+        <td>
+          <a [routerLink]="['/client/' + client._id]">
+          <div>{{client.name}}</div>
+          <div class="small text-muted">
+            Registered: {{client.date}}
+          </div>
+          </a>
+        </td>
+        <td>
+          <a [routerLink]="['/client/' + client._id]">{{client.classification}}</a>
+        </td>
+        <td>
+          <a [routerLink]="['/client/' + client._id]"><span  *ngFor="let phone of client.phones">{{phone.number}} </span></a>
+        </td>
+        <td>
+          <a [routerLink]="['/client/' + client._id]">{{client.email}}</a>
+        </td>
+        <td>
+          <a [routerLink]="['/client/' + client._id]">{{client.website}}</a>
+        </td>
+        <td>
+          <a [routerLink]="['/client/' + client._id]">{{client.adress}}</a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+</div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="clientmodal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">New Client</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true" class=""></span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+        <form [formGroup]="newClientForm">
+          <div class="form-group">
+            <label class="form-label">Company Name<span class="form-required">*</span></label>
+            <input type="text" class="form-control {{newClientForm.controls.name.invalid && (newClientForm.controls.name.dirty || newClientForm.controls.name.touched) ? 'is-invalid' : ''}}" formControlName="name" placeholder="Enter Company Name">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Classification<span class="form-required">*</span></label>
+            <mat-form-field>
+              <mat-label >Select Classification</mat-label>
+              <mat-select formControlName="classification">
+                <mat-option value="FMCG">FCMGs</mat-option>
+                <mat-option value="Heavy Industries">Heavy industries</mat-option>
+                <mat-option value="Merchandising">Merchandising</mat-option>
+                <mat-option value="Communication">Communication</mat-option>
+                <mat-option value="Financial">Financial</mat-option>
+                <mat-option value="Agri Products">Agriculture Products</mat-option>
+                <mat-option value="RealEstate">RealEstate </mat-option>
+                <mat-option value="Electronics">Electronics</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <div class="form-group" >
+            <label class="form-label">Phone numbers<span class="form-required">*</span></label>
+            <ng-container formArrayName="phones">
+            <div class="row gutters-xs mb-2" *ngFor="let phone of phones.controls; let i = index;">
+              <div class="col">
+                <ngx-intl-tel-input
+                  [inputId]="'adsasd'"
+                  [cssClass]="'form-control'"
+                  [preferredCountries]="preferredCountries"
+                  [enableAutoCountrySelect]="false"
+                  [enablePlaceholder]="true"
+                  [searchCountryFlag]="true"
+                  [searchCountryField]="[SearchCountryField.Iso2, SearchCountryField.Name]"
+                  [selectFirstCountry]="false"
+                  [selectedCountryISO]="CountryISO.Tanzania"
+                  [maxLength]="15"
+               
+                  [phoneValidation]="true"
+                  [separateDialCode]="true"
+                  name="phone" formControlName="{{i}}">
+                </ngx-intl-tel-input>
+                <!--<input type="text" class="form-control" formControlName="{{i}}" placeholder="+255700000000">-->
+              </div>
+              <span class="col-auto">
+                <button class="btn btn-secondary" type="button" (click)="removeItem(i)"><i class="fe fe-x"></i></button>
+              </span>
+            </div>
+            </ng-container>
+
+
+            <button class="mt-1 btn btn-secondary btn-block" (click)="addItem()"><span class="fe fe-plus mr-1"></span> ADD PHONE NUMBER</button>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Email<span class="form-required">*</span></label>
+            <input type="email" class="form-control {{newClientForm.controls.email.invalid && (newClientForm.controls.email.dirty || newClientForm.controls.email.touched) ? 'is-invalid' : ''}}" formControlName="email" placeholder="example@mail.com">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Website </label>
+            <input type="text" class="form-control {{newClientForm.controls.website.invalid && (newClientForm.controls.website.dirty || newClientForm.controls.website.touched) ? 'is-invalid' : ''}}" formControlName="website" placeholder="www.example.com">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Adress <span class="form-required">*</span></label>
+            <textarea class="form-control {{newClientForm.controls.adress.invalid && (newClientForm.controls.adress.dirty || newClientForm.controls.adress.touched) ? 'is-invalid' : ''}}"  formControlName="adress" placeholder="Adress"></textarea>
+          </div>
+
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" (click)="createClient()">Add</button>
+      </div>
+    </div>
+  </div>
+</div>
+
