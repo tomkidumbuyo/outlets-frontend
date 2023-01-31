@@ -26,7 +26,7 @@ export class SettingsComponent implements OnInit {
   constructor(
     private brandService: BrandService,
     private clientService: ClientService,
-  ) { 
+  ) {
 
 
     this.newBrandForm = new FormGroup({
@@ -38,20 +38,20 @@ export class SettingsComponent implements OnInit {
 
     this.brandObservarable = this.brandService.getDataObservable();
     this.brandObservarable.subscribe(arg => {
-        
+
         this.brand = arg.brand;
         if(this.brand != undefined && this.brand.manager != undefined) {
           this.newBrandForm.controls['name'].setValue(this.brand.name);
           this.newBrandForm.controls['manager'].setValue(this.brand.manager.name);
           this.newBrandForm.controls['email'].setValue(this.brand.manager.email);
         }
-        
+
     });
     brandService.setPage('setting');
 
-    
+
     this.phones = this.newBrandForm.get('phones') as FormArray;
-    
+
   }
 
   ngOnInit(): void {
@@ -72,18 +72,16 @@ export class SettingsComponent implements OnInit {
   }
 
   addItem(): void {
-    console.log('phone');
     this.phones.push(new FormControl('', [Validators.required]));
   }
 
   removeItem(index): void {
-    console.log('remove phone');
     this.phones.removeAt(index);
     if (this.phones.value.length == 0) {
       this.addItem();
     }
   }
 
- 
+
 
 }

@@ -13,7 +13,7 @@ import { RestApiService } from '../_services/rest-api.service';
 })
 export class MapComponent implements OnInit {
 
- 
+
   outletObservarable: any;
   outlets: any[] = [];
   markers = []
@@ -55,7 +55,7 @@ export class MapComponent implements OnInit {
   classifications: any[];
   user: any;
 
-  
+
 
   constructor(
     private auth: AuthenticationService,
@@ -71,7 +71,6 @@ export class MapComponent implements OnInit {
     .then((data: any) => {
 
       this.user = data;
-      console.log(this.user)
       if(this.user.type == "temp") {
         router.navigate(['/no-access']);
       } else if(this.user.type == "client") {
@@ -81,16 +80,12 @@ export class MapComponent implements OnInit {
     })
     .catch(err => {
       this.router.navigate(['/auth']);
-      console.log('Error getting user.');
     });
 
     navigator.geolocation.getCurrentPosition(function(location) {
-      console.log(location.coords.latitude);
-      console.log(location.coords.longitude);
-      console.log(location.coords.accuracy);
       this.position = { lat: location.coords.latitude, lng: location.coords.longitude }
     })
-    
+
 
     this.outletService.getData();
     this.outletObservarable = outletService.getDataObservable();
@@ -101,7 +96,7 @@ export class MapComponent implements OnInit {
       this.districtModel = arg.districtModel;
       this.wardModel = arg.wardModel;
       this.classifications = arg.classifications;
-      
+
 
       this.outlets = arg.filteredOutletsUnpaginated;
       // this.outlets = arg.outlets;
@@ -115,7 +110,7 @@ export class MapComponent implements OnInit {
   }
 
   initMap(): void {
-    
+
 
       const map = new google.maps.Map(document.getElementById("map2") as HTMLElement, {
         center: this.position,
@@ -130,10 +125,10 @@ export class MapComponent implements OnInit {
         this.pos = new google.maps.LatLng(lat,lng);
         this.name = name
       }
-      
-      
-    
-    
+
+
+
+
       /**
        * The custom USGSOverlay object contains the USGS image,
        * the bounds of the image, and a reference to the map.
@@ -143,15 +138,15 @@ export class MapComponent implements OnInit {
         private name: string;
         private color: string;
         private div?: HTMLElement;
-    
+
         constructor(bounds: google.maps.LatLngBounds, name: string, color: string) {
           super();
-    
+
           this.bounds = bounds;
           this.name = name;
           this.color = color;
         }
-    
+
         /**
          * onAdd is called when the map's panes are ready and the overlay has been
          * added to the map.
@@ -162,21 +157,21 @@ export class MapComponent implements OnInit {
           this.div.style.borderStyle = "none";
           this.div.style.borderWidth = "0px";
           this.div.style.position = "absolute";
-    
-    
+
+
           this.div.innerHTML = "<div class='html-marker-label' ><span class=\"color\" style=\"background: " + this.color + " !important\"></span>" + this.name + "</div>";
           // Add the element to the "overlayLayer" pane.
           const panes = this.getPanes()!;
           panes.overlayLayer.appendChild(this.div);
 
         }
-    
+
         draw() {
           // We use the south-west and north-east
           // coordinates of the overlay to peg it to the correct position and size.
           // To do this, we need to retrieve the projection from the overlay.
           const overlayProjection = this.getProjection();
-    
+
           // Retrieve the south-west and north-east coordinates of this overlay
           // in LatLngs and convert them to pixel coordinates.
           // We'll use these coordinates to resize the div.
@@ -186,7 +181,7 @@ export class MapComponent implements OnInit {
           const ne = overlayProjection.fromLatLngToDivPixel(
             this.bounds.getNorthEast()
           )!;
-    
+
           // Resize the image's div to fit the indicated dimensions.
           if (this.div) {
 
@@ -197,7 +192,7 @@ export class MapComponent implements OnInit {
             //this.div.style.height = sw.y - ne.y + "px";
           }
         }
-    
+
         /**
          * The onRemove() method will be called automatically from the API if
          * we ever set the overlay's map property to 'null'.
@@ -208,7 +203,7 @@ export class MapComponent implements OnInit {
             delete this.div;
           }
         }
-    
+
         /**
          *  Set the visibility to 'hidden' or 'visible'.
          */
@@ -217,13 +212,13 @@ export class MapComponent implements OnInit {
             this.div.style.visibility = "hidden";
           }
         }
-    
+
         show() {
           if (this.div) {
             this.div.style.visibility = "visible";
           }
         }
-    
+
         toggle() {
           if (this.div) {
             if (this.div.style.visibility === "hidden") {
@@ -233,7 +228,7 @@ export class MapComponent implements OnInit {
             }
           }
         }
-    
+
         toggleDOM(map: google.maps.Map) {
           if (this.getMap()) {
             this.setMap(null);
@@ -261,11 +256,11 @@ export class MapComponent implements OnInit {
           new google.maps.LatLng(parseFloat(outlet.latlng.lat) , parseFloat(outlet.latlng.lng) )
         );
 
-      
+
         const overlay: USGSOverlay = new USGSOverlay(bounds, outlet.name, outlet.classifications.length ? outlet.classifications[0].color : '#000000');
         overlay.setMap(map);
         this.markers.push(overlay)
-        
+
       }
 
       // Add a marker clusterer to manage the markers.
@@ -275,12 +270,12 @@ export class MapComponent implements OnInit {
       //     "https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m",
       // });
 
-   
-    
+
+
   }
 
   ngOnInit(): void {
-    
+
   }
 
   loadLocations() {
@@ -311,7 +306,7 @@ export class MapComponent implements OnInit {
 
   }
 
-  
+
 
   selectRegion(region){
     this.regionModel = region;
@@ -339,8 +334,6 @@ export class MapComponent implements OnInit {
   }
 
   setServiceFilters() {
-
-    console.log('this.queryModel : ', this.queryModel)
     this.outletService.setFilterVariables({
       regionModel : this.regionModel,
       districtModel : this.districtModel,

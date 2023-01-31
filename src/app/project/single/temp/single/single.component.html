@@ -1,18 +1,18 @@
 <nav class="navbar client-navbar  navbar-light bg-light " *ngIf="project">
     <div class="container">
-       
-  
-   
+
+
+
 
       <a _ngcontent-inu-c82=""  class="nav-link pl-0 leading-none">
-          <span _ngcontent-inu-c82="" class="avatar" style="background-image: url(assets/faces/female/25.jpg);">{{user?.first_name?.charAt(0) | titlecase}}{{user?.last_name?.charAt(0) | titlecase}}</span>
+          <span _ngcontent-inu-c82="" class="avatar" style="background-image: url(assets/faces/female/25.jpg);">{{user?.firstName?.charAt(0) | titlecase}}{{user?.lastName?.charAt(0) | titlecase}}</span>
           <span _ngcontent-inu-c82="" class="ml-2 d-none d-lg-block">
-              <span _ngcontent-inu-c82="" class="text-default">{{user?.first_name | titlecase}} {{user?.last_name | titlecase}}</span>
+              <span _ngcontent-inu-c82="" class="text-default">{{user?.firstName | titlecase}} {{user?.lastName | titlecase}}</span>
               <small _ngcontent-inu-c82="" class="text-muted d-block mt-1">{{user?.email | lowercase}}</small>
         </span>
     </a>
       <ul class="navbar-nav navbar-nav nav nav-tabs border-0 flex-column flex-lg-row">
-      
+
         <li class="nav-item {{ page == 'info' ? 'active' : '' }}">
           <a class="nav-link" [routerLink]="['/project/' + project?._id + '/temps/' + id + '/']">Info</a>
         </li>

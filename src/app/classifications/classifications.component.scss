@@ -14,13 +14,16 @@
     border-bottom: none;
     margin-bottom: 0px !important;
     .nav-item {
+      padding: 0px;
       .nav-link {
         border-bottom-width: 3px;
-      }
-      .nav-link.active {
-        color: #000;
-        border-bottom: 3px rgb(70, 127, 207) solid;
-color: #000;
+        padding: 13px 10px;
+        &.active {
+          color: #000;
+          border: 0px;
+          border-bottom: 3px rgb(70, 127, 207) solid;
+  color: #000;
+        }
       }
     }
   }

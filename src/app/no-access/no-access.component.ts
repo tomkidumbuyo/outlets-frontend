@@ -13,12 +13,11 @@ export class NoAccessComponent implements OnInit {
   constructor(
     private auth: AuthenticationService,
     private router: Router
-  ) { 
+  ) {
     this.auth.isLoggedIn()
     .then((data: any) => {
 
       this.user = data;
-      console.log(this.user)
       if(this.user.type != "temp") {
         router.navigate(['/outlet']);
       } else if(this.user.type == "client") {
@@ -28,7 +27,6 @@ export class NoAccessComponent implements OnInit {
     })
     .catch(err => {
       this.router.navigate(['/auth']);
-      console.log('Error getting user.');
     });
   }
 

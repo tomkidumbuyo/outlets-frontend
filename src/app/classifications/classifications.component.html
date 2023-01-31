@@ -37,7 +37,7 @@
         <div class="row">
           <div class="col-md-3 object-col" *ngFor="let level of displayLevels">
             <div class="new-category" >
-              <div class=" row gutters-xs" [hidden]="level.parent._id == null">
+              <div class=" row gutters-xs m-0" [hidden]="level.parent._id == null">
                 <div class="col">
                   <input type="text" class="form-control" [(ngModel)]="level.newCategoryName" placeholder="Create new Category">
                 </div>
@@ -66,7 +66,7 @@
                 </div>
               </div>
               <div class="card-footer">
-                <div class="row gutters-xs">
+                <div class="row gutters-xs m-0">
                   <div class="col">
                     <input type="text" class="form-control" [(ngModel)]="category.newClassName" placeholder="Create new Class">
                   </div>
@@ -180,7 +180,7 @@
         </div>
       </div>
 
-      
+
       <div class="card-footer">
         A class can have more than one category type. Each category type will have its own child category and the chain continues.
       </div>

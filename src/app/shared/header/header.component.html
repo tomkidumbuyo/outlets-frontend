@@ -1,4 +1,4 @@
-<div class="header py-4">
+<div class="header py-1">
   <div class="container">
     <div class="d-flex">
       <a class="header-brand" [routerLink]="['/']">
@@ -10,9 +10,9 @@
 
         <div class="dropdown">
           <a  class="nav-link pr-0 leading-none" data-toggle="dropdown">
-            <span class="avatar" style="background-image: url(assets/faces/female/25.jpg)">{{user.first_name?.charAt(0) | titlecase}}{{user.last_name?.charAt(0) | titlecase}}</span>
-            <span class="ml-2 d-none d-lg-block">
-              <span class="text-default">{{user.first_name | titlecase}} {{user.last_name | titlecase}}</span>
+            <span class="avatar" style="background-image: url(assets/faces/female/25.jpg)">{{user.firstName?.charAt(0) | titlecase}}{{user.lastName?.charAt(0) | titlecase}}</span>
+            <span class="ml-2 d-none d-lg-inline-block">
+              <span class="text-default">{{user.firstName | titlecase}} {{user.lastName | titlecase}}</span>
               <small class="text-muted d-block mt-1">{{user.email | lowercase}}</small>
             </span>
           </a>
@@ -37,7 +37,7 @@
     </div>
   </div>
 </div>
-<div class="header collapse d-lg-flex p-0" *ngIf="user.type == 'admin'" id="headerMenuCollapse">
+<div class="header collapse d-lg-flex p-0" *ngIf="user.isAdmin == true" id="headerMenuCollapse">
   <div class="container">
     <div class="row align-items-center">
 

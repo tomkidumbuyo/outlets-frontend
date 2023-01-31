@@ -1,24 +1,23 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, Validators } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { Router } from '@angular/router';
-import { ConfirmationDialogComponent } from 'src/app/shared/confirmation-dialog/confirmation-dialog.component';
-import { AuthenticationService } from 'src/app/_services/authentication.service';
-import { ProjectService } from 'src/app/_services/project.service';
-import { RestApiService } from 'src/app/_services/rest-api.service';
-import { UsersService } from 'src/app/_services/users.service';
+import { Component, OnInit } from "@angular/core";
+import { FormBuilder, FormControl, Validators } from "@angular/forms";
+import { MatDialog } from "@angular/material/dialog";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { Router } from "@angular/router";
+import { ConfirmationDialogComponent } from "src/app/shared/confirmation-dialog/confirmation-dialog.component";
+import { AuthenticationService } from "src/app/_services/authentication.service";
+import { ProjectService } from "src/app/_services/project.service";
+import { RestApiService } from "src/app/_services/rest-api.service";
+import { UsersService } from "src/app/_services/users.service";
 
 declare var $: any;
 
 @Component({
-  selector: 'app-temp',
-  templateUrl: './temp.component.html',
-  styleUrls: ['./temp.component.scss']
+  selector: "app-temp",
+  templateUrl: "./temp.component.html",
+  styleUrls: ["./temp.component.scss"],
 })
 export class TempComponent implements OnInit {
-
-  loadingMessage = '';
+  loadingMessage = "";
   dataLoaded: boolean = false;
 
   userObservarable: any;
@@ -40,117 +39,120 @@ export class TempComponent implements OnInit {
     private formBuilder: FormBuilder,
     private restApi: RestApiService,
     public dialog: MatDialog,
-    private projectService: ProjectService,
-  ) { 
-
+    private projectService: ProjectService
+  ) {
     this.projectObservarable = this.projectService.getDataObservable();
-    this.projectObservarable.subscribe(data => {
+    this.projectObservarable.subscribe((data) => {
       this.loadingMessage = data.loadingMessage;
-      this.dataLoaded     = data.dataLoaded;
+      this.dataLoaded = data.dataLoaded;
       this.project = data.project;
-    
     });
 
     this.newUserForm = this.formBuilder.group({
-      first_name: new FormControl('', Validators.required),
-      last_name: new FormControl('', Validators.required),
-      email: new FormControl('', Validators.required),
-      password: new FormControl('', Validators.required),
-      retype_password: new FormControl('', Validators.required),
-      phone: new FormControl('', Validators.required),
-      region: new FormControl('admin', Validators.required),
-      dc: new FormControl('admin', Validators.required)
+      firstName: new FormControl("", Validators.required),
+      lastName: new FormControl("", Validators.required),
+      email: new FormControl("", Validators.required),
+      password: new FormControl("", Validators.required),
+      retype_password: new FormControl("", Validators.required),
+      phone: new FormControl("", Validators.required),
+      region: new FormControl("admin", Validators.required),
+      dc: new FormControl("admin", Validators.required),
     });
 
-    this.restApi.getAuth('region/')
-    .then((data: any) => {
+    this.restApi.getAuth("region/").then((data: any) => {
       this.regions = data;
       this.selectRegion();
     });
 
-    this.projectService.setPage('temps');
-
+    this.projectService.setPage("temps");
   }
 
-  ngOnInit(): void {
-
-  }
+  ngOnInit(): void {}
 
   register() {
-
     const userAttributes = {
       admin: this.newUserForm.value.admin,
-      first_name: this.newUserForm.value.first_name,
-      last_name: this.newUserForm.value.last_name,
-      type: 'temp',
+      firstName: this.newUserForm.value.firstName,
+      lastName: this.newUserForm.value.lastName,
+      type: "temp",
       project: this.project._id,
       phone: this.newUserForm.value.phone,
-      region: null
+      region: null,
     };
 
-
-    if (this.newUserForm.value.type === 'regionalSuperviser') {
+    if (this.newUserForm.value.type === "regionalSuperviser") {
       userAttributes.region = this.newUserForm.value.region;
     } else {
       delete userAttributes.region;
     }
 
-    $('#new-user').modal('hide');
+    $("#new-user").modal("hide");
 
     if (this.editedUser) {
-      this.auth.editUser(
-        this.editedUser,
-        userAttributes
-      ).then((data: any) => {
-        this.users[this.users.indexOf(this.editedUser)] = data;
-        this.snackBar.open('User updated successfully', 'Close', {
-          verticalPosition: 'top'
-        });
-        this.clearUser();
-      }, (err) => {
-        console.log(err.error.message);
-        this.snackBar.open('Error creating  user.' + err.error.message, 'Close', {
-          verticalPosition: 'top'
-        });
-      });
+      this.auth.editUser(this.editedUser, userAttributes).then(
+        (data: any) => {
+          this.users[this.users.indexOf(this.editedUser)] = data;
+          this.snackBar.open("User updated successfully", "Close", {
+            verticalPosition: "top",
+          });
+          this.clearUser();
+        },
+        (err) => {
+          this.snackBar.open(
+            "Error creating  user." + err.error.message,
+            "Close",
+            {
+              verticalPosition: "top",
+            }
+          );
+        }
+      );
     } else {
-      this.auth.register(
-        this.newUserForm.value.email,
-        this.newUserForm.value.password,
-        this.newUserForm.value.retype_password,
-        userAttributes
-      )
-      .then((data: any) => {
-        this.users.push(data.user.user);
-        this.snackBar.open('User added successfully', 'Close', {
-          verticalPosition: 'top'
-        });
-        this.clearUser();
-      }, (err) => {
-        console.log(err.error.message);
-        this.snackBar.open('Error creating  user.' + err.error.message, 'Close', {
-          verticalPosition: 'top'
-        });
-      });
+      this.auth
+        .register(
+          this.newUserForm.value.email,
+          this.newUserForm.value.password,
+          this.newUserForm.value.retype_password,
+          userAttributes
+        )
+        .then(
+          (data: any) => {
+            this.users.push(data.user.user);
+            this.snackBar.open("User added successfully", "Close", {
+              verticalPosition: "top",
+            });
+            this.clearUser();
+          },
+          (err) => {
+            this.snackBar.open(
+              "Error creating  user." + err.error.message,
+              "Close",
+              {
+                verticalPosition: "top",
+              }
+            );
+          }
+        );
     }
   }
 
   deleteUser(user) {
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
-      width: '350px',
-      data: 'Do you confirm the deletion of this user.'
+      width: "350px",
+      data: "Do you confirm the deletion of this user.",
     });
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.restApi.deleteAuth('user/' + user._id)
-        .then((data: any) => {
-          this.users.splice(this.users.indexOf(user), 1);
-        })
-        .catch(err => {
-          this.snackBar.open(err.error.message, 'Close', {
-            verticalPosition: 'top'
+        this.restApi
+          .deleteAuth("user/" + user._id)
+          .then((data: any) => {
+            this.users.splice(this.users.indexOf(user), 1);
+          })
+          .catch((err) => {
+            this.snackBar.open(err.error.message, "Close", {
+              verticalPosition: "top",
+            });
           });
-        });
       }
     });
   }
@@ -159,55 +161,53 @@ export class TempComponent implements OnInit {
     for (const rg of this.regions) {
       if (rg._id === this.newUserForm.value.region) {
         this.distributionCenters = rg.distributionCenters;
-        this.newUserForm.get('dc').setValue(rg.distributionCenters[0]._id);
+        this.newUserForm.get("dc").setValue(rg.distributionCenters[0]._id);
       }
     }
   }
 
   editUser(user) {
-
-    console.log(user);
     this.editedUser = user;
-    this.newUserForm.get('first_name').setValue(user.first_name);
-    this.newUserForm.get('last_name').setValue(user.last_name);
-    this.newUserForm.get('email').setValue(user.email);
-    this.newUserForm.get('phone').setValue(user.phone);
-    this.newUserForm.get('type').setValue(user.type);
+    this.newUserForm.get("firstName").setValue(user.firstName);
+    this.newUserForm.get("lastName").setValue(user.lastName);
+    this.newUserForm.get("email").setValue(user.email);
+    this.newUserForm.get("phone").setValue(user.phone);
+    this.newUserForm.get("type").setValue(user.type);
     if (user.region) {
-      this.newUserForm.get('region').setValue(user.region._id);
+      this.newUserForm.get("region").setValue(user.region._id);
     }
     if (user.dc) {
-      this.newUserForm.get('region').setValue(user.dc.region);
+      this.newUserForm.get("region").setValue(user.dc.region);
       this.selectRegion();
-      this.newUserForm.get('dc').setValue(user.dc.id);
+      this.newUserForm.get("dc").setValue(user.dc.id);
     }
-    console.log('edited user', this.editedUser);
   }
 
   clearUser() {
     this.editedUser = false;
-    this.newUserForm.get('first_name').setValue('');
-    this.newUserForm.get('last_name').setValue('');
-    this.newUserForm.get('email').setValue('');
-    this.newUserForm.get('phone').setValue('');
-    this.newUserForm.get('type').setValue('admin');
-    this.newUserForm.get('region').setValue('');
-    this.newUserForm.get('dc').setValue('');
+    this.newUserForm.get("firstName").setValue("");
+    this.newUserForm.get("lastName").setValue("");
+    this.newUserForm.get("email").setValue("");
+    this.newUserForm.get("phone").setValue("");
+    this.newUserForm.get("type").setValue("admin");
+    this.newUserForm.get("region").setValue("");
+    this.newUserForm.get("dc").setValue("");
   }
 
   changePassword() {
-    this.auth.changePassword(this.editedUser, this.newUserForm.value.password, this.newUserForm.value.retype_password)
-    .then(data => {
-      console.log(data);
-      $('#change-password').modal('hide');
-    })
-    .catch(err => {
-      this.snackBar.open('Error changing the password.', 'Close', {
-        verticalPosition: 'top'
+    this.auth
+      .changePassword(
+        this.editedUser,
+        this.newUserForm.value.password,
+        this.newUserForm.value.retype_password
+      )
+      .then((data) => {
+        $("#change-password").modal("hide");
+      })
+      .catch((err) => {
+        this.snackBar.open("Error changing the password.", "Close", {
+          verticalPosition: "top",
+        });
       });
-    });
-
   }
-
-
 }

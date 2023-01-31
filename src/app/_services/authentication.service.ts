@@ -21,10 +21,7 @@ export class AuthenticationService {
     return new Promise(async (resolve, reject) => {
       if (this.accessToken && this.user) {
         this.restApi
-          .postAuth("auth/isLoggedIn", {
-            accessToken: this.accessToken,
-            user: this.user,
-          })
+          .getAuth("auth/isLoggedIn", )
           .then((data) => {
             resolve(data);
           })
@@ -119,6 +116,7 @@ export class AuthenticationService {
   }
 
   editUser(user, attributes) {
+    attributes = this.removeEmptyAttributesFromObject(attributes)
     return new Promise((resolve, reject) => {
       this.restApi
         .putAuth("auth/user/" + user._id, attributes)
@@ -130,6 +128,10 @@ export class AuthenticationService {
           reject(err);
         });
     });
+  }
+
+  removeEmptyAttributesFromObject(obj) {
+    return Object.fromEntries(Object.entries(obj).filter(([_, v]) => v != null));
   }
 
   changePassword(user, pass: string, passVerification: string) {

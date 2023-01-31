@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { retry, catchError } from 'rxjs/operators';
+import { environment } from '../../environments/environment';
 
 declare var $: any;
 
@@ -12,8 +13,8 @@ declare var $: any;
 export class RestApiService {
 
   // Define API
-  apiURL = './api/';
-a
+  apiURL = environment.backendUrl + '/api/v1/';
+
   // Http Options
   httpOptions = {
     headers: new HttpHeaders({
@@ -101,7 +102,6 @@ a
       .subscribe(
       res => {
         resolve(res);
-        // console.log("res : ",res);
       },
       err => {
         this.handleError(err, reject);
@@ -176,7 +176,6 @@ a
 
   // Error handling
   handleError(error, reject) {
-    console.log(error);
     reject(error);
     //  let errorMessage = '';
     //  if (error.error instanceof ErrorEvent) {

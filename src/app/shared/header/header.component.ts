@@ -20,10 +20,9 @@ export class HeaderComponent implements OnInit {
     private router: Router
   ) {
     this.page = headerService.getPage();
-    
+
     this.headerDataObserver = this.headerService.getDataObservable();
     this.headerDataObserver.subscribe((data: any) => {
-        console.log('observarable', data);
         this.page = data.page;
       }
     );

@@ -41,7 +41,7 @@ export class NewProductsComponent implements OnInit {
 
       this.brandObservarable = this.brandService.getDataObservable();
       this.brandObservarable.subscribe(arg => {
-        console.log('args', arg);
+
         this.brand = arg.brand;
       });
       brandService.setPage('products');
@@ -49,7 +49,7 @@ export class NewProductsComponent implements OnInit {
 
       this.classificationObservarable = this.classificationService.getDataObservable();
       this.classificationObservarable.subscribe(arg => {
-        console.log('CLASSIFICATION args', arg);
+
         this.classifications = arg.classifications;
         this.categoriesArray = [{
           name: 'Main Category',
@@ -70,13 +70,12 @@ export class NewProductsComponent implements OnInit {
   ngOnInit(): void {
 
     this.id = this.activatedRoute.snapshot.paramMap.get('id');
-    console.log('ID', this.id);
+
 
     if(this.id) {
       this.savingRequest = true
       this.restApiService.getAuth('product/' + this.id)
       .then((product: any) => {
-        console.log('product', product)
         this.product = product;
         this.newProductForm.controls['name'].setValue(product.name);
         for (const sku of this.product.skus) {
@@ -88,10 +87,9 @@ export class NewProductsComponent implements OnInit {
         this.removeSku(0);
 
         for (const classification of this.product.classifications) {
-          console.log('classification', classification);
           this.selectedClasses.push(classification);
         }
-        
+
         this.savingRequest = false
       })
       .catch(error => {
@@ -105,7 +103,7 @@ export class NewProductsComponent implements OnInit {
     return this.newProductForm.get("skus") as FormArray
   }
 
- 
+
 
   newSku(): FormGroup {
     return this.fb.group({
@@ -140,13 +138,10 @@ export class NewProductsComponent implements OnInit {
 
 
     if (current.children.length > 0) {
-      console.log('current children', current.children);
-      console.log('before splice', this.categoriesArray);
       for (const child of current.children) {
         child.parent = parent;
         this.categoriesArray.splice(i, 0, child);
       }
-      console.log('after splice', this.categoriesArray);
     } else {
       if (this.selectedClasses.indexOf(current) > -1) {
         this.snackBar.open('this category is already added', 'ok', {
@@ -163,9 +158,6 @@ export class NewProductsComponent implements OnInit {
         children: this.classifications
       }];
     }
-
-    console.log('this.categoriesArray', this.categoriesArray);
-
     this.parentCategoriesArray.push(parent);
   }
 
@@ -188,7 +180,7 @@ export class NewProductsComponent implements OnInit {
 
   saveProduct() {
 
-    
+
 
     const data = this.newProductForm.value;
     data.classifications = this.selectedClasses;
@@ -197,8 +189,6 @@ export class NewProductsComponent implements OnInit {
     if(this.product) {
       data._id = this.product._id;
     }
-
-    console.log(data);
 
     if (data.classifications.length == 0) {
       this.snackBar.open('Please add categories', 'ok', {
@@ -216,7 +206,6 @@ export class NewProductsComponent implements OnInit {
       this.savingRequest = true;
       this.productsService.createProduct(data)
       .then(product => {
-        console.log('PRODUCT created', product);
         this.router.navigate(['brand/' + this.brand._id + '/products']);
         this.savingRequest = false;
         this.brandService.getProducts();

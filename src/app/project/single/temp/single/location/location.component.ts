@@ -24,7 +24,7 @@ export class LocationComponent implements OnInit {
 
   constructor(
     private tempService: TempService
-  ) { 
+  ) {
 
     this.tempObservarable = this.tempService.getDataObservable();
     this.tempObservarable.subscribe(arg => {
@@ -34,34 +34,30 @@ export class LocationComponent implements OnInit {
         this.report = arg.report;
         if(!this.selectedDay) {
           this.selectDay(this.days[this.days.length - 1])
-          setTimeout(() => { 
+          setTimeout(() => {
             this.datesDivLength = $('.dates-div').width()
             this.datesDivListLength = $('.dates-div-list').width()
             this.divLeft = this.datesDivLength > this.datesDivListLength ? 0 : (this.datesDivListLength - this.datesDivLength)*-1;
             this.datesDivListLength = $('.dates-div-list').width()
-            console.log('this.datesDivLength : ', this.datesDivLength)
-            console.log('this.datesDivListLength : ', this.datesDivListLength)
           }, 1000);
-          
+
         }
       }
-      console.log('ARG : ',arg)
     });
 
     this.tempService.setPage('location');
-    
+
   }
 
   selectDay(day) {
     this.selectedDay = day;
-    setTimeout(()=>{ 
+    setTimeout(()=>{
       this.initMap();
     }, 1000);
-    //console.log('DAY : ',day)
   }
 
   ngOnInit(): void {
-    
+
   }
 
   initMap(): void {

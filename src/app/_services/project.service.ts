@@ -10,7 +10,6 @@ import { RestApiService } from './rest-api.service';
 
 export class ProjectService {
 
-  
   projects: any[] = [];
   selectedProject: any;
   private dataSource = new Subject();
@@ -38,7 +37,6 @@ export class ProjectService {
   newOutlets: any[];
   user: any;
 
-  
 
   constructor(
     private restApiService: RestApiService,
@@ -52,7 +50,6 @@ export class ProjectService {
     this.auth.isLoggedIn()
     .then((data: any) => {
       this.user = data;
-     
 
       this.restApiService.getAuth('project')
       .then((projects: any[]) => {
@@ -61,22 +58,18 @@ export class ProjectService {
         } else {
           this.projects = projects;
         }
-        
         this.sendData();
       })
       .catch(error => {
 
       });
-      
     })
     .catch(err => {
 
     });
-   
   }
 
   setFilterVariables(filterVariables: { regionModel: any; districtModel: any; wardModel: any; categoryModel: any; query: any; }) {
-    
   }
 
   setTimeFilter( from: Date, to: Date) {
@@ -112,11 +105,11 @@ export class ProjectService {
       .catch(error => {
         console.error(error)
       });
-    } 
+    }
 
   }
 
-  
+
   sendData() {
     this.dataSource.next({
       projects: this.projects,
@@ -171,7 +164,7 @@ export class ProjectService {
         t.temp = temp;
         return t
       });
-  
+
       this.sendData();
     })
     .catch(error => {
@@ -253,7 +246,7 @@ export class ProjectService {
   //     this.restApiService.getAuth('project/' + this.selectedProject._id + '/posmvisibility')
   //     .then((data: any[]) => {
   //       this.outletProducts = data;
-        
+
   //       resolve(data);
   //     })
   //     .catch(err => {
@@ -337,7 +330,7 @@ export class ProjectService {
   processData() {
 
     this.selectedProject.skus = [].concat.apply([], this.selectedProject.products.map(product => product.skus));
-    
+
 
     let all = {
       newOutlets: [],
@@ -398,13 +391,13 @@ export class ProjectService {
 
 
   getWardOutlets(ward: any) {
- 
+
       let outlets = this.outlets.filter(outlet => outlet.ward._id == ward._id);
       //outlets = outlets.map(outlet => {
       let results = [];
 
       for (const outlet of outlets) {
-        
+
         outlet.visits = this.getOutletVisits(outlet);
         outlet.posms = this.selectedProject.posms.map(posm => {
           JSON.parse(JSON.stringify(posm))
@@ -412,7 +405,7 @@ export class ProjectService {
           posm.removed = 0;
           return JSON.parse(JSON.stringify(posm));
         });
-    
+
         outlet.products = this.selectedProject.products.map(product => {
           product.stock = 0;
           product.visible = 0;
@@ -441,14 +434,14 @@ export class ProjectService {
             sku.delivered = 0;
             return JSON.parse(JSON.stringify(sku));
           })
-          
-          
+
+
           return JSON.parse(JSON.stringify(product));
 
         });
 
-        
-    
+
+
         outlet.giveaways = this.selectedProject.giveaways.map(giveaway => {
           giveaway.amount = 0;
           return giveaway;
@@ -464,7 +457,7 @@ export class ProjectService {
               }
               return posm;
           });
-      
+
 
           outlet.giveaways = outlet.giveaways.map(giveaway =>  {
             let p =  visit.giveaways.filter(giveawaym => giveawaym.giveaway != null && giveawaym.giveaway._id == giveaway._id)
@@ -484,7 +477,7 @@ export class ProjectService {
               prdt.visible += p.visibility ? 1 : 0;
               prdt.invisible += p.visibility? 0 : 1;
             }
-            
+
             for (const sale of visit.sales) {
               let is =  sale.items.filter(item => prdt.skus.map(sku => sku._id).includes(item.sku))
               for (const i of is) {
@@ -523,11 +516,11 @@ export class ProjectService {
                     sku.priceBelow += 1;
                   }
 
-                    
-  
+
+
                 }
               }
-              
+
               for (const sale of visit.sales) {
                 let is =  sale.items.filter(item =>  sku._id == item.sku)
                 for (const i of is) {
@@ -550,11 +543,11 @@ export class ProjectService {
             })
 
             let pt =  visit.products.filter(product => prdt._id == product.product)
-           
-            
+
+
 
             if(pt.length) {
-              
+
               prdt.posmsVisibilities = prdt.posmsVisibilities.map(posmsVisibility => {
                 let pp =  pt[0].posms.filter(posmu => posmsVisibility.posm._id == posmu.posm._id)[0]
                   // posmsVisibility.saved = pp.saved ? true : posmsVisibility.saved;
@@ -571,10 +564,10 @@ export class ProjectService {
 
           });
         }
-        
+
         results.push(outlet);
       }
-  
+
       return results;
   }
 
@@ -589,7 +582,7 @@ export class ProjectService {
         posm.removed = 0;
         return JSON.parse(JSON.stringify(posm));
       });
-  
+
       user.products = this.selectedProject.products.map(product => {
         product.stock = 0;
         product.visible = 0;
@@ -616,7 +609,7 @@ export class ProjectService {
         })
         return JSON.parse(JSON.stringify(product));
       });
-  
+
       user.giveaways = this.selectedProject.giveaways.map(giveaway => {
         giveaway.amount = 0;
         return giveaway;
@@ -632,9 +625,9 @@ export class ProjectService {
             }
             return posm;
         });
-    
+
         user.giveaways = user.giveaways.map(giveaway =>  {
-          
+
           let p =  visit.giveaways.filter(giveawaym => giveawaym.giveaway != null && giveawaym.giveaway._id == giveaway._id)
           if(p.length) {
             giveaway.amount += parseInt(p[0].amount);
@@ -650,7 +643,7 @@ export class ProjectService {
             prdt.visible += p.visibility ? 1 : 0;
             prdt.invisible += p.visibility ? 0 : 1;
           }
-          
+
           for (const sale of visit.sales) {
 
             let is =  sale.items.filter(item => prdt.skus.map(sku => sku._id).includes(item.sku))
@@ -692,7 +685,7 @@ export class ProjectService {
               sku.visible += p.visibility ? 1 : 0;
               sku.invisible += p.visibility ? 0 : 1;
             }
-            
+
             for (const sale of visit.sales) {
               let is =  sale.items.filter(item => product => sku._id == item.sku)
               for (const i of is) {
@@ -713,7 +706,7 @@ export class ProjectService {
             }
             return sku;
           })
-         
+
           return prdt;
         });
       }
@@ -721,9 +714,9 @@ export class ProjectService {
       return user;
 
     });
-    
+
     this.sendData();
-  
+
   }
 
 
@@ -795,7 +788,7 @@ export class ProjectService {
         posm.removed = 0;
         return posm;
       })));
-  
+
       classification.products = JSON.parse(JSON.stringify(this.selectedProject.products.map(product => {
         product.stock = 0;
         product.visible = 0;
@@ -824,7 +817,7 @@ export class ProjectService {
         });
         return product;
       })));
-  
+
       classification.giveaways = JSON.parse(JSON.stringify(this.selectedProject.giveaways.map(giveaway => {
         giveaway.amount = 0;
         return giveaway;
@@ -850,11 +843,11 @@ export class ProjectService {
         return posm;
     });
 
- 
+
 
     location.giveaways = location.giveaways.map(giveaway =>  {
       let p =  outlet.giveaways.filter(giveawaym => giveawaym._id == giveaway._id)
-     
+
       if(p.length > 0) {
         giveaway.amount += p[0].amount;
       }
@@ -876,8 +869,8 @@ export class ProjectService {
         prdt.orderedPrice += parseInt(p[0].orderedPrice);
         prdt.canceled += parseInt(p[0].canceled);
         prdt.delivered += parseInt(p[0].delivered);
-        
-  
+
+
 
         prdt.skus = prdt.skus.map(sku => {
           let pp =  p[0].skus.filter(skuu => sku._id == skuu._id)
@@ -897,33 +890,32 @@ export class ProjectService {
             sku.orderedPrice += parseInt(pp[0].orderedPrice);
             sku.canceled += parseInt(p[0].canceled);
             sku.delivered += parseInt(p[0].delivered);
-            
+
           }
           return sku;
         })
 
-        
+
 
         prdt.posmsVisibilities = prdt.posmsVisibilities.map(posmsVisibility => {
           let pp =  p[0].posmsVisibilities.filter(posmu => posmsVisibility.posm._id == posmu.posm._id)[0]
-        
+
             posmsVisibility.saved += pp.saved ? 1 : 0;
             posmsVisibility.visible += pp.visible ? 1 : 0;
-           
+
           return posmsVisibility;
         })
 
-        
+
       }
 
-      // console.log('prdt : ',prdt)
 
       return prdt;
     })
 
     location.skus = [].concat.apply([], location.products.map(product => product.skus));
 
-    
+
     location.classifications.map(classification => {
       if(outlet.classifications.filter(cls => cls._id == classification._id).length > 0) {
         classification.outlets.push(outlet);
@@ -940,7 +932,7 @@ export class ProjectService {
 
         classification.giveaways = classification.giveaways.map(giveaway =>  {
           let p =  outlet.giveaways.filter(giveawaym => giveawaym._id == giveaway._id)
-        
+
           if(p.length > 0) {
             giveaway.amount += p[0].amount;
           }
@@ -966,7 +958,7 @@ export class ProjectService {
               if(p.length) {
                 sku.stock += parseInt(pp[0].stock);
 
-                
+
 
                 if(pp[0].price) {
                   sku.priceComplied += pp[0].priceComplied;
@@ -1026,7 +1018,7 @@ export class ProjectService {
         return visit;
       })
 
-      
+
 
     if(this.from != null && this.to != null) {
       visits = visits.filter(visit => this.from.getTime() < new Date(visit.date).getTime() && this.to.getTime() > new Date(visit.date).getTime())
@@ -1034,6 +1026,6 @@ export class ProjectService {
     return visits;
   }
 
-  
+
 
 }

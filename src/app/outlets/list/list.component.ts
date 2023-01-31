@@ -51,7 +51,7 @@ export class ListComponent implements OnInit {
   categoryModel: any;
   categories: any[];
   classifications: any[];
-  
+
 
   constructor(
     private outletService: OutletsService,
@@ -66,7 +66,6 @@ export class ListComponent implements OnInit {
     this.outletObservarable = outletService.getDataObservable();
     this.outletObservarable.subscribe(arg => {
 
-      // console.log('args', arg);
       this.outlets = arg.outlets;
       this.loading = arg.loading;
       this.pages = arg.pages;
@@ -85,9 +84,6 @@ export class ListComponent implements OnInit {
       this.paginationSliceStart = this.page - 3 > 0 ? this.page - 3 : 0 ;
       this.paginationSliceEnd = this.page + 4 < this.pages.length ? this.page + 4 : this.pages.length ;
       this.paginationPages = this.pages.slice(this.paginationSliceStart, this.paginationSliceEnd);
-
-      // console.log(this.paginationSliceStart + '|' + this.page + '|' + this.paginationSliceEnd);
-      // console.log(this.paginationPages);
 
     });
 
@@ -127,7 +123,7 @@ export class ListComponent implements OnInit {
 
   }
 
-  
+
 
   selectRegion(region){
     this.regionModel = region;
@@ -155,8 +151,6 @@ export class ListComponent implements OnInit {
   }
 
   setServiceFilters() {
-
-    console.log('this.queryModel : ', this.queryModel)
     this.outletService.setFilterVariables({
       regionModel : this.regionModel,
       districtModel : this.districtModel,
@@ -167,7 +161,6 @@ export class ListComponent implements OnInit {
   }
 
   selectPage(page) {
-    console.log('page:', page);
     this.outletService.setPage(page);
   }
 

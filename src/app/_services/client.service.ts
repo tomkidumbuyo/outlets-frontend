@@ -9,7 +9,7 @@ import { Subject } from 'rxjs';
 export class ClientService {
 
 
-  
+
 
   clients: any[] = [];
   private dataSource = new Subject();
@@ -23,7 +23,7 @@ export class ClientService {
   }
 
   fetch() {
-    console.log('fetching');
+
     this.restApiService.getAuth('client')
     .then((clients: any[]) => {
       this.clients = clients;
@@ -75,7 +75,7 @@ export class ClientService {
   deleteClient(client: any) {
     this.restApiService.deleteAuth('client/' + client._id)
     .then((responce: any[]) => {
-      
+
     })
     .catch(error => {
 
@@ -92,7 +92,7 @@ export class ClientService {
     .catch(error => {
 
     });
-    
+
   }
 
   setPage(page) {

@@ -54,12 +54,12 @@ export class AllComponent implements OnInit {
 
 
   addItem(): void {
-    console.log('phone');
+
     this.phones.push(new FormControl('', [Validators.required]));
   }
 
   removeItem(index): void {
-    console.log('remove phone');
+
     this.phones.removeAt(index);
     if (this.phones.value.length == 0) {
       this.addItem();
@@ -69,7 +69,7 @@ export class AllComponent implements OnInit {
   createClient() {
 
     const errors = [];
-    console.log(this.newClientForm.value);
+
     if (!this.newClientForm.value.name) {
       errors.push('Name is required');
     }
@@ -84,7 +84,6 @@ export class AllComponent implements OnInit {
     }
 
     for ( const phone of this.newClientForm.value.phones) {
-      console.log(phone);
       if (!phone) {
         errors.push('Please fill all the phone numbers');
       }

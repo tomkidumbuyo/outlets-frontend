@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  filesEndpoint: 'https://amplifyimages.s3.us-east-2.amazonaws.com/files/'
+  filesEndpoint: 'https://amplifyimages.s3.us-east-2.amazonaws.com/files/',
+  backendUrl: 'http://localhost:9090'
 };
 
 /*

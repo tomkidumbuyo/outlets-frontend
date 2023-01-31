@@ -42,7 +42,7 @@ export class NewProjectComponent implements OnInit {
   classifications: any[];
   categories: any[];
   dissabled: boolean = true;
-  
+
 
   constructor(
     private route: ActivatedRoute,
@@ -58,7 +58,7 @@ export class NewProjectComponent implements OnInit {
 
 
   ngOnInit(): void {
-    
+
     this.newProjectForm = this.fb.group({
       name: new FormControl('', [Validators.required]),
       price: new FormControl('', [Validators.required]),
@@ -73,7 +73,7 @@ export class NewProjectComponent implements OnInit {
       products: new FormArray([]),
     });
     this.contactPeopleFormArray = this.newProjectForm.get('contactPeople') as FormArray;
-    
+
 
     // Check if the project is set
     this.projectId = this.route.snapshot.params['id'];
@@ -166,7 +166,7 @@ export class NewProjectComponent implements OnInit {
                   return prdt;
                 }));
                 for(const brnd of this.project.brands) {
-                  if(brand._id == brnd._id){ 
+                  if(brand._id == brnd._id){
                     brand.selected = true;
                     this.selectBrand(brand)
                   }
@@ -183,7 +183,7 @@ export class NewProjectComponent implements OnInit {
         console.error("Error filling up the project", error)
       })
 
-     
+
     } else {
       this.addContactPerson();
       this.restApiService.getAuth('admin/regions')
@@ -237,7 +237,7 @@ export class NewProjectComponent implements OnInit {
   }
 
   createForm() {
-    
+
   }
 
   fetchProducts() {
@@ -273,7 +273,7 @@ export class NewProjectComponent implements OnInit {
 
   // selectRegion(region) {
 
-  //   console.log(region);
+
 
   //   if (region.selected == null || region.selected == false) {
   //     region.selected = true;
@@ -302,7 +302,6 @@ export class NewProjectComponent implements OnInit {
     this.filteredproducts = this.products.filter(item => {
       if(search == '') {
         const prdts = this.client.products.map(prtd => prtd._id);
-        // console.log(prdts);
         if (prdts.indexOf(item._id) == -1) {
           return item;
         }
@@ -341,9 +340,9 @@ export class NewProjectComponent implements OnInit {
   }
 
   removeCompetetiveProduct(prdct, product) {
-    console.log(product)
+
     product.competetiveProducts.splice(product.competetiveProducts.indexOf(prdct));
-    console.log(product)
+
   }
 
   contactPerson(): FormGroup {
@@ -375,10 +374,10 @@ export class NewProjectComponent implements OnInit {
 
     projectData.products = this.client.products.filter(prdct => prdct.selected).map(product => {
       return {
-          product : product._id, 
+          product : product._id,
           competetiveProducts : product.competetiveProducts ? product.competetiveProducts.map(pp => pp._id) : []
         }
-      
+
     });
 
     projectData.brands = this.client.brands.filter(brand => brand.selected).map(brand => brand._id);
@@ -388,7 +387,7 @@ export class NewProjectComponent implements OnInit {
     projectData.giveaways = this.giveaways.filter(giveaway => giveaway.selected).map(giveaway => giveaway._id);
     projectData.client = this.client._id;
 
-    
+
 
     if (projectData.marketSensingModule == false && projectData.salesAndOrdersModule == false && projectData.posmPlacementModule == false && projectData.giveawaysModule == false) {
       this.snackBar.open('Please select atleast one module', 'Close', {
@@ -426,8 +425,8 @@ export class NewProjectComponent implements OnInit {
       return
     }
 
-   
-    
+
+
 
     if (projectData.regions.length == 0) {
       this.snackBar.open('Please select atleast one region', 'Close', {
@@ -450,12 +449,12 @@ export class NewProjectComponent implements OnInit {
       return;
     }
 
-    
+
 
     if(projectData._id != undefined) {
       this.restApiService.putAuth('project/' + projectData._id, projectData)
       .then((data: any) => {
-        console.log(data);
+
         this.router.navigate([ 'project/' + data._id ]);
       })
       .catch(err => {
@@ -464,14 +463,9 @@ export class NewProjectComponent implements OnInit {
         });
       });
     } else {
-
       this.dissabled = true;
-
-      console.log(projectData.brands);
-
       this.restApiService.postAuth('project/create', projectData)
       .then((data: any) => {
-        console.log(data);
         this.router.navigate([ 'project/' + data._id ]);
       })
       .catch(err => {

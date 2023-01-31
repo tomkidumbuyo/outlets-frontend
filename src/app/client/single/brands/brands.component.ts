@@ -27,7 +27,6 @@ export class BrandsComponent implements OnInit {
     clientService.setPage('brands');
     this.clientObservarable = this.clientService.getDataObservable();
     this.clientObservarable.subscribe(arg => {
-      console.log('args', arg);
       this.client = arg.client;
     });
     clientService.sendData();
@@ -59,12 +58,11 @@ export class BrandsComponent implements OnInit {
   }
 
   addItem(): void {
-    console.log('phone');
+
     this.phones.push(new FormControl('', [Validators.required]));
   }
 
   removeItem(index): void {
-    console.log('remove phone');
     this.phones.removeAt(index);
     if (this.phones.value.length == 0) {
       this.addItem();

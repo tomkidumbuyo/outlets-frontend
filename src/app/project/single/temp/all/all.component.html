@@ -55,8 +55,8 @@
                       <span class="avatar-status bg-green"></span>
                     </div>
                   </td> -->
-                  <td>{{ user.first_name | titlecase }} {{ user.last_name | titlecase }}</td>
-                 
+                  <td>{{ user.firstName | titlecase }} {{ user.lastName | titlecase }}</td>
+
                   <td>{{ user.phone}}</td>
                   <td>{{ user.email}}</td>
                   <td style="border-right: 1px solid rgba(0, 40, 100, 0.12);">{{ user.visits?.length}}</td>
@@ -82,7 +82,7 @@
 
                   <td><a [routerLink]="['/project/' + project?._id + '/temps/' + user.temp._id ]" class="btn btn-sm btn-secondary pull-right">Open <span class="fe fe-arrow-right"></span></a></td>
                 </tr>
-                
+
               </tbody>
             </table>
           </div>
@@ -91,7 +91,7 @@
       </div>
     </div>
 
-  
+
   <div class="modal" id="new-user" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
@@ -103,24 +103,24 @@
         </div>
 
         <div class="modal-body">
-  
+
           <form [formGroup]="newUserForm" class="form-horizontal">
 
-        
+
             <div class="form-group">
               <label for="exampleFormControlInput3">Email address</label>
               <input type="email" class="form-control" id="exampleFormControlInput3" placeholder="name@example.com"  formControlName="email">
             </div>
-         
-           
-        
+
+
+
             <button (click)="register()" class="btn btn-primary btn-block">Register</button>
 
           </form>
         </div>
 
         <div class="modal-body">
-  
+
           <form [formGroup]="newUserForm" class="form-horizontal">
 
             <div class="row">
@@ -128,10 +128,10 @@
               <label >Full name</label>
             </div>
               <div class="form-group col-sm-6">
-                <input type="text" class="form-control"  placeholder="first name"  formControlName="first_name">
+                <input type="text" class="form-control"  placeholder="first name"  formControlName="firstName">
               </div>
               <div class="form-group col-sm-6">
-                <input type="text" class="form-control"  placeholder="last name"  formControlName="last_name">
+                <input type="text" class="form-control"  placeholder="last name"  formControlName="lastName">
               </div>
             </div>
             <div class="form-group">
@@ -142,7 +142,7 @@
               <label for="exampleFormControlInput3">Phone</label>
               <input type="tel" class="form-control" placeholder="+255 000 000 000"  formControlName="phone">
             </div>
-           
+
             <div class="form-group" *ngIf="!editedUser !== false">
               <label for="exampleFormControlInput4">Password</label>
               <input type="password" class="form-control" id="exampleFormControlInput4"  formControlName="password">
@@ -170,12 +170,12 @@
       </div>
     </div>
   </div>
-  
+
   <div class="modal" id="change-password" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title">Change Password for {{editedUser?.first_name}}  {{editedUser?.last_name}}</h5>
+          <h5 class="modal-title">Change Password for {{editedUser?.firstName}}  {{editedUser?.lastName}}</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="clearUser()">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -196,4 +196,4 @@
       </div>
     </div>
   </div>
-  
+

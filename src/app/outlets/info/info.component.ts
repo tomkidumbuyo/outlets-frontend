@@ -30,14 +30,12 @@ export class InfoComponent implements OnInit {
     public restApi: RestApiService,
     private route: ActivatedRoute
   ) {
-
-      console.log('params', this.route.snapshot.params);
       this.restApi.getAuth('outlet/' + this.route.snapshot.params.id)
       .then(data => {
         this.outlet = data;
         this.getSales();
         this.initMap()
-        console.log(data);
+
       })
       .catch(err => {
         console.log(err)
@@ -67,7 +65,6 @@ export class InfoComponent implements OnInit {
     this.restApi.getAuth('outlet/' + this.outlet._id + '/sales')
     .then((data: any[]) => {
         this.sales = data;
-        console.log(data);
     })
     .catch(err => {
         console.log(err)
@@ -78,13 +75,10 @@ export class InfoComponent implements OnInit {
     this.restApi.getAuth('outlet/' + id + '/visits')
     .then((data: any[]) => {
         this.visits = data.map(visit => {
-          console.log('VISIT', visit)
           visit.rowspan = Math.max(visit.posms.length,visit.giveaways.length, visit.sales.length);
           visit.rows = Array(visit.rowspan).fill(0).map((x,i)=>i)
-          console.log('VISIT', visit)
           return visit;
         });
-        console.log(data);
     })
     .catch(err => {
         console.log(err)

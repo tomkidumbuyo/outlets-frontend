@@ -6,20 +6,24 @@ a.header-brand{
 }
 
 .nav-tabs{
-  .nav-link.active {
-      border-color: #467fcf;
-      color: #000;
-      background: transparent;
-      border-bottom: 1px solid brown;
+  .nav-item{
+    padding: 0px;
+    .nav-link {
       font-weight: bold;
       padding-left: 10px;
       padding-right: 10px;
-      i {
-          color: blue;
+      &.active {
+        border-color: #467fcf;
+        color: #000;
+        background: transparent;
+        border: 0px;
+        border-bottom: 1px solid brown;
+        font-weight: bold;
+
+        i {
+            color: blue;
+        }
       }
-  }
-  .nav-link {
-      
-      font-weight: bold;
+    }
   }
 }

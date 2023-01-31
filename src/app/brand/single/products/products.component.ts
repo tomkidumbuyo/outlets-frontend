@@ -23,10 +23,9 @@ export class ProductsComponent implements OnInit {
     private brandService: BrandService,
     private productService: ProductsService
   ) {
-      
+
       this.brandObservarable = this.brandService.getDataObservable();
       this.brandObservarable.subscribe(arg => {
-        console.log('args', arg);
         this.brand = arg.brand;
       });
       this.brandService.fetch();
@@ -42,7 +41,7 @@ export class ProductsComponent implements OnInit {
       $('#delete-product').modal('hide')
       this.brand.products.splice(this.brand.products.indexOf(this.brand.products.filter(prdct => this.deletedProduct._id == prdct._id)[0]),1);
     }
-    
+
   }
 
   promptDeleteProduct(product) {

@@ -6,7 +6,6 @@ import { Subject } from 'rxjs';
   providedIn: 'root'
 })
 export class OutletsService {
-  
 
   outlets: any[] = [];
   filteredOutlets: any[] = [];
@@ -27,7 +26,6 @@ export class OutletsService {
   public wardModel = null;
   public categoryModel = null;
 
- 
   private pages = [];
   private offset: number;
 
@@ -36,7 +34,6 @@ export class OutletsService {
   classifications: any[];
   categories: any[];
   filteredOutletsUnpaginated: any[];
-  
 
   constructor(
     public restApi: RestApiService,
@@ -46,7 +43,6 @@ export class OutletsService {
   }
 
   getData() {
-    console.log('GETTING DATA');
     this.sendData();
     this.loadAllData();
   }
@@ -59,7 +55,6 @@ export class OutletsService {
       this.restApi.getAuth('classification/categories'),
     ]).then((datas: any[]) => {
 
-     
 
       this.outlets = datas[0];
       this.classifications = datas[1].filter(data => data.for == 'outlet');
@@ -75,22 +70,18 @@ export class OutletsService {
         this.loadAllData();
       }
       this.reload = false;
-  
     });
-    
   }
 
   getParents(classification) {
 
     let c = classification;
     let parents = []
-    
     while(c != null && c != undefined && c.category) {
         let cat = this.categories.filter(category => category._id == c.category)[0]
         c = this.classifications.filter(classification => classification._id == cat.classification)[0];
         parents.push(c);
     }
-    
     return parents.reverse();
   }
 
@@ -119,7 +110,6 @@ export class OutletsService {
   }
 
   loadPartialData() {
-    
     this.loading = true;
     this.offset = this.page * this.limit;
     this.restApi.getAuth('outlet/pagination/' + this.limit + '/' + (this.offset))
@@ -198,7 +188,6 @@ export class OutletsService {
   }
 
   filter() {
-   
     if (this.query) {
       this.filteredOutlets = this.outlets.filter(outlet => {
         if(
@@ -209,7 +198,7 @@ export class OutletsService {
           outlet.ward.name.toLowerCase().indexOf(this.query.toLowerCase()) !== -1 ||
           outlet.district.name.toLowerCase().indexOf(this.query.toLowerCase()) !== -1 ||
           outlet.region.name.toLowerCase().indexOf(this.query.toLowerCase()) !== -1 ||
-          outlet.phone.toLowerCase().indexOf(this.query.toLowerCase()) !== -1 
+          outlet.phone.toLowerCase().indexOf(this.query.toLowerCase()) !== -1
         ){
           return outlet;
         }

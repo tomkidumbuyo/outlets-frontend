@@ -28,7 +28,7 @@ export class VisitsComponent implements OnInit {
 
   constructor(
     private tempService: TempService
-  ) { 
+  ) {
 
     this.tempObservarable = this.tempService.getDataObservable();
     this.tempObservarable.subscribe(arg => {
@@ -41,28 +41,26 @@ export class VisitsComponent implements OnInit {
         this.giveaways = arg.giveaways;
         if(!this.selectedDay) {
           this.selectDay(this.days[this.days.length - 1])
-          setTimeout(() => { 
+          setTimeout(() => {
             this.datesDivLength = $('.dates-div').width()
             this.datesDivListLength = $('.dates-div-list').width()
             this.divLeft = this.datesDivLength > this.datesDivListLength ? 0 : (this.datesDivListLength - this.datesDivLength)*-1;
           }, 1000);
-          
+
         }
       }
-      console.log('ARG : ',arg)
     });
     this.tempService.setPage('visits');
-    
+
   }
 
   ngOnInit(): void {
 
-    
+
   }
 
   selectDay(day) {
     this.selectedDay = day;
-    console.log('DAY : ',day)
     if(this.selectedDay.visits.length > 0 ) {
       this.selectVisit(this.selectedDay.visits[0]);
     }
@@ -70,7 +68,6 @@ export class VisitsComponent implements OnInit {
 
   selectVisit(visit) {
     this.selectedVisit = visit;
-    console.log('visit', visit)
 
     this.selectedVisit.posms = this.project.posms.map(posm => {
       posm.added = 0;
@@ -94,7 +91,7 @@ export class VisitsComponent implements OnInit {
       return giveaway;
     });
 
-    
+
 
       this.selectedVisit.posms = this.selectedVisit.posms.map(posm =>  {
           let p =  visit.posms.filter(posmm => posmm.posm != null && posmm.posm._id == posm._id)
@@ -104,7 +101,7 @@ export class VisitsComponent implements OnInit {
           }
           return posm;
       });
-  
+
       this.selectedVisit.giveaways = this.selectedVisit.giveaways.map(giveaway =>  {
         let p =  visit.giveaways.filter(giveawaym => giveawaym.giveaway != null && giveawaym.giveaway._id == giveaway._id)
         if(p.length) {
@@ -115,15 +112,14 @@ export class VisitsComponent implements OnInit {
 
       this.selectedVisit.products = this.selectedVisit.products.map(prdt => {
 
-       
+
         let ps =  visit.products.filter(product => prdt.skus.includes(product.sku))
-        //console.log('PRODUCTS  : ', ps)
         for (const p of ps) {
           prdt.stock += parseInt(p.stock);
           prdt.visible += p.visible ? 1 : 0;
           prdt.invisible += p.visible ? 0 : 1;
         }
-        
+
         for (const sale of visit.sales) {
           let is =  sale.items.filter(item => prdt.skus.includes(item.sku))
           for (const i of is) {
@@ -139,10 +135,6 @@ export class VisitsComponent implements OnInit {
         return prdt;
       });
 
-      console.log('this.selectedVisit', this.selectedVisit);
-
-      
-    
   }
 
   scrollLeft() {

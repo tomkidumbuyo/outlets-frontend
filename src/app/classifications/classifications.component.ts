@@ -59,7 +59,7 @@ export class ClassificationsComponent implements OnInit {
     this.auth.isLoggedIn()
     .then((data: any) => {
       this.user = data;
-      console.log(this.user)
+
       if(this.user.type == "temp") {
         router.navigate(['/no-access']);
       } else if(this.user.type == "client") {
@@ -68,7 +68,7 @@ export class ClassificationsComponent implements OnInit {
     })
     .catch(err => {
       this.router.navigate(['/auth']);
-      console.log('Error getting user.');
+
     });
 
     this.newAttribute = {
@@ -81,7 +81,7 @@ export class ClassificationsComponent implements OnInit {
 
     this.classificationObservarable = this.classificationService.getDataObservable();
     this.classificationObservarable.subscribe(arg => {
-      console.log('args',arg);
+
       this.levels = arg.levels;
       this.dataSource.data = arg.classifications;
       this.displayLevels = this.levels.slice(-4);
@@ -96,7 +96,7 @@ export class ClassificationsComponent implements OnInit {
 
     this.restApi.getAuth('posm/')
     .then((data: any) => {
-        console.log(data);
+
         this.posms = data;
     })
       .catch(err => {
@@ -105,14 +105,14 @@ export class ClassificationsComponent implements OnInit {
 
     this.restApi.getAuth('giveaway/')
     .then((data: any) => {
-        console.log(data);
+
         this.giveaways = data;
     })
     .catch(err => {
         console.log(err);
     })
 
-    
+
 
 
   }
@@ -154,9 +154,9 @@ export class ClassificationsComponent implements OnInit {
   }
 
   deleteAttribute(attribute) {
-    console.log(this.selectedClassification.attributes.indexOf(attribute))
+
     this.selectedClassification.attributes.splice(this.selectedClassification.attributes.indexOf(attribute), 1);
-    console.log(this.selectedClassification.attributes)
+
     this.restApi.putAuth('classification/classification/' + this.selectedClassification._id, this.selectedClassification)
     .then(data => {
       this.classificationService.selectClass(this.selectedClassification);
@@ -168,14 +168,14 @@ export class ClassificationsComponent implements OnInit {
 
 
   addAttribute() {
-    console.log(this.newAttribute);
+
     if (this.newAttribute.name == "") {
       console.log('Please add attribute name');
     } else {
       this.selectedClassification.attributes.push(JSON.parse(JSON.stringify(this.newAttribute)));
       this.restApi.putAuth('classification/classification/' + this.selectedClassification._id, this.selectedClassification)
       .then((data: any) => {
-        console.log(data);
+
         this.selectedClassification = data;
         this.classificationService.selectClass(this.selectedClassification);
       })
@@ -188,7 +188,7 @@ export class ClassificationsComponent implements OnInit {
   createPosm() {
     this.restApi.postAuth('posm/create', {name: this.newPosm})
     .then((data: any) => {
-        console.log(data);
+
         this.posms.push(data);
     })
       .catch(err => {
@@ -199,7 +199,7 @@ export class ClassificationsComponent implements OnInit {
   createGiveaway() {
     this.restApi.postAuth('giveaway/create', {name: this.newGiveaway})
     .then((data: any) => {
-        console.log(data);
+
         this.giveaways.push(data);
     })
       .catch(err => {
@@ -210,7 +210,7 @@ export class ClassificationsComponent implements OnInit {
   deletePosm(posm) {
     this.restApi.deleteAuth('posm/' + posm._id)
     .then((data: any) => {
-        console.log(data);
+
         this.posms.splice(this.posms.indexOf(posm),1);
     })
       .catch(err => {
@@ -221,7 +221,7 @@ export class ClassificationsComponent implements OnInit {
   deleteGiveaway(giveaway) {
     this.restApi.deleteAuth('giveaway/' + giveaway._id)
     .then((data: any) => {
-        console.log(data);
+
         this.giveaways.splice(this.giveaways.indexOf(giveaway),1);
     })
       .catch(err => {

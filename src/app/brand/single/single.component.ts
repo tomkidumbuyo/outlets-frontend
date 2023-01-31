@@ -28,14 +28,12 @@ export class SingleComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    
+
     this.id = this.activatedRoute.snapshot.paramMap.get('id');
     this.brand = {_id: this.id, name: 'loading...'}
     this.brandService.selectBrand(this.brand);
-    console.log('ID', this.id);
     this.restApiService.getAuth('brand/' + this.id)
     .then((brand: any[]) => {
-      console.log('brand', brand)
       this.brand = brand;
       this.brandService.selectBrand(brand);
     })

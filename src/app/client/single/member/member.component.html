@@ -18,7 +18,7 @@
                   <th width="20px" style="width: 20px;">#</th>
                   <th class="text-center w-1"><i class="icon-people"></i></th>
                   <th>Name</th>
-                  
+
                   <th>Phone</th>
                   <th>Email</th>
                 </tr>
@@ -34,12 +34,12 @@
                       <span class="avatar-status bg-green"></span>
                     </div>
                   </td>
-                  <td>{{ user.first_name | titlecase }} {{ user.last_name | titlecase }}</td>
-                 
+                  <td>{{ user.firstName | titlecase }} {{ user.lastName | titlecase }}</td>
+
                   <td>{{ user.phone}}</td>
                   <td>{{ user.email}}</td>
                 </tr>
-                
+
               </tbody>
             </table>
           </div>
@@ -48,7 +48,7 @@
       </div>
     </div>
   </div>
-  
+
   <div class="modal" id="new-user" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
@@ -59,17 +59,17 @@
           </button>
         </div>
         <div class="modal-body">
-  
+
           <form [formGroup]="newUserForm" class="form-horizontal">
             <div class="row">
               <div class="col-md-12">
               <label >Full name</label>
             </div>
               <div class="form-group col-sm-6">
-                <input type="text" class="form-control"  placeholder="first name"  formControlName="first_name">
+                <input type="text" class="form-control"  placeholder="first name"  formControlName="firstName">
               </div>
               <div class="form-group col-sm-6">
-                <input type="text" class="form-control"  placeholder="last name"  formControlName="last_name">
+                <input type="text" class="form-control"  placeholder="last name"  formControlName="lastName">
               </div>
             </div>
             <div class="form-group">
@@ -80,7 +80,7 @@
               <label for="exampleFormControlInput3">Phone</label>
               <input type="tel" class="form-control" placeholder="+255 000 000 000"  formControlName="phone">
             </div>
-       
+
             <div class="form-group" *ngIf="newUserForm.get('type').value == 'distributionCenter' || newUserForm.get('type').value == 'regionalSuperviser'">
               <label for="exampleFormControlInput3">Region</label>
               <select formControlName="region" class="form-control" (change)="selectRegion()">
@@ -107,12 +107,12 @@
       </div>
     </div>
   </div>
-  
+
   <div class="modal" id="change-password" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title">Change Password for {{editedUser?.first_name}}  {{editedUser?.last_name}}</h5>
+          <h5 class="modal-title">Change Password for {{editedUser?.firstName}}  {{editedUser?.lastName}}</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="clearUser()">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -133,4 +133,3 @@
       </div>
     </div>
   </div>
-  

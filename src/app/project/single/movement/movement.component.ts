@@ -12,7 +12,7 @@ export class MovementComponent implements OnInit {
 
   projectDataObserver: any;
   dispatchs: any;
- 
+
 
 
   selectedOutlet: any = null;
@@ -72,14 +72,7 @@ export class MovementComponent implements OnInit {
       this.outlets        = data.outlets;
 
       if(this.project) {
-
-        // console.log('this.all : ',this.all)
-        // console.log('this.regions : ',this.regions)
-
         if(this.from == null && this.to == null) {
-
-          
-
           this.from = this.project.from;
           this.to = this.project.to
           this.initialfrom = this.project.from;
@@ -97,7 +90,7 @@ export class MovementComponent implements OnInit {
       }
     });
     this.projectService.setPage('lidmovement');
-    
+
 
 
   }
@@ -107,7 +100,7 @@ export class MovementComponent implements OnInit {
   }
 
   selectRegion(region){
-   
+
     if(region != null) {
       this.selectedRegion = region;
       this.selectedLocation = region;
@@ -127,7 +120,7 @@ export class MovementComponent implements OnInit {
       this.districtModel = null;
       this.wardModel = null;
     }
-    
+
     this.setServiceFilters();
   }
 
@@ -142,7 +135,7 @@ export class MovementComponent implements OnInit {
       this.districtModel = district;
       this.wardModel = null;
       this.filteredWards = district.wards
-      
+
     } else {
       this.selectedLocation = this.selectRegion;
       this.selectedLocation.children = this.selectedLocation.districts;

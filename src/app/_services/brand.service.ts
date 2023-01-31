@@ -18,7 +18,6 @@ export class BrandService {
   ) { }
 
   fetch() {
-    console.log('fetching');
     this.restApiService.getAuth('brand')
     .then((brands: any[]) => {
       this.brands = brands;
@@ -30,7 +29,6 @@ export class BrandService {
   }
 
   getProducts() {
-    console.log('SELECTED BRAND PRODUCTS', this.selectedBrand);
     this.restApiService.getAuth('brand/products/' + this.selectedBrand._id)
     .then((products: any[]) => {
       this.selectedBrand.products = products;
@@ -41,10 +39,9 @@ export class BrandService {
     });
   }
 
- 
+
 
   setPage(page) {
-    console.log('set page', page);
     this.page = page;
     this.sendData();
   }
@@ -60,7 +57,6 @@ export class BrandService {
 
   selectBrand(brand){
     this.selectedBrand = brand;
-    console.log('SELECTED BRAND', brand);
     this.getProducts();
     this.sendData();
   }

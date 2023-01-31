@@ -10,7 +10,7 @@ TimeAgo.addDefaultLocale(en)
   providedIn: 'root'
 })
 export class TempService {
-  
+
   page: any;
   selectedProject: any;
   temp: any;
@@ -33,19 +33,18 @@ export class TempService {
   days: any[];
   report: any;
   weekDays = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-  
 
   constructor(
     private restApiService: RestApiService,
   ) {
-    
+
   }
 
-  
+
 
 
   setId(id: any) {
-    
+
     this.id = id;
     this.restApiService.getAuth('temp/' + id)
     .then((temp: any) => {
@@ -58,9 +57,7 @@ export class TempService {
     });
   }
 
- 
   setPage(page) {
-    console.log('set page', page);
     this.page = page;
     this.sendData();
   }
@@ -93,7 +90,7 @@ export class TempService {
       .catch(err => {
         console.error(err);
       });
-    
+
   }
 
   getProject() {
@@ -120,12 +117,10 @@ export class TempService {
         movement.totimeago = (new Date().getTime() - new Date(movement.to_time).getTime()) > 60*60*24*1000 ? this.toShortTimeFormat(new Date(movement.to_time)) : this.timeAgo.format(new Date(movement.to_time));
         return movement;
       });
-      //console.log("movements : ", this.movements)
       resolve(this.movements);
     })
     .catch(error => {
       reject(error)
-      console.log('Error getting temp movements : ', error)
     });
    })
   }
@@ -136,11 +131,9 @@ export class TempService {
       .then((visits: any[]) => {
         this.visits = visits;
         resolve(this.visits);
-        //console.log("vists : ", this.visits)
       })
       .catch(error => {
         reject(error)
-        console.log('Error getting temp movements : ', error)
       });
      })
   }
@@ -151,11 +144,9 @@ export class TempService {
       .then((outlets: any[]) => {
         this.outlets = outlets;
         resolve(this.outlets);
-        //console.log("outlets : ", this.outlets)
       })
       .catch(error => {
         reject(error)
-        console.log('Error getting temp movements : ', error)
       });
      })
   }
@@ -166,11 +157,9 @@ export class TempService {
       .then((allOutlets: any[]) => {
         this.allOutlets = allOutlets;
         resolve(this.allOutlets);
-        console.log("this.allOutlets : ", this.allOutlets)
       })
       .catch(error => {
         reject(error)
-        console.log('Error getting temp movements : ', error)
       });
      })
   }
@@ -180,11 +169,9 @@ export class TempService {
       this.restApiService.getAuth('temp/' + this.id + '/sales')
       .then((data: any[]) => {
         this.sales = data;
-        //console.log("sales : ", this.sales)
         resolve(this.sales);
       })
       .catch(err => {
-        console.log(err);
         reject(err);
       });
     });
@@ -195,11 +182,9 @@ export class TempService {
       this.restApiService.getAuth('temp/' + this.id + '/giveaways')
       .then((data: any[]) => {
         this.giveaways = data;
-        //console.log("giveaways : ", this.giveaways)
         resolve(data);
       })
       .catch(err => {
-        console.log(err);
         reject(err);
       });
     });
@@ -210,11 +195,9 @@ export class TempService {
       this.restApiService.getAuth('temp/' + this.id + '/posms')
       .then((data: any[]) => {
         this.posms = data;
-        //console.log("posms : ", this.posms)
         resolve(data);
       })
       .catch(err => {
-        console.log(err);
         reject(err);
       });
     });
@@ -225,17 +208,13 @@ export class TempService {
       this.restApiService.getAuth('temp/' + this.id + '/products')
       .then((data: any[]) => {
         this.products = data;
-        //console.log("products : ", this.products)
         resolve(data);
       })
       .catch(err => {
-        console.log(err);
         reject(err);
       });
     });
   }
-
-  
 
   sendData() {
     this.dataSource.next({
@@ -251,8 +230,6 @@ export class TempService {
 
 
   processData() {
-    
-
     this.visits = this.visits
     .map(visit => {
         visit.sales = this.sales.filter(sale => sale.visit == visit._id)
@@ -263,11 +240,8 @@ export class TempService {
         return visit;
     })
 
-    console.log('this.visits : ', this.visits)
-
     this.days = this.dataToDays();
     this.sendData();
-
   }
 
   toShortFormat = function(d) {
@@ -279,19 +253,16 @@ export class TempService {
     let monthIndex = d.getMonth();
     let monthName = monthNames[monthIndex];
     let year = d.getFullYear();
-    return `${monthName} ${day}, ${year}`;  
+    return `${monthName} ${day}, ${year}`;
 
   }
 
   toShortTimeFormat = function(d) {
-
-    
     let h = this.pad_with_zeroes(d.getHours(), 2);
     let m = this.pad_with_zeroes(d.getMinutes(), 2);
     let s = this.pad_with_zeroes(d.getSeconds(), 2);
 
-
-    return ` ${h} : ${m} : ${s}`;  
+    return ` ${h} : ${m} : ${s}`;
 
   }
 
@@ -347,7 +318,7 @@ export class TempService {
           }
           return posm;
       });
-  
+
       this.report.giveaways = this.report.giveaways.map(giveaway =>  {
         let p =  visit.giveaways.filter(giveawaym => giveawaym.giveaway != null && giveawaym.giveaway._id == giveaway._id)
         if(p.length) {
@@ -358,15 +329,13 @@ export class TempService {
 
       this.report.products = this.report.products.map(prdt => {
 
-       
         let ps =  visit.products.filter(product => prdt.skus.includes(product.sku))
-        //console.log('PRODUCTS  : ', ps)
         for (const p of ps) {
           prdt.stock += parseInt(p.stock);
           prdt.visible += p.visible ? 1 : 0;
           prdt.invisible += p.visible ? 0 : 1;
         }
-        
+
         for (const sale of visit.sales) {
           let is =  sale.items.filter(item => prdt.skus.includes(item.sku))
           for (const i of is) {
@@ -382,7 +351,6 @@ export class TempService {
         return prdt;
       });
 
-      
     }
 
     let weekstart = new Date(firstday.getTime())
@@ -420,7 +388,7 @@ export class TempService {
         product.orderedPrice = 0;
         return JSON.parse(JSON.stringify(product));
       });
-  
+
       week.giveaways = this.giveaways.map(giveaway => {
         giveaway.amount = 0;
         return giveaway;
@@ -436,7 +404,7 @@ export class TempService {
             }
             return posm;
         });
-    
+
         week.giveaways = week.giveaways.map(giveaway =>  {
           let p =  visit.giveaways.filter(giveawaym => giveawaym.giveaway != null && giveawaym.giveaway._id == giveaway._id)
           if(p.length) {
@@ -446,16 +414,15 @@ export class TempService {
         });
 
         week.products = week.products.map(prdt => {
-         
+
 
           let ps =  visit.products.filter(product => prdt.skus.includes(product.sku))
-          //console.log('PRODUCTS  : ', ps)
           for (const p of ps) {
             prdt.stock += parseInt(p.stock);
             prdt.visible += p.visible ? 1 : 0;
             prdt.invisible += p.visible ? 0 : 1;
           }
-          
+
           for (const sale of visit.sales) {
             let is =  sale.items.filter(item => prdt.skus.includes(item.sku))
             for (const i of is) {
@@ -471,15 +438,13 @@ export class TempService {
           return prdt;
         });
 
-        
-      }
 
-      //console.log('week : ', week)
+      }
 
       periods.push(week);
       weekstart.setDate(weekstart.getDate() + 1);
       weekend.setDate(weekend.getDate() + 1)
-      
+
     }
     return periods;
   }

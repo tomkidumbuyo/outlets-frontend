@@ -78,7 +78,7 @@
               <tr *ngFor="let region of regions" (click)="selectRegion(region)" class="{{selectedLocation._id == region._id ? 'active' : '' }}">
                 <td>{{region.code}}</td>
                 <td>{{region.name}}</td>
-                <!--<td>{{region.supervisor?.first_name}} {{region.supervisor?.last_name}}</td>--
+                <!--<td>{{region.supervisor?.firstName}} {{region.supervisor?.lastName}}</td>--
               </tr>
             </tbody>
           </table>
@@ -115,7 +115,7 @@
             <td style="border-right: 1px solid rgba(0, 40, 100, 0.12);"><h6>{{ selectedChildrenType | titlecase }}</h6></td>
             <td colspan="7"><span class="badge badge-default mr-1" *ngFor="let district of selectedLocation?.children; let i = index" [attr.data-index]="i">{{district.name}}</span></td>
           </tr>
-          
+
           <tr *ngIf="selectedLocation.posms.length > 0">
             <td [attr.rowspan]="selectedLocation.posms ? selectedLocation.posms.length + 1 : 1"  style="border-right: 1px solid rgba(0, 40, 100, 0.12);"><h6>Posms Adding and Removing</h6></td>
             <td style="border-right: 1px solid rgba(0, 40, 100, 0.12);"><h6>Type</h6></td>
@@ -146,7 +146,7 @@
             <td [attr.rowspan]="selectedLocation.giveaways ? selectedLocation.giveaways.length + 1 : 1" style="border-right: 1px solid rgba(0, 40, 100, 0.12);"><h6>Giveaways</h6></td>
             <td style="border-right: 1px solid rgba(0, 40, 100, 0.12);" colspan="1"><h6>Type</h6></td>
             <td colspan="6"><h6>Amount</h6></td>
-  
+
           </tr>
           <tr *ngFor="let giveaway of selectedLocation.giveaways">
             <td style="border-right: 1px solid rgba(0, 40, 100, 0.12);" colspan="1">{{giveaway.name}}</td>
@@ -160,7 +160,7 @@
             <td><h6>Orders</h6></td>
             <td><h6>Availability</h6></td>
             <td><h6>Visibility</h6></td>
-        
+
           </tr>
           <tr *ngFor="let product of selectedLocation.products">
             <td>{{product.name }}</td>
@@ -168,7 +168,7 @@
             <td><span class="text-muted">{{product.ordered}}</span></td>
             <td><span class="text-muted">{{product.stock}} / {{product.visible + product.invisible}}</span></td>
             <td><span class="text-muted">{{product.visible}} / {{product.visible + product.invisible}}</span></td>
- 
+
           </tr> -->
 
           <tr *ngIf="selectedLocation.skus?.length > 0">
@@ -194,7 +194,7 @@
           <tr *ngIf="selectedLocation.skus?.length > 0">
             <td [attr.rowspan]="selectedLocation.skus ? selectedLocation.skus.length + 1 : 1"  style="border-right: 1px solid rgba(0, 40, 100, 0.12);"><h6>Products Availability and Price Compliance</h6></td>
             <td style="border-right: 1px solid rgba(0, 40, 100, 0.12);"><h6>SKU</h6></td>
-    
+
             <td><h6>Availability</h6></td>
             <td><h6>Visibility</h6></td>
             <td><h6>Supplier Price</h6></td>
@@ -215,7 +215,7 @@
       </div>
 
     </div>
-    
+
 
   </div>
 </div>
@@ -249,16 +249,16 @@
               <th rowspan="3" style="border-right: 1px solid rgba(0, 40, 100, 0.12);">Phone No.</th>
               <th rowspan="3" style="border-right: 1px solid rgba(0, 40, 100, 0.12);"></th>
             </tr>
-         
+
             <tr>
               <th *ngFor="let posm of project.posms" colspan="2" style="border-right: 1px solid rgba(0, 40, 100, 0.12);">{{posm.name}}</th>
-              
+
               <th *ngFor="let product of project.products" [attr.colspan]="product.skus.length + 1" style="border-right: 1px solid rgba(0, 40, 100, 0.12);">{{product.name}}</th>
               <th *ngFor="let product of project.products" [attr.colspan]="product.skus.length + 1" style="border-right: 1px solid rgba(0, 40, 100, 0.12);">{{product.name}}</th>
               <th *ngFor="let product of project.products" [attr.colspan]="product.skus.length + 1" style="border-right: 1px solid rgba(0, 40, 100, 0.12);">{{product.name}}</th>
               <th *ngFor="let product of project.products" [attr.colspan]="product.skus.length + 1" style="border-right: 1px solid rgba(0, 40, 100, 0.12);">{{product.name}}</th>
-             
-              
+
+
             </tr>
             <tr>
               <ng-container *ngFor="let posm of project.posms">
@@ -284,7 +284,7 @@
                 <th *ngFor="let sku of product.skus"  style="border-right: 1px solid rgba(0, 40, 100, 0.12); width: 30px;"><span class="upright-label"> {{sku.sku}}</span></th>
                 <th style="border-right: 1px solid rgba(0, 40, 100, 0.12); width: 30px;"><span class="upright-label"> Total</span></th>
               </ng-container>
-              
+
             </tr>
           </thead>
           <tbody>
@@ -294,12 +294,12 @@
               <td style="border-right: 1px solid rgba(0, 40, 100, 0.12); width: 150px;">
                 {{outlet.name | titlecase }}
               </td>
-              
+
               <!-- <td>
                 {{outlet.created | date : 'short' : tz }}
               </td> -->
               <td style="border-right: 1px solid rgba(0, 40, 100, 0.12); width: 70px;">
-                <span *ngFor="let classification of outlet.classifications"> <span class="status-icon bg-success" style="background: {{classification?.color}} !important;"  ></span> {{classification?.name}} </span> 
+                <span *ngFor="let classification of outlet.classifications"> <span class="status-icon bg-success" style="background: {{classification?.color}} !important;"  ></span> {{classification?.name}} </span>
               </td>
               <td style="border-right: 1px solid rgba(0, 40, 100, 0.12);"> <span class="badge badge-default">{{outlet?.region?.name}}</span> </td>
               <td style="border-right: 1px solid rgba(0, 40, 100, 0.12);"> <span class="badge badge-default">{{outlet?.district?.name}}</span> </td>
@@ -361,7 +361,7 @@
   <div class="col-md-auto">
     <h4 class="title mt-2"> {{selectedOutlet.name | titlecase}}</h4>
   </div>
- 
+
   <div class="col pr-0 mb-2">
     <nav class="nav pull-right mt-2">
       <a class="nav-link {{ outlet_page == 'summary' ? 'active' : '' }}" (click)="select_outlet_page('summary')">Oulet Summary</a>
@@ -417,7 +417,7 @@
           <td><span class="text-muted">{{product.ordered}}</span></td>
           <td><span class="text-muted">{{(product.visible / (product.visible + product.invisible)) * 100 | number }}</span></td>
         </tr>
-        
+
       </table>
 
     </div>
@@ -441,8 +441,8 @@
                 <td style="border-right: 1px solid rgba(0, 40, 100, 0.12);"><h6>User</h6></td>
                 <td colspan="4">{{selectedLocation?.user?.length}}</td>
               </tr>
-             
-              
+
+
               <tr>
                 <td [attr.rowspan]="selectedLocation.posms ? selectedLocation.posms.length + 1 : 1"  style="border-right: 1px solid rgba(0, 40, 100, 0.12);"><h6>Posms</h6></td>
                 <td colspan="2"><h6>Type</h6></td>
@@ -458,13 +458,13 @@
                 <td [attr.rowspan]="selectedVisit.giveaways ? selectedVisit.giveaways.length + 1 : 1" style="border-right: 1px solid rgba(0, 40, 100, 0.12);"><h6>Giveaways</h6></td>
                 <td colspan="2"><h6>Type</h6></td>
                 <td colspan="2"><h6>Amount</h6></td>
-      
+
               </tr>
               <tr *ngFor="let giveaway of selectedVisit.giveaways">
                 <td colspan="2"><span class="text-muted">{{giveaway.name}}</span></td>
                 <td colspan="2"><span class="text-muted">{{giveaway.amount | number }}</span></td>
               </tr>
-    
+
               <tr>
                 <td [attr.rowspan]="selectedVisit.products ? selectedVisit.products.length + 1 : 1"  style="border-right: 1px solid rgba(0, 40, 100, 0.12);"><h6>Products</h6></td>
                 <td><h6>Type</h6></td>
@@ -478,9 +478,9 @@
                 <td><span class="text-muted">{{product.ordered}}</span></td>
                 <td><span class="text-muted">{{(product.visible / (product.visible + product.invisible)) * 100 | number }}</span></td>
               </tr>
-              
+
             </table>
-    
+
           </div>
         </div>
       </div>
@@ -503,23 +503,23 @@
               <th rowspan="3" style="border-right: 1px solid rgba(0, 40, 100, 0.12); width: 70px;">Outlet</th>
               <th rowspan="3" style="border-right: 1px solid rgba(0, 40, 100, 0.12); width: 70px;">Temp</th>
               <th rowspan="3" style="border-right: 1px solid rgba(0, 40, 100, 0.12); max-width: 70px !important;"  width="70px">Outlet Classification</th>
-              
+
 
               <th rowspan="3" style="border-right: 1px solid rgba(0, 40, 100, 0.12);">Location</th>
-             
-            
+
+
 
               <th [attr.colspan]="project.posms.length * 2" style="border-right: 1px solid rgba(0, 40, 100, 0.12);">POSMs </th>
 
               <th rowspan="3" style="border-right: 1px solid rgba(0, 40, 100, 0.12);">Before Images</th>
               <th rowspan="3" style="border-right: 1px solid rgba(0, 40, 100, 0.12);">After Images</th>
-              
+
             </tr>
 
             <tr>
               <th *ngFor="let posm of project.posms" colspan="2" style="border-right: 1px solid rgba(0, 40, 100, 0.12);">{{posm.name}}</th>
             </tr>
-         
+
             <tr>
               <ng-container *ngFor="let posm of project.posms">
                 <th  style="border-right: 1px solid rgba(0, 40, 100, 0.12); width: 30px;"> <span class="upright-label"> Added</span></th>
@@ -540,16 +540,16 @@
               </td>
 
               <td style="border-right: 1px solid rgba(0, 40, 100, 0.12); width: 150px;">
-                {{ visit.user.first_name | titlecase }} {{ visit.user.last_name | titlecase }}
+                {{ visit.user.firstName | titlecase }} {{ visit.user.lastName | titlecase }}
               </td>
 
-              
-      
+
+
               <td style="border-right: 1px solid rgba(0, 40, 100, 0.12); max-width: 70px !important;" width="70px">
-                <span *ngFor="let classification of visit.outlet.classifications" style="max-width: 70px !important;"> <span class="status-icon bg-success" style="background: {{classification?.color}} !important;"  ></span> {{classification?.name}} </span> 
+                <span *ngFor="let classification of visit.outlet.classifications" style="max-width: 70px !important;"> <span class="status-icon bg-success" style="background: {{classification?.color}} !important;"  ></span> {{classification?.name}} </span>
               </td>
               <td style="border-right: 1px solid rgba(0, 40, 100, 0.12);"> <span class="badge badge-default">{{visit.outlet?.region?.name}}</span> <span class="badge badge-default">{{visit.outlet?.district?.name}}</span> <span class="badge badge-default">{{visit.outlet?.ward?.name}}</span> </td>
-          
+
               <ng-container *ngFor="let posm of visit.posms">
               <td style="border-right: 1px solid rgba(0, 40, 100, 0.12); width: 30px;">
                 {{posm.added}}
@@ -566,12 +566,12 @@
               <td style="border-right: 1px solid rgba(0, 40, 100, 0.12); width: 150px;">
                 <img *ngFor="let posmAfterImage of visit.posmAfterImages" style="height: 40px;" class="rounded ml-1" src="https://amplifyimages.s3.us-east-2.amazonaws.com/files/{{posmAfterImage}}" (click)="viewImage(posmAfterImage)">
               </td>
-              
-            
 
-          
 
-            
+
+
+
+
 
             </tr>
           </tbody>
@@ -580,7 +580,7 @@
       </div>
 
     </div>
-    
+
 
   </div>
 </div>
@@ -590,7 +590,7 @@
 <div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
-     
+
       <div class="modal-body p-0">
         <img src="https://amplifyimages.s3.us-east-2.amazonaws.com/files/{{popupImage}}" id="imagepreview" style="width: 100%; height: auto;" >
       </div>

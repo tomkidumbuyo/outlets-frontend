@@ -35,14 +35,11 @@ export class SettingComponent implements OnInit {
   constructor(
     private clientService: ClientService,
     private snackBar: MatSnackBar
-  ) { 
+  ) {
 
     clientService.setPage('settings');
     this.clientObservarable = this.clientService.getDataObservable();
     this.clientObservarable.subscribe(arg => {
-      console.log('INFO args', arg);
-      
-
       if(arg.client != undefined && this.client.classification == null) {
         this.client = arg.client;
         this.editClientForm.controls['name'].setValue(this.client.name);
@@ -51,7 +48,6 @@ export class SettingComponent implements OnInit {
         this.editClientForm.controls['adress'].setValue(this.client.adress);
         // this.removeItem(0)
         for(let phone of this.client.phones){
-          console.log("phone : ", phone.number)
           this.addItem(phone.number)
         }
       }
@@ -67,12 +63,10 @@ export class SettingComponent implements OnInit {
   }
 
   addItem(phone = ""): void {
-    console.log('phone');
     this.phones.push(new FormControl(phone, [Validators.required]));
   }
 
   removeItem(index): void {
-    console.log('remove phone');
     this.phones.removeAt(index);
     if (this.phones.value.length == 0) {
       this.addItem();
@@ -88,7 +82,6 @@ export class SettingComponent implements OnInit {
   saveClient() {
 
     const errors = [];
-    console.log(this.editClientForm.value);
     if (!this.editClientForm.value.name) {
       errors.push('Name is required');
     }
@@ -103,7 +96,6 @@ export class SettingComponent implements OnInit {
     }
 
     for ( const phone of this.editClientForm.value.phones) {
-      console.log(phone);
       if (!phone) {
         errors.push('Please fill all the phone numbers');
       }
@@ -114,7 +106,7 @@ export class SettingComponent implements OnInit {
       let mesage = errors[0];
       if (errors.length > 1) {
         mesage += ' and ' + (errors.length - 1) + ' more error(s)';
-      } 
+      }
       this.snackBar.open(mesage, 'ok', {
         duration: 2000,
       });

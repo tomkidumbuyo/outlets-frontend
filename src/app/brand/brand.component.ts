@@ -27,7 +27,6 @@ export class BrandComponent implements OnInit {
     .then((data: any) => {
 
       this.user = data;
-      console.log(this.user)
       if(this.user.type == "temp") {
         router.navigate(['/no-access']);
       } else if(this.user.type == "client") {
@@ -37,7 +36,6 @@ export class BrandComponent implements OnInit {
     })
     .catch(err => {
       this.router.navigate(['/auth']);
-      console.log('Error getting user.');
     });
   }
 
